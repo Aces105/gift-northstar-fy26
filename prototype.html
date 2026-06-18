@@ -5,1753 +5,264 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Best Buy Gifting North Star FY27 – Sarah's Journey</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
-  body { background: #1a1a2e; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0f0f1a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+    user-select: none;
+  }
 
-  /* Phone shell */
+  /* ── Phone shell ── */
   .phone {
     width: 390px;
     height: 844px;
-    background: #fff;
     border-radius: 50px;
     overflow: hidden;
     position: relative;
-    box-shadow: 0 40px 80px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,255,255,0.1);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.08),
+      0 0 0 10px #1c1c1e,
+      0 0 0 11px rgba(255,255,255,0.06),
+      0 40px 80px rgba(0,0,0,0.7);
+    background: #000;
   }
 
-  /* Navigation dots */
-  .nav-bar {
-    position: fixed;
-    bottom: 24px;
-    display: flex;
-    gap: 8px;
-    z-index: 100;
-    align-items: center;
+  /* ── Screens ── */
+  .screen {
+    position: absolute; inset: 0;
+    display: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
   }
-  .nav-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.3);
+  .screen::-webkit-scrollbar { display: none; }
+  .screen.active { display: block; }
+
+  .screen img.frame-img {
+    width: 390px;
+    display: block;
+  }
+
+  /* ── Tap zones (invisible, on top of image) ── */
+  .tap-zone {
+    position: absolute;
     cursor: pointer;
-    transition: all 0.2s;
-  }
-  .nav-dot.active { background: #FFE200; width: 24px; border-radius: 4px; }
-
-  /* Screen label */
-  .screen-label {
-    position: fixed;
-    top: 20px;
-    color: rgba(255,255,255,0.5);
-    font-size: 12px;
-    letter-spacing: 0.5px;
-    font-family: monospace;
   }
 
-  /* Progress arrows */
-  .arrow-btn {
+  /* ── Navigation arrows ── */
+  .arrow {
     position: fixed;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(255,255,255,0.1);
-    border: none;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
     color: white;
-    width: 40px; height: 40px;
+    width: 44px; height: 44px;
     border-radius: 50%;
-    font-size: 18px;
+    font-size: 20px;
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    transition: background 0.2s;
-    backdrop-filter: blur(4px);
-  }
-  .arrow-btn:hover { background: rgba(255,255,255,0.2); }
-  .arrow-btn.left { left: calc(50% - 235px); }
-  .arrow-btn.right { right: calc(50% - 235px); }
-
-  /* Screens container */
-  .screens { width: 390px; height: 844px; position: relative; }
-  .screen {
-    position: absolute; top: 0; left: 0;
-    width: 390px; height: 844px;
-    overflow: hidden;
-    display: none;
-    flex-direction: column;
-  }
-  .screen.active { display: flex; }
-
-  /* ===== SHARED COMPONENTS ===== */
-  .status-bar {
-    height: 44px;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 20px 0;
-    flex-shrink: 0;
-  }
-  .status-bar .time { font-size: 15px; font-weight: 600; }
-  .status-bar .icons { display: flex; gap: 6px; align-items: center; }
-  .status-bar .icons svg { width: 16px; height: 12px; }
-
-  /* Best Buy Header */
-  .bb-header {
-    background: #0046BE;
-    padding: 10px 16px 12px;
-    flex-shrink: 0;
-  }
-  .bb-header .search-bar {
-    background: white;
-    border-radius: 6px;
-    height: 40px;
-    display: flex; align-items: center; gap: 8px;
-    padding: 0 10px;
-  }
-  .bb-header .search-bar input {
-    border: none; outline: none; flex: 1;
-    font-size: 14px; color: #6C6F75;
-    background: transparent;
-  }
-  .bb-header .cart-icon {
-    margin-left: 12px;
-    position: relative;
-  }
-  .bb-header .cart-badge {
-    position: absolute; top: -6px; right: -6px;
-    background: #FFE200; color: #000;
-    border-radius: 50%; width: 16px; height: 16px;
-    font-size: 10px; font-weight: 700;
-    display: flex; align-items: center; justify-content: center;
-  }
-
-  /* Bottom Nav */
-  .bb-bottom-nav {
-    height: 83px;
-    background: white;
-    border-top: 1px solid #E5E5E5;
-    display: flex;
-    flex-shrink: 0;
-    margin-top: auto;
-  }
-  .bb-bottom-nav .nav-item {
-    flex: 1;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    gap: 4px;
-    padding-bottom: 8px;
-    cursor: pointer;
-  }
-  .bb-bottom-nav .nav-item .nav-label {
-    font-size: 10px; color: #6C6F75;
-  }
-  .bb-bottom-nav .nav-item.active .nav-label { color: #0046BE; }
-  .bb-bottom-nav .nav-item svg { width: 24px; height: 24px; }
-
-  /* Ask Blue Header */
-  .ask-blue-header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 12px 16px;
-    border-bottom: 1px solid #E5E5E5;
-    flex-shrink: 0;
-  }
-  .ask-blue-header .title {
-    font-size: 17px; font-weight: 600; color: #030303;
-  }
-  .ask-blue-header .title span { color: #0046BE; }
-  .ask-blue-header .ai-badge {
-    font-size: 11px; color: #6C6F75;
-  }
-
-  /* Ask Blue disclaimer */
-  .ask-blue-disclaimer {
-    padding: 8px 16px;
-    font-size: 11px; color: #6C6F75; line-height: 1.4;
-    flex-shrink: 0;
-  }
-  .ask-blue-disclaimer a { color: #0046BE; }
-
-  /* Ask Blue input */
-  .ask-blue-input-bar {
-    padding: 12px 16px;
-    border-top: 1px solid #E5E5E5;
-    background: white;
-    flex-shrink: 0;
-  }
-  .ask-blue-input-bar .input-wrap {
-    border: 1.5px solid #E5E5E5;
-    border-radius: 24px;
-    height: 48px;
-    display: flex; align-items: center;
-    padding: 0 16px; gap: 8px;
-  }
-  .ask-blue-input-bar input {
-    flex: 1; border: none; outline: none;
-    font-size: 15px; color: #030303;
-  }
-  .ask-blue-input-bar input::placeholder { color: #9CA3AF; }
-
-  /* Product card */
-  .product-card {
-    background: white;
-    border: 1px solid #E5E5E5;
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .product-card .p-img {
-    width: 100%; height: 140px;
-    background: #F5F5F5;
-    display: flex; align-items: center; justify-content: center;
-    overflow: hidden;
-  }
-  .product-card .p-img img { width: 100%; height: 100%; object-fit: contain; }
-  .product-card .p-body { padding: 10px; }
-  .product-card .p-title { font-size: 13px; font-weight: 500; color: #030303; line-height: 1.3; margin-bottom: 6px; }
-  .product-card .p-stars { color: #C37600; font-size: 11px; margin-bottom: 4px; }
-  .product-card .p-price { font-size: 16px; font-weight: 700; color: #030303; margin-bottom: 8px; }
-  .product-card .p-delivery { font-size: 11px; color: #030303; margin-bottom: 4px; }
-  .product-card .add-to-cart {
-    width: 100%; background: #FFE200; border: none;
-    border-radius: 4px; height: 36px;
-    font-size: 13px; font-weight: 700; cursor: pointer;
-  }
-
-  /* Toast */
-  .toast {
-    position: absolute;
-    bottom: 96px; left: 50%;
-    transform: translateX(-50%);
-    background: #030303;
-    color: white;
-    border-radius: 8px;
-    padding: 12px 16px;
-    width: 328px;
-    display: flex; align-items: flex-start; gap: 10px;
-    font-size: 13px; line-height: 1.4;
-    z-index: 50;
-    animation: slideUp 0.3s ease;
-  }
-  .toast .toast-action { color: #FFE200; font-weight: 600; display: block; margin-top: 2px; }
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-    to { opacity: 1; transform: translateX(-50%) translateY(0); }
-  }
-
-  /* Chips */
-  .chip {
-    display: inline-block;
-    border: 1px solid #D1D5DB;
-    border-radius: 20px;
-    padding: 8px 14px;
-    font-size: 14px; color: #030303;
-    cursor: pointer;
-    margin: 0 0 8px 0;
-    background: white;
+    backdrop-filter: blur(8px);
     transition: background 0.15s;
+    z-index: 200;
   }
-  .chip:hover { background: #F7F7FF; }
+  .arrow:hover { background: rgba(255,255,255,0.18); }
+  .arrow.left  { left:  calc(50% - 242px); }
+  .arrow.right { right: calc(50% - 242px); }
 
-  /* Scrollable content */
-  .scroll-content {
-    flex: 1;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+  /* ── Dot indicator ── */
+  .dots {
+    position: fixed;
+    bottom: 28px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    z-index: 200;
   }
-  .scroll-content::-webkit-scrollbar { display: none; }
-
-  /* Badge */
-  .badge {
-    display: inline-block;
-    font-size: 11px; font-weight: 700;
-    padding: 3px 8px; border-radius: 3px;
-    margin-bottom: 6px;
-  }
-  .badge.blue { background: #0046BE; color: white; }
-  .badge.red { background: #BB0628; color: white; }
-  .badge.yellow { background: #FFE200; color: #030303; }
-
-  /* Section header */
-  .section-header {
-    font-size: 16px; font-weight: 700; color: #030303;
-    padding: 16px 16px 8px;
-  }
-
-  /* ===== SCREEN 1: INTRO CARD ===== */
-  #s1 { background: #D4C49A; justify-content: space-between; }
-  #s1 .intro-content { padding: 40px 24px 0; flex: 1; }
-  #s1 .journey-label { font-size: 13px; font-weight: 700; color: #577652; letter-spacing: 0.5px; margin-bottom: 8px; }
-  #s1 .journey-title { font-size: 26px; font-weight: 700; color: #41643C; margin-bottom: 24px; line-height: 1.2; }
-  #s1 .journey-desc { font-size: 16px; color: #1a1a1a; line-height: 1.6; }
-  #s1 .start-btn {
-    margin: 32px 20px;
-    background: #1A2E50;
-    border: none; border-radius: 50px;
-    height: 64px; width: calc(100% - 40px);
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 24px;
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
     cursor: pointer;
-    color: white; font-size: 20px; font-weight: 700;
+    transition: all 0.2s;
   }
-  #s1 .start-btn .arrow { font-size: 24px; }
+  .dot.active { background: #FFE200; width: 20px; border-radius: 3px; }
 
-  /* ===== SCREEN 2: CHATGPT DEFAULT ===== */
-  #s2 { background: #1E1F21; }
-  #s2 .status-bar { color: white; }
-  #s2 .chatgpt-header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 12px 20px;
-    flex-shrink: 0;
-  }
-  #s2 .chatgpt-header .menu { color: white; font-size: 20px; }
-  #s2 .chatgpt-header .logo { color: white; font-size: 18px; font-weight: 600; }
-  #s2 .chatgpt-header .login-btn {
-    background: white; color: #030303;
-    border: none; border-radius: 20px;
-    padding: 8px 18px; font-size: 15px; font-weight: 500;
-    cursor: pointer;
-  }
-  #s2 .chatgpt-body {
-    flex: 1; display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    padding: 0 24px;
-    gap: 0;
-  }
-  #s2 .chatgpt-prompt {
-    color: white; font-size: 28px; font-weight: 600;
-    text-align: center; line-height: 1.3;
-    margin-bottom: 32px;
-  }
-  #s2 .chatgpt-input-wrap {
-    width: 100%;
-    background: #2D2E30;
-    border-radius: 16px;
-    padding: 14px 16px;
-  }
-  #s2 .chatgpt-input-wrap .input-text {
-    color: #9CA3AF; font-size: 16px;
-    margin-bottom: 12px;
-  }
-  #s2 .chatgpt-input-actions {
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  #s2 .plus-btn {
-    width: 32px; height: 32px; border-radius: 50%;
-    background: #3D3E40;
-    color: white; font-size: 20px;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer; border: none;
-  }
-  #s2 .mic-btn {
-    width: 32px; height: 32px; border-radius: 50%;
-    background: #3D3E40; color: white;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer; border: none; font-size: 14px;
-  }
-  #s2 .chatgpt-footer {
-    padding: 12px 20px;
-    font-size: 11px; color: #6C6F75; text-align: center; line-height: 1.5;
-    flex-shrink: 0;
-  }
-  #s2 .chatgpt-footer a { color: #6C6F75; text-decoration: underline; }
-  #s2 .browser-bar {
-    background: #1E1F21;
-    padding: 8px 16px 12px;
-    flex-shrink: 0;
-  }
-  #s2 .browser-url {
-    background: #2D2E30; border-radius: 10px;
-    height: 36px; display: flex; align-items: center; justify-content: center;
-    color: #9CA3AF; font-size: 14px;
-  }
-  #s2 .browser-nav {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 8px 0;
-  }
-  #s2 .browser-nav-btn {
-    width: 40px; height: 40px; border-radius: 50%;
-    background: transparent; border: none; color: white;
-    font-size: 18px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-  }
-  #s2 .tab-count {
-    background: #3D3E40; color: white;
-    border-radius: 6px; padding: 4px 8px; font-size: 13px;
+  /* ── Screen label ── */
+  .label {
+    position: fixed;
+    top: 18px;
+    color: rgba(255,255,255,0.35);
+    font-size: 11px;
+    letter-spacing: 1px;
+    font-family: monospace;
+    z-index: 200;
   }
 
-  /* ===== SCREEN 3: CHATGPT MOM TYPING ===== */
-  #s3 { background: #1E1F21; }
-  #s3 .status-bar { color: white; }
-  #s3 .chatgpt-body-2 {
-    flex: 1; display: flex; flex-direction: column;
-    padding: 24px 20px 0;
-  }
-  #s3 .chatgpt-prompt-2 {
-    color: white; font-size: 26px; font-weight: 600;
-    text-align: center; line-height: 1.3;
-    margin-bottom: 24px;
-  }
-  #s3 .chatgpt-input-active {
-    background: #2D2E30; border-radius: 16px; padding: 14px 16px;
-  }
-  #s3 .typed-text {
-    color: white; font-size: 15px; line-height: 1.5; margin-bottom: 12px;
-  }
-  #s3 .input-actions2 {
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  #s3 .send-btn {
-    width: 32px; height: 32px; border-radius: 50%;
-    background: white; border: none; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px;
-  }
-  #s3 .keyboard-sim {
-    margin-top: auto;
-    background: #D1D1D6;
-    border-radius: 0;
-    flex-shrink: 0;
-  }
-  #s3 .kb-top {
-    background: #AAB0B8; padding: 6px 10px;
-    display: flex; gap: 12px;
-    font-size: 20px; color: #1E1F21;
-  }
-  #s3 .kb-row {
-    display: flex; padding: 4px 4px;
-    gap: 4px;
-  }
-  #s3 .kb-key {
-    flex: 1; background: white; border-radius: 5px;
-    height: 42px; display: flex; align-items: center; justify-content: center;
-    font-size: 16px; color: #030303; font-weight: 400;
-    box-shadow: 0 1px 0 #888;
-  }
-  #s3 .kb-key.wide { flex: 1.5; font-size: 13px; }
-  #s3 .kb-key.dark { background: #AAB0B8; }
-  #s3 .kb-bottom {
-    display: flex; padding: 4px;
-    gap: 4px; padding-bottom: 20px;
-  }
-  #s3 .kb-space {
-    flex: 1; background: white; border-radius: 5px;
-    height: 42px; display: flex; align-items: center; justify-content: center;
-    font-size: 15px; color: #030303;
-    box-shadow: 0 1px 0 #888;
-  }
-
-  /* ===== SCREEN 4: CHATGPT EBIKE RESULTS ===== */
-  #s4 { background: #f7f7f7; }
-  #s4 .status-bar { background: #fff; }
-  #s4 .browser-top {
-    background: #fff;
-    padding: 0 12px 10px;
-    flex-shrink: 0;
-  }
-  #s4 .browser-top .url-bar {
-    background: #F2F2F2; border-radius: 10px;
-    height: 36px; display: flex; align-items: center; justify-content: center;
-    color: #6C6F75; font-size: 13px; gap: 6px;
-  }
-  #s4 .product-result {
-    background: white;
-    padding: 16px;
-    flex: 1;
-    overflow-y: auto;
-  }
-  #s4 .product-result::-webkit-scrollbar { display: none; }
-  #s4 .ebike-img {
-    width: 100%; height: 200px;
-    background: #1E1F21;
-    display: flex; align-items: center; justify-content: center;
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 8px;
-  }
-  #s4 .ebike-img img { width: 90%; object-fit: contain; }
-  #s4 .img-dots { display: flex; justify-content: center; gap: 6px; margin-bottom: 16px; }
-  #s4 .img-dots span { width: 7px; height: 7px; border-radius: 50%; background: #D1D5DB; }
-  #s4 .img-dots span.active { background: #030303; }
-  #s4 .product-name { font-size: 18px; font-weight: 700; color: #030303; margin-bottom: 4px; }
-  #s4 .product-rating { font-size: 14px; color: #030303; margin-bottom: 16px; }
-  #s4 .retailer-row {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 12px 0; border-top: 1px solid #E5E5E5;
-  }
-  #s4 .retailer-info { display: flex; align-items: center; gap: 10px; }
-  #s4 .retailer-logo {
-    width: 24px; height: 24px; border-radius: 4px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 10px; font-weight: 700;
-  }
-  #s4 .retailer-details .name { font-size: 13px; font-weight: 600; color: #030303; }
-  #s4 .retailer-details .sub { font-size: 11px; color: #6C6F75; }
-  #s4 .retailer-price { font-size: 15px; font-weight: 700; color: #030303; }
-  #s4 .visit-btn {
-    background: #F2F2F2; border: none; border-radius: 20px;
-    padding: 8px 18px; font-size: 13px; font-weight: 600;
-    cursor: pointer;
-  }
-  #s4 .follow-up {
-    position: absolute;
-    bottom: 96px; right: 16px;
-    background: #1E1F21; color: white;
-    border-radius: 20px; padding: 10px 18px;
-    font-size: 14px; font-weight: 500;
-    display: flex; align-items: center; gap: 6px;
-  }
-  #s4 .browser-nav-bar {
-    background: white;
-    padding: 8px 16px 20px;
-    flex-shrink: 0;
-  }
-  #s4 .browser-nav-bar .nav-row {
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  #s4 .browser-nav-bar .nav-btn {
-    background: none; border: none; color: #6C6F75;
-    font-size: 20px; padding: 8px;
-    display: flex; align-items: center; justify-content: center;
-  }
-
-  /* ===== SCREEN 5: BB SAVED ITEMS ===== */
-  #s5 .page-title-bar {
-    padding: 12px 16px 8px;
-    display: flex; align-items: center; gap: 8px;
-    flex-shrink: 0;
-  }
-  #s5 .page-title-bar h1 { font-size: 20px; font-weight: 700; color: #030303; }
-  #s5 .list-tabs {
-    padding: 0 16px 12px;
-    display: flex; gap: 8px; overflow-x: auto;
-    flex-shrink: 0;
-  }
-  #s5 .list-tabs::-webkit-scrollbar { display: none; }
-  #s5 .list-tab {
-    border: 1.5px solid #E5E5E5;
-    border-radius: 20px; padding: 6px 14px;
-    font-size: 13px; white-space: nowrap;
-    cursor: pointer; background: white;
-    display: flex; align-items: center; gap: 6px;
-  }
-  #s5 .list-tab.active { border-color: #0046BE; color: #0046BE; }
-  #s5 .list-tab svg { width: 14px; height: 14px; }
-  #s5 .product-grid {
-    padding: 0 16px;
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 12px; margin-bottom: 16px;
-  }
-  #s5 .acc-section-title {
-    padding: 8px 16px;
-    font-size: 14px; font-weight: 700; color: #030303;
-    background: white; border-top: 1px solid #E5E5E5;
+  /* ── Section badge (shown between screens) ── */
+  .section-badge {
+    position: fixed;
+    top: 18px;
+    right: calc(50% - 195px - 8px);
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.5);
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    z-index: 200;
+    font-family: -apple-system, sans-serif;
   }
 </style>
 </head>
 <body>
 
-<span class="screen-label" id="screenLabel">1 / 16</span>
+<span class="label" id="lbl">1 / 16</span>
+<span class="section-badge" id="badge">Intro</span>
 
-<button class="arrow-btn left" onclick="prevScreen()">‹</button>
-<button class="arrow-btn right" onclick="nextScreen()">›</button>
+<button class="arrow left"  onclick="prev()">‹</button>
+<button class="arrow right" onclick="next()">›</button>
 
-<div class="phone">
-  <div class="screens" id="screens">
+<div class="phone" id="phone">
 
-    <!-- ===== SCREEN 1: INTRO CARD ===== -->
-    <div class="screen active" id="s1">
-      <div class="intro-content">
-        <div class="journey-label">GIFTING JOURNEY</div>
-        <div class="journey-title">Pre-season: Sept. – Oct</div>
-        <div class="journey-desc">Sarah is on her phone and decides to use ChatGPT to get some gift ideas for her parents.</div>
-      </div>
-      <button class="start-btn" onclick="goToScreen(2)">
-        <span>Start</span>
-        <span class="arrow">→</span>
-      </button>
-    </div>
+  <!-- Each screen: scrollable container with the exact Figma frame image -->
 
-    <!-- ===== SCREEN 2: CHATGPT DEFAULT ===== -->
-    <div class="screen" id="s2">
-      <div class="status-bar" style="background:#1E1F21">
-        <span class="time" style="color:white">2:07</span>
-        <div class="icons">
-          <svg viewBox="0 0 16 12" fill="white"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4" y="5" width="3" height="7" rx="1"/><rect x="8" y="2" width="3" height="10" rx="1"/><rect x="12" y="0" width="3" height="12" rx="1"/></svg>
-          <svg viewBox="0 0 16 12" fill="white" width="16"><path d="M8 1C5 1 2.4 2.2.8 4.2L2.2 5.6C3.5 3.9 5.6 2.8 8 2.8s4.5 1.1 5.8 2.8l1.4-1.4C13.6 2.2 11 1 8 1zm0 3.6c-1.8 0-3.4.8-4.5 2L4.9 8c.8-.9 1.9-1.6 3.1-1.6s2.3.6 3.1 1.6l1.4-1.4C11.4 5.4 9.8 4.6 8 4.6z"/></svg>
-          <svg viewBox="0 0 25 12" fill="white" width="25"><rect x="0" y="1" width="22" height="10" rx="2" stroke="white" stroke-width="1" fill="none"/><rect x="1" y="2" width="17" height="8" rx="1" fill="white"/><rect x="23" y="4" width="2" height="4" rx="1" fill="white"/></svg>
-        </div>
-      </div>
-      <div class="chatgpt-header">
-        <span class="menu">≡</span>
-        <span class="logo">ChatGPT</span>
-        <button class="login-btn">Log in</button>
-      </div>
-      <div class="chatgpt-body">
-        <div class="chatgpt-prompt">What's on the<br>agenda today?</div>
-        <div class="chatgpt-input-wrap">
-          <div class="input-text">Ask anything</div>
-          <div class="chatgpt-input-actions">
-            <button class="plus-btn">+</button>
-            <div style="display:flex;gap:8px">
-              <button class="mic-btn">🎤</button>
-              <button class="mic-btn" style="background:#9CA3AF">↑</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="chatgpt-footer">
-        ChatGPT is AI. By using it, you agree to our <a>Terms</a> & <a>Privacy Policy</a>.<br>Chats may be reviewed and used to improve our AI models. <a>Learn more</a>
-      </div>
-      <div class="browser-bar">
-        <div class="browser-url">📷 chatgpt.com ↗</div>
-        <div class="browser-nav">
-          <button class="browser-nav-btn">‹</button>
-          <button class="browser-nav-btn">›</button>
-          <button class="browser-nav-btn">+</button>
-          <span class="tab-count">36</span>
-          <button class="browser-nav-btn">···</button>
-        </div>
-      </div>
-    </div>
+  <div class="screen active" id="s1">
+    <img class="frame-img" src="images/s1_intro.png" alt="Intro Card">
+  </div>
 
-    <!-- ===== SCREEN 3: CHATGPT MOM TYPING ===== -->
-    <div class="screen" id="s3">
-      <div class="status-bar" style="background:#1E1F21">
-        <span class="time" style="color:white">2:08</span>
-        <div class="icons">
-          <svg viewBox="0 0 16 12" fill="white"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4" y="5" width="3" height="7" rx="1"/><rect x="8" y="2" width="3" height="10" rx="1"/><rect x="12" y="0" width="3" height="12" rx="1"/></svg>
-          <svg viewBox="0 0 25 12" fill="white" width="25"><rect x="0" y="1" width="22" height="10" rx="2" stroke="white" stroke-width="1" fill="none"/><rect x="1" y="2" width="14" height="8" rx="1" fill="white"/><rect x="23" y="4" width="2" height="4" rx="1" fill="white"/></svg>
-        </div>
-      </div>
-      <div class="chatgpt-body-2">
-        <div class="chatgpt-prompt-2">What's on the<br>agenda today?</div>
-        <div class="chatgpt-input-active">
-          <div class="typed-text">gift ideas for mom she's into e-bikes.<br>budget is around $800</div>
-          <div class="input-actions2">
-            <button class="plus-btn" style="background:#3D3E40;color:white;border:none;border-radius:50%;width:32px;height:32px;">+</button>
-            <button class="send-btn">↑</button>
-          </div>
-        </div>
-      </div>
-      <!-- Keyboard simulation -->
-      <div class="keyboard-sim" style="background:#D1D1D6;flex-shrink:0;">
-        <div class="kb-top" style="background:#AAB0B8;padding:6px 10px;display:flex;gap:16px;">
-          <span style="color:#555;font-size:14px;">🔑</span>
-          <span style="color:#555;font-size:14px;">💳</span>
-          <span style="color:#555;font-size:14px;">📍</span>
-          <span style="margin-left:auto;background:#007AFF;color:white;border-radius:6px;padding:2px 8px;font-size:13px;">⌨️</span>
-        </div>
-        <div style="padding:0 3px">
-          <div class="kb-row">
-            <div class="kb-key">1</div><div class="kb-key">2</div><div class="kb-key">3</div><div class="kb-key">4</div><div class="kb-key">5</div>
-            <div class="kb-key">6</div><div class="kb-key">7</div><div class="kb-key">8</div><div class="kb-key">9</div><div class="kb-key">0</div>
-          </div>
-          <div class="kb-row">
-            <div class="kb-key">-</div><div class="kb-key">/</div><div class="kb-key">:</div><div class="kb-key">;</div><div class="kb-key">(</div>
-            <div class="kb-key">)</div><div class="kb-key">$</div><div class="kb-key">&</div><div class="kb-key">@</div><div class="kb-key">"</div>
-          </div>
-          <div class="kb-row">
-            <div class="kb-key dark" style="flex:1.5;font-size:12px">#+=</div>
-            <div class="kb-key">.</div><div class="kb-key">,</div><div class="kb-key">?</div><div class="kb-key">!</div><div class="kb-key">'</div>
-            <div class="kb-key dark" style="flex:1.5;font-size:16px;">⌫</div>
-          </div>
-          <div class="kb-bottom" style="padding-bottom:24px;">
-            <div class="kb-key dark" style="flex:1.2;font-size:12px">ABC</div>
-            <div class="kb-space">space</div>
-            <div class="kb-key dark" style="flex:1.2;font-size:12px">return</div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="screen" id="s2">
+    <img class="frame-img" src="images/s2_chatgpt_default.png" alt="ChatGPT Default">
+  </div>
 
-    <!-- ===== SCREEN 4: CHATGPT EBIKE RESULTS ===== -->
-    <div class="screen" id="s4">
-      <div class="status-bar" style="background:white">
-        <span class="time">10:30</span>
-        <div class="icons">
-          <svg viewBox="0 0 16 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="#030303"/><rect x="4" y="5" width="3" height="7" rx="1" fill="#030303"/><rect x="8" y="2" width="3" height="10" rx="1" fill="#030303"/><rect x="12" y="0" width="3" height="12" rx="1" fill="#030303"/></svg>
-          <svg viewBox="0 0 25 12" width="25"><rect x="0" y="1" width="22" height="10" rx="2" stroke="#030303" stroke-width="1" fill="none"/><rect x="1" y="2" width="17" height="8" rx="1" fill="#030303"/><rect x="23" y="4" width="2" height="4" rx="1" fill="#030303"/></svg>
-        </div>
-      </div>
-      <div class="browser-top">
-        <div class="url-bar">📷 &nbsp; chatgpt.com &nbsp; ↗</div>
-      </div>
-      <div class="product-result">
-        <div class="ebike-img">
-          <div style="color:white;font-size:48px;">🚲</div>
-        </div>
-        <div class="img-dots">
-          <span class="active"></span><span></span><span></span><span></span>
-        </div>
-        <div class="product-name">Lectric XP4 750 Step-Thru</div>
-        <div class="product-rating">⭐ 4.9 (980)</div>
+  <div class="screen" id="s3">
+    <img class="frame-img" src="images/s3_chatgpt_mom.png" alt="ChatGPT Mom Typing">
+  </div>
 
-        <div class="retailer-row">
-          <div class="retailer-info">
-            <div class="retailer-logo" style="background:#E8F0FE;">⚡</div>
-            <div class="retailer-details">
-              <div class="name">Lectric eBikes</div>
-              <div class="sub">In stock online, Free delivery Jun 23–30</div>
-            </div>
-          </div>
-          <span class="retailer-price">$1,299.00</span>
-          <button class="visit-btn">Visit</button>
-        </div>
+  <div class="screen" id="s4">
+    <img class="frame-img" src="images/s4_chatgpt_ebike.png" alt="ChatGPT E-bike Results">
+  </div>
 
-        <div class="retailer-row">
-          <div class="retailer-info">
-            <div class="retailer-logo" style="background:#FFE200;font-size:8px;font-weight:700;color:#030303;">BB</div>
-            <div class="retailer-details">
-              <div class="name">Best Buy</div>
-              <div class="sub">In stock online and nearby, Free delivery by Sat</div>
-            </div>
-          </div>
-          <span class="retailer-price">$1,299.00</span>
-          <button class="visit-btn">Visit</button>
-        </div>
+  <div class="screen" id="s5">
+    <img class="frame-img" src="images/s5_saved_mom.png" alt="BB Saved Items Mom">
+  </div>
 
-        <div class="retailer-row" style="opacity:0.7">
-          <div class="retailer-info">
-            <div class="retailer-logo" style="background:#FF3008;color:white;font-size:8px;font-weight:700;">DD</div>
-            <div class="retailer-details">
-              <div class="name">DoorDash – Best...</div>
-              <div class="sub">2 hour delivery $5.99</div>
-            </div>
-          </div>
-          <span class="retailer-price">$1,2...</span>
-        </div>
+  <div class="screen" id="s6">
+    <img class="frame-img" src="images/s6_askblue_mom.png" alt="Ask Blue Still Shopping Mom">
+  </div>
 
-        <div style="font-size:13px;color:#6C6F75;padding-top:12px;">1 other seller • Starting at $1,299.00 ∨</div>
-      </div>
+  <div class="screen" id="s7">
+    <img class="frame-img" src="images/s7_askblue_dad_typing.png" alt="Ask Blue Dad Typing">
+  </div>
 
-      <div style="position:absolute;bottom:80px;right:16px;background:#1E1F21;color:white;border-radius:20px;padding:10px 18px;font-size:14px;font-weight:500;display:flex;align-items:center;gap:6px;">
-        ↪ Follow up
-      </div>
+  <div class="screen" id="s8">
+    <img class="frame-img" src="images/s8_askblue_dad_results.png" alt="Ask Blue Dad Results">
+  </div>
 
-      <div class="browser-nav-bar">
-        <div class="nav-row">
-          <button class="nav-btn" style="background:none;border:none;font-size:22px;color:#6C6F75;">‹</button>
-          <button class="nav-btn" style="background:none;border:none;font-size:22px;color:#D1D5DB;">›</button>
-          <button class="nav-btn" style="background:none;border:none;font-size:20px;color:#6C6F75;">+</button>
-          <span style="background:#F2F2F2;border-radius:6px;padding:4px 8px;font-size:13px;color:#030303;">26</span>
-          <button class="nav-btn" style="background:none;border:none;font-size:20px;color:#6C6F75;">···</button>
-        </div>
-      </div>
-    </div>
+  <div class="screen" id="s9">
+    <img class="frame-img" src="images/s9_askblue_dad_toast.png" alt="Ask Blue Dad Item Saved">
+  </div>
 
-    <!-- ===== SCREEN 5: BB SAVED ITEMS – MOM ===== -->
-    <div class="screen" id="s5" style="background:#F7F7FF;">
-      <!-- BB Header -->
-      <div style="background:#0046BE;padding:10px 16px 12px;flex-shrink:0;">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="background:white;border-radius:6px;height:40px;flex:1;display:flex;align-items:center;padding:0 10px;gap:8px;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#6C6F75" stroke-width="2"/><line x1="16.5" y1="16.5" x2="22" y2="22" stroke="#6C6F75" stroke-width="2" stroke-linecap="round"/></svg>
-            <span style="font-size:14px;color:#6C6F75;">Search Best Buy</span>
-            <span style="margin-left:auto;color:#6C6F75;">🎤</span>
-          </div>
-          <div style="position:relative;">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6" stroke="white" stroke-width="2"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-            <div style="position:absolute;top:-4px;right:-4px;background:#FFE200;color:#030303;border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;">5</div>
-          </div>
-        </div>
-      </div>
-      <div class="status-bar" style="height:auto;padding:10px 16px 8px;background:white;flex-shrink:0;">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <svg width="22" height="20" viewBox="0 0 22 20" fill="#0046BE"><path d="M11 19l-1.5-1.35C4.4 12.8 1 10.1 1 6.5 1 3.4 3.4 1 6.5 1c1.74 0 3.41.81 4.5 2.09C12.09 1.81 13.76 1 15.5 1 18.6 1 21 3.4 21 6.5c0 3.6-3.4 6.3-8.5 11.15L11 19z"/></svg>
-          <h1 style="font-size:20px;font-weight:700;color:#030303;">Saved items</h1>
-        </div>
-      </div>
-      <div style="padding:8px 16px 12px;display:flex;gap:8px;overflow-x:auto;background:white;flex-shrink:0;border-bottom:1px solid #E5E5E5;">
-        <div style="border:1.5px solid #0046BE;border-radius:20px;padding:6px 12px;font-size:13px;color:#0046BE;white-space:nowrap;display:flex;align-items:center;gap:6px;cursor:pointer;">
-          ✓ Christmas gifts ×
-        </div>
-        <div style="border:1.5px solid #E5E5E5;border-radius:20px;padding:6px 12px;font-size:13px;color:#030303;white-space:nowrap;cursor:pointer;">Trip to Thailand</div>
-        <div style="border:1.5px solid #E5E5E5;border-radius:20px;padding:6px 12px;font-size:13px;color:#030303;white-space:nowrap;cursor:pointer;">All saved items</div>
-        <div style="border:1.5px solid #E5E5E5;border-radius:20px;padding:6px 12px;font-size:13px;color:#030303;white-space:nowrap;cursor:pointer;">+ Create new list</div>
-      </div>
-      <div class="scroll-content" style="background:#F7F7FF;">
-        <!-- Sign-in nudge -->
-        <div style="background:white;margin:0 0 8px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;">
-          <div>
-            <div style="font-size:14px;font-weight:600;color:#030303;margin-bottom:2px;">✨ Keep this chat</div>
-            <div style="font-size:12px;color:#55555A;">Sign in to return to it later.</div>
-          </div>
-          <div style="display:flex;gap:8px;">
-            <button style="background:#0046BE;color:white;border:none;border-radius:4px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;">Sign in</button>
-            <button style="background:white;border:1px solid #030303;border-radius:4px;padding:8px 14px;font-size:13px;cursor:pointer;">Create account</button>
-          </div>
-        </div>
+  <div class="screen" id="s10">
+    <img class="frame-img" src="images/s10_bb_home.png" alt="Best Buy Home">
+  </div>
 
-        <!-- Product card - full width e-bike -->
-        <div style="background:white;margin:0 0 8px;padding:16px;">
-          <div style="display:flex;gap:12px;align-items:flex-start;">
-            <div style="width:120px;height:120px;background:#F5F5F5;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:48px;flex-shrink:0;">🚲</div>
-            <div style="flex:1;">
-              <div class="badge blue">Top Rated</div>
-              <div style="font-size:13px;font-weight:600;color:#030303;margin-bottom:4px;line-height:1.3;">Hey Bike- Ranger S 2.0 - Foldable Step-Thru Fat-Tire Electric Bike</div>
-              <div style="font-size:12px;color:#C37600;margin-bottom:4px;">★★★★★ <span style="color:#030303;">5.0 (919)</span></div>
-              <div style="font-size:18px;font-weight:700;margin-bottom:6px;">$799.99</div>
-              <div style="font-size:12px;color:#030303;margin-bottom:2px;">🏪 Pick up <strong>Tue, Nov 15</strong></div>
-              <div style="font-size:12px;color:#030303;margin-bottom:10px;">📦 Get it by <strong>Thur, Nov 18</strong></div>
-              <button style="background:#FFE200;border:none;border-radius:4px;height:36px;width:100%;font-size:13px;font-weight:700;cursor:pointer;">Add to cart</button>
-            </div>
-          </div>
-        </div>
+  <div class="screen" id="s11">
+    <img class="frame-img" src="images/s11_askblue_hi.png" alt="Ask Blue Hi Sarah">
+  </div>
 
-        <!-- Accessories section -->
-        <div style="font-size:14px;font-weight:700;color:#030303;padding:12px 16px 8px;background:white;border-top:1px solid #E5E5E5;">e-Bike accessories for mom under $100</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px 16px;background:white;">
-          <!-- Card 1 -->
-          <div class="product-card">
-            <div class="p-img" style="position:relative;">
-              <div style="font-size:40px;">🧺</div>
-              <div style="position:absolute;top:8px;left:8px;"><span class="badge blue">Top Rated</span></div>
-              <div style="position:absolute;top:8px;right:8px;display:flex;flex-direction:column;gap:6px;">
-                <div style="width:28px;height:28px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,0.15);font-size:13px;">···</div>
-                <div style="width:28px;height:28px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,0.15);font-size:13px;">♡</div>
-              </div>
-            </div>
-            <div class="p-body">
-              <div style="font-size:10px;color:#6C6F75;margin-bottom:2px;">Sponsored</div>
-              <div class="p-title">VEVOR - Rear Bike Basket, Medium Bicycle...</div>
-              <div class="p-stars">★★★★★ <span style="color:#030303;font-size:11px;">4.9 (918)</span></div>
-              <div class="p-price">$43.99</div>
-              <div class="p-delivery">🏪 Pick up today</div>
-              <div style="font-size:11px;color:#030303;margin-bottom:8px;">📦 Get it tomorrow • <span style="color:#007600;font-weight:600;">FREE</span></div>
-              <button class="add-to-cart">Add to cart</button>
-            </div>
-          </div>
-          <!-- Card 2 -->
-          <div class="product-card">
-            <div class="p-img" style="position:relative;">
-              <div style="font-size:40px;">🗄️</div>
-              <div style="position:absolute;top:8px;left:8px;"><span class="badge red">Save $30</span></div>
-              <div style="position:absolute;top:8px;right:8px;display:flex;flex-direction:column;gap:6px;">
-                <div style="width:28px;height:28px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,0.15);font-size:13px;">···</div>
-                <div style="width:28px;height:28px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,0.15);font-size:13px;">♡</div>
-              </div>
-            </div>
-            <div class="p-body">
-              <div class="p-title">Lectric eBikes - Xpress Rear Rack - Black...</div>
-              <div class="p-stars">★★★★★ <span style="color:#030303;font-size:11px;">5.0 (934)</span></div>
-              <div class="p-price">$89.99</div>
-              <div class="p-delivery">🏪 Pick up today</div>
-              <div style="font-size:11px;color:#030303;margin-bottom:8px;">📦 Get it tomorrow • <span style="color:#007600;font-weight:600;">FREE</span></div>
-              <button class="add-to-cart">Add to cart</button>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div class="screen" id="s12">
+    <img class="frame-img" src="images/s12_askblue_sister_typing.png" alt="Ask Blue Sister Typing">
+  </div>
 
-      <!-- Bottom Nav -->
-      <div class="bb-bottom-nav">
-        <div class="nav-item active">
-          <svg viewBox="0 0 24 24" fill="#0046BE"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-          <span class="nav-label" style="color:#0046BE;">Home</span>
-        </div>
-        <div class="nav-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#6C6F75" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
-          <span class="nav-label">Shop</span>
-        </div>
-        <div class="nav-item">
-          <div style="width:32px;height:32px;background:linear-gradient(135deg,#0046BE,#7B2FBE);border-radius:50%;display:flex;align-items:center;justify-content:center;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke="white" stroke-width="1.5" fill="none"/></svg>
-          </div>
-          <span class="nav-label">Ask Blue</span>
-        </div>
-        <div class="nav-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#6C6F75" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-          <span class="nav-label">Wallet</span>
-        </div>
-        <div class="nav-item">
-          <div style="width:28px;height:28px;background:#E8F0FE;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;color:#0046BE;font-weight:700;">S</div>
-          <span class="nav-label">Sarah</span>
-        </div>
-      </div>
-    </div>
+  <div class="screen" id="s13">
+    <img class="frame-img" src="images/s13_askblue_sister_results.png" alt="Ask Blue Sister Results">
+  </div>
 
+  <div class="screen" id="s14">
+    <img class="frame-img" src="images/s14_sms.png" alt="SMS Price Drop Alert">
+  </div>
 
-    <!-- ===== SCREEN 6: ASK BLUE – MOM CONTEXT / DAD INTRO ===== -->
-    <div class="screen" id="s6" style="background:#F7F7FF;flex-direction:column;">
-      <div style="background:#0046BE;padding:10px 16px 12px;flex-shrink:0;">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="background:white;border-radius:6px;height:40px;flex:1;display:flex;align-items:center;padding:0 10px;gap:8px;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#6C6F75" stroke-width="2"/><line x1="16.5" y1="16.5" x2="22" y2="22" stroke="#6C6F75" stroke-width="2" stroke-linecap="round"/></svg>
-            <span style="font-size:14px;color:#6C6F75;">Search Best Buy</span>
-          </div>
-          <div style="position:relative;">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6" stroke="white" stroke-width="2"/></svg>
-            <div style="position:absolute;top:-4px;right:-4px;background:#FFE200;color:#030303;border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;">5</div>
-          </div>
-        </div>
-      </div>
-      <!-- Ask Blue sub-header -->
-      <div style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between;background:white;border-bottom:1px solid #E5E5E5;flex-shrink:0;">
-        <span style="font-size:22px;color:#6C6F75;cursor:pointer;">✕</span>
-        <span style="font-size:17px;font-weight:600;color:#030303;">Ask Blue <span style="color:#6C6F75;font-size:13px;font-weight:400;">AI</span></span>
-        <div style="display:flex;gap:14px;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#030303" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="#030303" stroke-width="2"/></svg>
-        </div>
-      </div>
-      <div style="padding:8px 16px;font-size:11px;color:#6C6F75;line-height:1.4;background:white;flex-shrink:0;">
-        By continuing, you agree to our <span style="color:#0046BE;">Terms and Conditions</span> and <span style="color:#0046BE;">Privacy Policy</span>. We may keep a record for quality and training.
-      </div>
-      <!-- Chat content -->
-      <div class="scroll-content" style="padding:20px 16px;">
-        <div style="font-size:28px;font-weight:700;color:#0046BE;line-height:1.3;margin-bottom:16px;">
-          Still shopping for mom in self-care with budget of $800?
-        </div>
-        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px;">
-          <div class="chip">Is mom into fitness tech?</div>
-          <div class="chip">Does she like hiking on trails?</div>
-          <div class="chip">Is mom into health &amp; relaxation?</div>
-        </div>
-      </div>
-      <div style="padding:12px 16px;border-top:1px solid #E5E5E5;background:white;flex-shrink:0;">
-        <div style="border:1.5px solid #E5E5E5;border-radius:24px;height:48px;display:flex;align-items:center;padding:0 16px;gap:8px;">
-          <input type="text" placeholder="Ask a question" style="flex:1;border:none;outline:none;font-size:15px;color:#030303;background:transparent;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6C6F75" stroke-width="2"><path d="M12 1a4 4 0 014 4v5a4 4 0 01-8 0V5a4 4 0 014-4z"/><path d="M19 10a7 7 0 01-14 0"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
-          <div style="width:32px;height:32px;background:#E5E5E5;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;">↑</div>
-        </div>
-      </div>
-      <!-- Bottom Nav -->
-      <div class="bb-bottom-nav">
-        <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="#6C6F75" stroke-width="2"><path d="M3 12L12 3l9 9"/><path d="M9 21V12h6v9"/></svg><span class="nav-label">Home</span></div>
-        <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="#6C6F75" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg><span class="nav-label">Shop</span></div>
-        <div class="nav-item active">
-          <div style="width:32px;height:32px;background:linear-gradient(135deg,#0046BE,#7B2FBE);border-radius:50%;display:flex;align-items:center;justify-content:center;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/><circle cx="12" cy="12" r="3" fill="white"/></svg>
-          </div>
-          <span class="nav-label" style="color:#0046BE;">Ask Blue</span>
-        </div>
-        <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="#6C6F75" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg><span class="nav-label">Wallet</span></div>
-        <div class="nav-item"><div style="width:28px;height:28px;background:#E8F0FE;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;color:#0046BE;font-weight:700;">S</div><span class="nav-label">Sarah</span></div>
-      </div>
-    </div>
+  <div class="screen" id="s15">
+    <img class="frame-img" src="images/s15_saved_all.png" alt="BB Saved Items All Tagged">
+  </div>
 
-    <!-- ===== SCREEN 7: ASK BLUE – DAD TYPING ===== -->
-    <div class="screen" id="s7" style="background:#F7F7FF;flex-direction:column;">
-      <div style="background:#0046BE;padding:10px 16px 12px;flex-shrink:0;">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="background:white;border-radius:6px;height:40px;flex:1;display:flex;align-items:center;padding:0 10px;gap:8px;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#6C6F75" stroke-width="2"/><line x1="16.5" y1="16.5" x2="22" y2="22" stroke="#6C6F75" stroke-width="2" stroke-linecap="round"/></svg>
-            <span style="font-size:14px;color:#6C6F75;">Search Best Buy</span>
-          </div>
-          <div style="position:relative;">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/></svg>
-            <div style="position:absolute;top:-4px;right:-4px;background:#FFE200;color:#030303;border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;">5</div>
-          </div>
-        </div>
-      </div>
-      <div style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between;background:white;border-bottom:1px solid #E5E5E5;flex-shrink:0;">
-        <span style="font-size:22px;color:#6C6F75;cursor:pointer;">✕</span>
-        <span style="font-size:17px;font-weight:600;">Ask Blue <span style="color:#6C6F75;font-size:13px;font-weight:400;">AI</span></span>
-        <div style="display:flex;gap:14px;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#030303" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="#030303" stroke-width="2"/></svg>
-        </div>
-      </div>
-      <div style="padding:8px 16px;font-size:11px;color:#6C6F75;background:white;flex-shrink:0;">
-        By continuing, you agree to our <span style="color:#0046BE;">Terms and Conditions</span> and <span style="color:#0046BE;">Privacy Policy</span>. We may keep a record for quality and training.
-      </div>
-      <div class="scroll-content" style="padding:20px 16px;">
-        <div style="font-size:28px;font-weight:700;color:#0046BE;line-height:1.3;margin-bottom:16px;">
-          Still shopping for mom in self-care with budget of $800?
-        </div>
-        <div class="chip">Is mom into fitness tech?</div>
-        <div class="chip">Does she like hiking on trails?</div>
-      </div>
-      <!-- Active typing input -->
-      <div style="padding:12px 16px;border-top:1px solid #E5E5E5;background:white;flex-shrink:0;">
-        <div style="border:1.5px solid #0046BE;border-radius:24px;min-height:48px;display:flex;align-items:center;padding:12px 16px;gap:8px;">
-          <div style="flex:1;font-size:15px;color:#030303;">My budget is around $500 gift for dad he's into green energy and lawn care</div>
-          <div style="display:flex;gap:8px;align-items:center;flex-shrink:0;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6C6F75" stroke-width="2"><path d="M12 1a4 4 0 014 4v5a4 4 0 01-8 0V5a4 4 0 014-4z"/><path d="M19 10a7 7 0 01-14 0"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
-            <div style="width:32px;height:32px;background:#0046BE;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:16px;flex-shrink:0;">↑</div>
-          </div>
-        </div>
-      </div>
-      <!-- Keyboard -->
-      <div style="background:#D1D1D6;flex-shrink:0;">
-        <div style="padding:6px 12px 4px;display:flex;gap:3px;">
-          <div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">q</div>
-          <div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">w</div>
-          <div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">e</div>
-          <div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">r</div>
-          <div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">t</div>
-          <div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">y</div>
-          <div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">u</div>
-          <div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">i</div>
-          <div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">o</div>
-          <div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">p</div>
-        </div>
-        <div style="padding:4px 18px;display:flex;gap:3px;">
-          <div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">a</div>
-          <div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">s</div>
-          <div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">d</div>
-          <div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">f</div>
-          <div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">g</div>
-          <div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">h</div>
-          <div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">j</div>
-          <div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">k</div>
-          <div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">l</div>
-        </div>
-        <div style="padding:4px 6px;display:flex;gap:3px;">
-          <div style="flex:1.4;background:#AAB0B8;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 1px 0 #888;">⇧</div>
-          <div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">z</div>
-          <div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">x</div>
-          <div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">c</div>
-          <div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">v</div>
-          <div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">b</div>
-          <div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">n</div>
-          <div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">m</div>
-          <div style="flex:1.4;background:#AAB0B8;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 1px 0 #888;">⌫</div>
-        </div>
-        <div style="padding:4px 6px 24px;display:flex;gap:3px;">
-          <div style="flex:1.4;background:#AAB0B8;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:12px;box-shadow:0 1px 0 #888;">ABC</div>
-          <div style="flex:4;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:0 1px 0 #888;">space</div>
-          <div style="flex:1.4;background:#AAB0B8;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:12px;box-shadow:0 1px 0 #888;">return</div>
-        </div>
-      </div>
-    </div>
+  <div class="screen" id="s16">
+    <img class="frame-img" src="images/s16_cart.png" alt="BB Cart Checkout">
+  </div>
 
-    <!-- ===== SCREEN 8: ASK BLUE – DAD RESULTS ===== -->
-    <div class="screen" id="s8" style="background:#F7F7FF;flex-direction:column;">
-      <div style="background:#0046BE;padding:10px 16px 12px;flex-shrink:0;">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="background:white;border-radius:6px;height:40px;flex:1;display:flex;align-items:center;padding:0 10px;gap:8px;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#6C6F75" stroke-width="2"/><line x1="16.5" y1="16.5" x2="22" y2="22" stroke="#6C6F75" stroke-width="2" stroke-linecap="round"/></svg>
-            <span style="font-size:14px;color:#6C6F75;">Search Best Buy</span>
-          </div>
-          <div style="position:relative;">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/></svg>
-            <div style="position:absolute;top:-4px;right:-4px;background:#FFE200;color:#030303;border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;">5</div>
-          </div>
-        </div>
-      </div>
-      <div style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between;background:white;border-bottom:1px solid #E5E5E5;flex-shrink:0;">
-        <span style="font-size:22px;color:#6C6F75;">✕</span>
-        <span style="font-size:17px;font-weight:600;">Ask Blue <span style="color:#6C6F75;font-size:13px;font-weight:400;">AI</span></span>
-        <div style="display:flex;gap:14px;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#030303" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="#030303" stroke-width="2"/></svg>
-        </div>
-      </div>
-      <div class="scroll-content" style="background:white;">
-        <!-- User message bubble -->
-        <div style="padding:16px 16px 0;display:flex;justify-content:flex-end;">
-          <div style="background:#0046BE;color:white;border-radius:18px 18px 4px 18px;padding:12px 16px;max-width:80%;font-size:14px;line-height:1.4;">
-            My budget around $500 gift for dad he's into green energy and lawn care
-          </div>
-        </div>
-        <!-- AI response -->
-        <div style="padding:16px;">
-          <div style="font-size:26px;font-weight:700;color:#030303;line-height:1.3;margin-bottom:12px;">Let's find the right gift for dad.</div>
-          <div style="font-size:14px;color:#030303;line-height:1.6;margin-bottom:20px;">Great combo to work with. Green energy and lawn care overlap really well at around $500. The sweet spot here is battery-powered outdoor equipment: it's the upgrade lawn enthusiasts actually want, and it directly replaces gas. Here's my thinking and top picks:</div>
-
-          <div style="font-size:17px;font-weight:700;margin-bottom:12px;">Clean power for the yard</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
-            <!-- Product 1 -->
-            <div class="product-card">
-              <div class="p-img" style="position:relative;">
-                <div style="font-size:36px;">🌿</div>
-                <div style="position:absolute;top:6px;right:6px;width:28px;height:28px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.15);font-size:13px;">♡</div>
-              </div>
-              <div class="p-body">
-                <div class="p-title">Greenworks · 48V (24V x 2) 17" Brushless Push Lawn Mower +Blower +...</div>
-                <div class="p-stars">★★★★★ <span style="color:#030303;font-size:11px;">4.8 (784)</span></div>
-                <div class="p-price">$539.99</div>
-                <button class="add-to-cart">Add to cart</button>
-              </div>
-            </div>
-            <!-- Product 2 -->
-            <div class="product-card">
-              <div class="p-img" style="position:relative;">
-                <div style="font-size:36px;">📺</div>
-                <div style="position:absolute;top:6px;right:6px;width:28px;height:28px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.15);font-size:13px;">♡</div>
-              </div>
-              <div class="p-body">
-                <div class="p-title">TCL · 65" Class QM5K Series 4K UHD HDR QD-Mini LED Smart TV wit...</div>
-                <div class="p-stars">★★★★★ <span style="color:#030303;font-size:11px;">4.7 (241)</span></div>
-                <div style="font-size:14px;font-weight:700;color:#030303;margin-bottom:4px;">$379.99 <span style="font-size:12px;color:#6C6F75;text-decoration:line-through;font-weight:400;">$810.99</span></div>
-                <button class="add-to-cart">Add to cart</button>
-              </div>
-            </div>
-          </div>
-
-          <div style="font-size:17px;font-weight:700;margin-bottom:12px;">Best Selling outdoors</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
-            <div class="product-card">
-              <div class="p-img"><div style="font-size:36px;">💨</div></div>
-              <div class="p-body">
-                <div class="p-title">WORX - outdoor blower - Long lasting battery last 2 hours on high - C...</div>
-                <div class="p-stars">★★★★★ <span style="color:#030303;font-size:11px;">4.5 (3)</span></div>
-                <div style="font-size:14px;font-weight:700;color:#030303;margin-bottom:2px;">$109.99 <span style="font-size:12px;color:#6C6F75;text-decoration:line-through;font-weight:400;">$159.99</span></div>
-                <button class="add-to-cart" style="margin-top:6px;">Add to cart</button>
-              </div>
-            </div>
-            <div class="product-card">
-              <div class="p-img"><div style="font-size:36px;">🪑</div></div>
-              <div class="p-body">
-                <div class="p-title">Steelite - Outdoor mulcher, Holds 3 Gallon Sweeper 21" Leaf Swee...</div>
-                <div class="p-stars">★★★★★ <span style="color:#030303;font-size:11px;">4.9 (252)</span></div>
-                <div class="p-price">$98.98</div>
-                <button class="add-to-cart">Add to cart</button>
-              </div>
-            </div>
-          </div>
-
-          <div style="font-size:14px;font-weight:700;margin-bottom:10px;">A question to help narrow it down:</div>
-          <div class="chip">Yards is large</div>
-          <div class="chip">Yards is mid-size</div>
-          <div class="chip">Yards is small</div>
-        </div>
-      </div>
-      <div style="padding:8px 16px 12px;background:white;border-top:1px solid #E5E5E5;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
-        <div style="display:flex;gap:16px;">
-          <span style="font-size:22px;color:#6C6F75;cursor:pointer;">👍</span>
-          <span style="font-size:22px;color:#6C6F75;cursor:pointer;">👎</span>
-        </div>
-        <div style="border:1.5px solid #E5E5E5;border-radius:24px;height:44px;flex:1;margin-left:12px;display:flex;align-items:center;padding:0 14px;">
-          <input placeholder="Ask a question" style="flex:1;border:none;outline:none;font-size:14px;background:transparent;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6C6F75" stroke-width="2"><path d="M12 1a4 4 0 014 4v5a4 4 0 01-8 0V5a4 4 0 014-4z"/><path d="M19 10a7 7 0 01-14 0"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
-          <div style="width:28px;height:28px;background:#E5E5E5;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-left:8px;">↑</div>
-        </div>
-      </div>
-      <div class="bb-bottom-nav">
-        <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="#6C6F75" stroke-width="2"><path d="M3 12L12 3l9 9"/><path d="M9 21V12h6v9"/></svg><span class="nav-label">Home</span></div>
-        <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="#6C6F75" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg><span class="nav-label">Shop</span></div>
-        <div class="nav-item active"><div style="width:32px;height:32px;background:linear-gradient(135deg,#0046BE,#7B2FBE);border-radius:50%;display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="10"/></svg></div><span class="nav-label" style="color:#0046BE;">Ask Blue</span></div>
-        <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="#6C6F75" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg><span class="nav-label">Wallet</span></div>
-        <div class="nav-item"><div style="width:28px;height:28px;background:#E8F0FE;border-radius:50%;font-size:14px;color:#0046BE;font-weight:700;display:flex;align-items:center;justify-content:center;">S</div><span class="nav-label">Sarah</span></div>
-      </div>
-    </div>
-
-    <!-- ===== SCREEN 9: ASK BLUE – DAD ITEM SAVED (TOAST) ===== -->
-    <div class="screen" id="s9" style="background:#F7F7FF;flex-direction:column;position:relative;">
-      <div style="background:#0046BE;padding:10px 16px 12px;flex-shrink:0;">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="background:white;border-radius:6px;height:40px;flex:1;display:flex;align-items:center;padding:0 10px;gap:8px;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#6C6F75" stroke-width="2"/></svg>
-            <span style="font-size:14px;color:#6C6F75;">Search Best Buy</span>
-          </div>
-          <div style="position:relative;"><svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/></svg><div style="position:absolute;top:-4px;right:-4px;background:#FFE200;color:#030303;border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;">5</div></div>
-        </div>
-      </div>
-      <div style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between;background:white;border-bottom:1px solid #E5E5E5;flex-shrink:0;">
-        <span style="font-size:22px;color:#6C6F75;">✕</span>
-        <span style="font-size:17px;font-weight:600;">Ask Blue <span style="color:#6C6F75;font-size:13px;font-weight:400;">AI</span></span>
-        <div style="display:flex;gap:14px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#030303" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg></div>
-      </div>
-      <div class="scroll-content" style="background:white;">
-        <div style="padding:16px 16px 0;display:flex;justify-content:flex-end;">
-          <div style="background:#0046BE;color:white;border-radius:18px 18px 4px 18px;padding:12px 16px;max-width:80%;font-size:14px;line-height:1.4;">My budget around $500 gift for dad he's into green energy and lawn care</div>
-        </div>
-        <div style="padding:16px;">
-          <div style="font-size:26px;font-weight:700;color:#030303;line-height:1.3;margin-bottom:12px;">Let's find the right gift for dad.</div>
-          <div style="font-size:14px;color:#030303;line-height:1.6;margin-bottom:16px;">Great combo to work with. Green energy and lawn care overlap really well at around $500.</div>
-          <div style="font-size:17px;font-weight:700;margin-bottom:12px;">Clean power for the yard</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-            <!-- Saved product (heart filled blue) -->
-            <div class="product-card">
-              <div class="p-img" style="position:relative;">
-                <div style="font-size:36px;">🌿</div>
-                <div style="position:absolute;top:6px;right:6px;width:28px;height:28px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.15);font-size:14px;color:#0046BE;">♥</div>
-              </div>
-              <div class="p-body">
-                <div class="p-title">Greenworks · 48V 17" Brushless Push Lawn Mower +Blower +...</div>
-                <div class="p-stars">★★★★★ <span style="color:#030303;font-size:11px;">4.8 (784)</span></div>
-                <div class="p-price">$539.99</div>
-                <button class="add-to-cart">Add to cart</button>
-              </div>
-            </div>
-            <div class="product-card">
-              <div class="p-img" style="position:relative;">
-                <div style="font-size:36px;">📺</div>
-                <div style="position:absolute;top:6px;right:6px;width:28px;height:28px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.15);font-size:13px;">♡</div>
-              </div>
-              <div class="p-body">
-                <div class="p-title">TCL · 65" Class QM5K 4K UHD HDR QD-Mini LED Smart TV...</div>
-                <div class="p-stars">★★★★★ <span style="color:#030303;font-size:11px;">4.7 (241)</span></div>
-                <div class="p-price">$379.99</div>
-                <button class="add-to-cart">Add to cart</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Toast notification -->
-      <div class="toast">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="#FBFBFB" stroke-width="1.5"/><path d="M2 8l10 7 10-7" stroke="#FBFBFB" stroke-width="1.5"/></svg>
-        <div>
-          Your item has been saved to "Christmas Gifts" list
-          <span class="toast-action">Saved Lists</span>
-        </div>
-      </div>
-      <div style="padding:8px 16px 12px;background:white;border-top:1px solid #E5E5E5;display:flex;align-items:center;gap:10px;flex-shrink:0;">
-        <div style="border:1.5px solid #E5E5E5;border-radius:24px;height:44px;flex:1;display:flex;align-items:center;padding:0 14px;gap:8px;">
-          <input placeholder="Ask a question" style="flex:1;border:none;outline:none;font-size:14px;background:transparent;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6C6F75" stroke-width="2"><path d="M12 1a4 4 0 014 4v5a4 4 0 01-8 0V5a4 4 0 014-4z"/></svg>
-          <div style="width:28px;height:28px;background:#E5E5E5;border-radius:50%;display:flex;align-items:center;justify-content:center;">↑</div>
-        </div>
-      </div>
-      <div class="bb-bottom-nav">
-        <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="#6C6F75" stroke-width="2"><path d="M3 12L12 3l9 9"/><path d="M9 21V12h6v9"/></svg><span class="nav-label">Home</span></div>
-        <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="#6C6F75" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg><span class="nav-label">Shop</span></div>
-        <div class="nav-item active"><div style="width:32px;height:32px;background:linear-gradient(135deg,#0046BE,#7B2FBE);border-radius:50%;display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="10"/></svg></div><span class="nav-label" style="color:#0046BE;">Ask Blue</span></div>
-        <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="#6C6F75" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/></svg><span class="nav-label">Wallet</span></div>
-        <div class="nav-item"><div style="width:28px;height:28px;background:#E8F0FE;border-radius:50%;font-size:14px;color:#0046BE;font-weight:700;display:flex;align-items:center;justify-content:center;">S</div><span class="nav-label">Sarah</span></div>
-      </div>
-    </div>
-
-    <!-- ===== SCREEN 10: BEST BUY HOME ===== -->
-    <div class="screen" id="s10" style="background:#F7F7FF;flex-direction:column;">
-      <div style="background:#0046BE;padding:10px 16px 12px;flex-shrink:0;">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="flex-shrink:0;">
-            <div style="background:#FFE200;color:#030303;font-size:11px;font-weight:900;padding:2px 5px;border-radius:2px;line-height:1;">BEST</div>
-            <div style="background:#FFE200;color:#030303;font-size:11px;font-weight:900;padding:2px 5px;border-radius:2px;line-height:1;margin-top:1px;">BUY</div>
-          </div>
-          <div style="background:white;border-radius:6px;height:40px;flex:1;display:flex;align-items:center;padding:0 10px;gap:8px;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#6C6F75" stroke-width="2"/><line x1="16.5" y1="16.5" x2="22" y2="22" stroke="#6C6F75" stroke-width="2" stroke-linecap="round"/></svg>
-            <span style="font-size:14px;color:#6C6F75;">Search Best Buy</span>
-            <span style="margin-left:auto;display:flex;gap:8px;"><span style="color:#6C6F75;font-size:14px;">🎤</span><span style="color:#6C6F75;font-size:14px;">⬛</span></span>
-          </div>
-          <div style="position:relative;"><svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6" stroke="white" stroke-width="2"/></svg><div style="position:absolute;top:-4px;right:-4px;background:#FFE200;color:#030303;border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;">5</div></div>
-        </div>
-      </div>
-      <div class="scroll-content">
-        <!-- Gift list banner -->
-        <div style="background:#E8F0FE;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #C5D5F5;">
-          <div style="font-size:13px;color:#030303;line-height:1.4;">Still shopping for <strong>apple</strong> and <strong>dad</strong>?<br>We have more gift ideas</div>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#030303" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-        </div>
-        <!-- Christmas Gift List preview -->
-        <div style="background:white;padding:14px 16px;border-bottom:8px solid #F7F7FF;">
-          <div style="font-size:15px;font-weight:700;color:#030303;margin-bottom:10px;">Your Christmas Gift list</div>
-          <div style="display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;">
-            <div style="text-align:center;flex-shrink:0;">
-              <div style="width:64px;height:64px;background:#F5F5F5;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:4px;">🚲</div>
-              <div style="font-size:10px;color:#030303;">$799.99</div>
-            </div>
-            <div style="text-align:center;flex-shrink:0;">
-              <div style="width:64px;height:64px;background:#F5F5F5;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:4px;">🌿</div>
-              <div style="font-size:10px;color:#030303;">$539.99</div>
-            </div>
-            <div style="text-align:center;flex-shrink:0;opacity:0.4;">
-              <div style="width:64px;height:64px;background:#F5F5F5;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:4px;">+</div>
-              <div style="font-size:10px;color:#030303;">Add more</div>
-            </div>
-          </div>
-          <button style="margin-top:12px;width:100%;background:#FFE200;border:none;border-radius:4px;height:36px;font-size:13px;font-weight:700;cursor:pointer;">Shop offers</button>
-        </div>
-        <!-- Promo banners -->
-        <div style="background:#1a1a1a;padding:16px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">
-          <div><div style="color:white;font-size:20px;font-weight:700;">Save up to</div><div style="color:#FFE200;font-size:32px;font-weight:900;">30%</div></div>
-          <div style="background:#E5E5E5;width:120px;height:70px;border-radius:8px;display:flex;align-items:center;justify-content:center;"><span style="color:#6C6F75;font-size:11px;">Roku promo</span></div>
-        </div>
-        <div style="background:black;padding:20px 16px;margin-bottom:8px;text-align:center;">
-          <div style="color:white;font-size:22px;font-weight:700;margin-bottom:8px;">Apple Watch Ultra</div>
-          <div style="color:#999;font-size:13px;margin-bottom:12px;">Featuring a titanium case, dual-frequency GPS, and up to 36 hours of battery life.</div>
-          <button style="background:white;border:none;border-radius:20px;padding:8px 20px;font-size:13px;font-weight:600;cursor:pointer;">Shop now</button>
-        </div>
-        <div style="background:white;padding:14px 16px;margin-bottom:80px;">
-          <div style="font-size:15px;font-weight:700;margin-bottom:8px;">Shop Black Friday deals by category</div>
-          <div style="display:flex;gap:10px;overflow-x:auto;">
-            <div style="text-align:center;flex-shrink:0;"><div style="width:60px;height:60px;background:#F5F5F5;border-radius:8px;margin-bottom:4px;display:flex;align-items:center;justify-content:center;font-size:24px;">📱</div><div style="font-size:10px;color:#030303;">Major<br>Appliances</div></div>
-            <div style="text-align:center;flex-shrink:0;"><div style="width:60px;height:60px;background:#F5F5F5;border-radius:8px;margin-bottom:4px;display:flex;align-items:center;justify-content:center;font-size:24px;">💻</div><div style="font-size:10px;color:#030303;">Laptops &amp;<br>Computers</div></div>
-            <div style="text-align:center;flex-shrink:0;"><div style="width:60px;height:60px;background:#F5F5F5;border-radius:8px;margin-bottom:4px;display:flex;align-items:center;justify-content:center;font-size:24px;">📺</div><div style="font-size:10px;color:#030303;">TVs &amp;<br>Projectors</div></div>
-          </div>
-        </div>
-      </div>
-      <div class="bb-bottom-nav">
-        <div class="nav-item active"><svg viewBox="0 0 24 24" fill="#0046BE"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span class="nav-label" style="color:#0046BE;">Home</span></div>
-        <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="#6C6F75" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg><span class="nav-label">Shop</span></div>
-        <div class="nav-item"><div style="width:32px;height:32px;background:linear-gradient(135deg,#0046BE,#7B2FBE);border-radius:50%;display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="10"/></svg></div><span class="nav-label">Ask Blue</span></div>
-        <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="#6C6F75" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg><span class="nav-label">Wallet</span></div>
-        <div class="nav-item"><div style="width:28px;height:28px;background:#E8F0FE;border-radius:50%;font-size:14px;color:#0046BE;font-weight:700;display:flex;align-items:center;justify-content:center;">S</div><span class="nav-label">Sarah</span></div>
-      </div>
-    </div>
-
-    <!-- ===== SCREEN 11: ASK BLUE – HI SARAH (SISTER START) ===== -->
-    <div class="screen" id="s11" style="background:#F7F7FF;flex-direction:column;">
-      <div style="background:#0046BE;padding:10px 16px 12px;flex-shrink:0;">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="background:white;border-radius:6px;height:40px;flex:1;display:flex;align-items:center;padding:0 10px;gap:8px;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#6C6F75" stroke-width="2"/></svg>
-            <span style="font-size:14px;color:#6C6F75;">Search Best Buy</span>
-          </div>
-          <div style="position:relative;"><svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/></svg><div style="position:absolute;top:-4px;right:-4px;background:#FFE200;color:#030303;border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;">5</div></div>
-        </div>
-      </div>
-      <div style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between;background:white;border-bottom:1px solid #E5E5E5;flex-shrink:0;">
-        <span style="font-size:22px;color:#6C6F75;">✕</span>
-        <span style="font-size:17px;font-weight:600;">Ask Blue <span style="color:#6C6F75;font-size:13px;font-weight:400;">AI</span></span>
-        <div style="display:flex;gap:14px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#030303" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="#030303" stroke-width="2"/></svg></div>
-      </div>
-      <div style="padding:8px 16px;font-size:11px;color:#6C6F75;background:white;flex-shrink:0;">
-        By continuing, you agree to our <span style="color:#0046BE;">Terms and Conditions</span> and <span style="color:#0046BE;">Privacy Policy</span>. We may keep a record for quality and training.
-      </div>
-      <div style="flex:1;display:flex;align-items:flex-start;padding:24px 16px;">
-        <div style="font-size:32px;font-weight:700;color:#0046BE;line-height:1.3;">Hi Sarah,<br>How can I help you<br>today?</div>
-      </div>
-      <div style="padding:12px 16px;border-top:1px solid #E5E5E5;background:white;flex-shrink:0;">
-        <div style="border:1.5px solid #E5E5E5;border-radius:24px;height:48px;display:flex;align-items:center;padding:0 16px;gap:8px;">
-          <input type="text" placeholder="" style="flex:1;border:none;outline:none;font-size:15px;color:#030303;background:transparent;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6C6F75" stroke-width="2"><path d="M12 1a4 4 0 014 4v5a4 4 0 01-8 0V5a4 4 0 014-4z"/><path d="M19 10a7 7 0 01-14 0"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
-          <div style="width:32px;height:32px;background:#E5E5E5;border-radius:50%;display:flex;align-items:center;justify-content:center;">↑</div>
-        </div>
-      </div>
-      <div class="bb-bottom-nav">
-        <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="#6C6F75" stroke-width="2"><path d="M3 12L12 3l9 9"/><path d="M9 21V12h6v9"/></svg><span class="nav-label">Home</span></div>
-        <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="#6C6F75" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg><span class="nav-label">Shop</span></div>
-        <div class="nav-item active"><div style="width:32px;height:32px;background:linear-gradient(135deg,#0046BE,#7B2FBE);border-radius:50%;display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="10"/></svg></div><span class="nav-label" style="color:#0046BE;">Ask Blue</span></div>
-        <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="#6C6F75" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/></svg><span class="nav-label">Wallet</span></div>
-        <div class="nav-item"><div style="width:28px;height:28px;background:#E8F0FE;border-radius:50%;font-size:14px;color:#0046BE;font-weight:700;display:flex;align-items:center;justify-content:center;">S</div><span class="nav-label">Sarah</span></div>
-      </div>
-    </div>
-
-    <!-- ===== SCREEN 12: ASK BLUE – SISTER TYPING ===== -->
-    <div class="screen" id="s12" style="background:#F7F7FF;flex-direction:column;">
-      <div style="background:#0046BE;padding:10px 16px 12px;flex-shrink:0;">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="background:white;border-radius:6px;height:40px;flex:1;display:flex;align-items:center;padding:0 10px;gap:8px;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#6C6F75" stroke-width="2"/></svg>
-            <span style="font-size:14px;color:#6C6F75;">Search Best Buy</span>
-          </div>
-          <div style="position:relative;"><svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/></svg><div style="position:absolute;top:-4px;right:-4px;background:#FFE200;color:#030303;border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;">5</div></div>
-        </div>
-      </div>
-      <div style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between;background:white;border-bottom:1px solid #E5E5E5;flex-shrink:0;">
-        <span style="font-size:22px;color:#6C6F75;">✕</span>
-        <span style="font-size:17px;font-weight:600;">Ask Blue <span style="color:#6C6F75;font-size:13px;font-weight:400;">AI</span></span>
-        <div style="display:flex;gap:14px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#030303" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg></div>
-      </div>
-      <div style="padding:8px 16px;font-size:11px;color:#6C6F75;background:white;flex-shrink:0;">By continuing, you agree to our <span style="color:#0046BE;">Terms and Conditions</span> and <span style="color:#0046BE;">Privacy Policy</span>.</div>
-      <div style="flex:1;padding:24px 16px;">
-        <div style="font-size:32px;font-weight:700;color:#0046BE;line-height:1.3;margin-bottom:24px;">Hi Sarah,<br>How can I help you<br>today?</div>
-      </div>
-      <div style="padding:12px 16px;border-top:1px solid #E5E5E5;background:white;flex-shrink:0;">
-        <div style="border:1.5px solid #0046BE;border-radius:24px;min-height:48px;display:flex;align-items:center;padding:12px 16px;gap:8px;">
-          <div style="flex:1;font-size:15px;color:#030303;">Gift for my sister, mid 30's she's into cooking $300</div>
-          <div style="width:32px;height:32px;background:#0046BE;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:16px;flex-shrink:0;">↑</div>
-        </div>
-      </div>
-      <!-- Simple keyboard rows -->
-      <div style="background:#D1D1D6;flex-shrink:0;padding:6px 6px 24px;">
-        <div style="display:flex;gap:3px;margin-bottom:3px;">
-          <div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">q</div><div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">w</div><div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">e</div><div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">r</div><div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">t</div><div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">y</div><div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">u</div><div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">i</div><div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">o</div><div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">p</div>
-        </div>
-        <div style="display:flex;gap:3px;padding:0 16px;margin-bottom:3px;">
-          <div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">a</div><div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">s</div><div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">d</div><div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">f</div><div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">g</div><div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">h</div><div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">j</div><div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">k</div><div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">l</div>
-        </div>
-        <div style="display:flex;gap:3px;margin-bottom:3px;">
-          <div style="flex:1.4;background:#AAB0B8;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 1px 0 #888;">⇧</div><div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">z</div><div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">x</div><div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">c</div><div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">v</div><div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">b</div><div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">n</div><div style="flex:1;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">m</div><div style="flex:1.4;background:#AAB0B8;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 1px 0 #888;">⌫</div>
-        </div>
-        <div style="display:flex;gap:3px;">
-          <div style="flex:1.4;background:#AAB0B8;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:12px;box-shadow:0 1px 0 #888;">ABC</div><div style="flex:4;background:white;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 0 #888;">space</div><div style="flex:1.4;background:#AAB0B8;border-radius:5px;height:42px;display:flex;align-items:center;justify-content:center;font-size:12px;box-shadow:0 1px 0 #888;">return</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ===== SCREEN 13: ASK BLUE – SISTER RESULTS ===== -->
-    <div class="screen" id="s13" style="background:#F7F7FF;flex-direction:column;">
-      <div style="background:#0046BE;padding:10px 16px 12px;flex-shrink:0;">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="background:white;border-radius:6px;height:40px;flex:1;display:flex;align-items:center;padding:0 10px;gap:8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#6C6F75" stroke-width="2"/></svg><span style="font-size:14px;color:#6C6F75;">Search Best Buy</span></div>
-          <div style="position:relative;"><svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/></svg><div style="position:absolute;top:-4px;right:-4px;background:#FFE200;color:#030303;border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;">5</div></div>
-        </div>
-      </div>
-      <div style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between;background:white;border-bottom:1px solid #E5E5E5;flex-shrink:0;">
-        <span style="font-size:22px;color:#6C6F75;">✕</span>
-        <span style="font-size:17px;font-weight:600;">Ask Blue <span style="color:#6C6F75;font-size:13px;font-weight:400;">AI</span></span>
-        <div style="display:flex;gap:14px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#030303" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg></div>
-      </div>
-      <div class="scroll-content" style="background:white;">
-        <div style="padding:16px 16px 0;display:flex;justify-content:flex-end;">
-          <div style="background:#0046BE;color:white;border-radius:18px 18px 4px 18px;padding:12px 16px;max-width:80%;font-size:14px;line-height:1.4;">Gift for my sister, mid 30's she's into cooking $300</div>
-        </div>
-        <div style="padding:16px;">
-          <div style="font-size:26px;font-weight:700;color:#030303;line-height:1.3;margin-bottom:12px;">Let's find the right gift for your sister.</div>
-          <div style="font-size:14px;color:#030303;line-height:1.6;margin-bottom:20px;">Great combo to work with. Green energy and lawn care overlap really well at around $500. The sweet spot here is battery-powered outdoor equipment; it's the upgrade lawn enthusiasts actually want.</div>
-
-          <div style="font-size:17px;font-weight:700;margin-bottom:12px;">Best selling kitchen appliance</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
-            <div class="product-card">
-              <div class="p-img" style="position:relative;">
-                <div style="font-size:36px;">🍳</div>
-                <div style="position:absolute;top:6px;left:6px;"><span class="badge blue" style="font-size:9px;">Best Selling</span></div>
-                <div style="position:absolute;top:6px;right:6px;width:28px;height:28px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.15);font-size:13px;">♡</div>
-              </div>
-              <div class="p-body">
-                <div class="p-title">Ninja - Foodi Smart XL 6-in-1 Countertop Indoor Grill with Smart...</div>
-                <div class="p-stars">★★★★★ <span style="color:#030303;font-size:11px;">4.9 (3,854)</span></div>
-                <div class="p-price">$299.99</div>
-                <button class="add-to-cart">Add to cart</button>
-              </div>
-            </div>
-            <div class="product-card">
-              <div class="p-img" style="position:relative;">
-                <div style="font-size:36px;">☕</div>
-                <div style="position:absolute;top:6px;left:6px;"><span class="badge yellow" style="font-size:9px;padding:2px 5px;">20% off</span></div>
-                <div style="position:absolute;top:6px;right:6px;width:28px;height:28px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.15);font-size:13px;">♡</div>
-              </div>
-              <div class="p-body">
-                <div class="p-title">Breville - the Barista Express Espresso Machine with 15 bars o...</div>
-                <div class="p-stars">★★★★★ <span style="color:#030303;font-size:11px;">4.7 (241)</span></div>
-                <div style="font-size:14px;font-weight:700;color:#030303;margin-bottom:2px;">$229.99 <span style="font-size:12px;color:#6C6F75;text-decoration:line-through;font-weight:400;">$290.99</span></div>
-                <button class="add-to-cart" style="margin-top:4px;">Add to cart</button>
-              </div>
-            </div>
-          </div>
-
-          <div style="font-size:17px;font-weight:700;margin-bottom:12px;">Get it by Dec. 19</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
-            <div class="product-card">
-              <div class="p-img" style="position:relative;">
-                <div style="font-size:36px;">🥣</div>
-                <div style="position:absolute;top:6px;left:6px;"><span class="badge red" style="font-size:9px;padding:2px 5px;">Best Selling</span></div>
-                <div style="position:absolute;top:6px;right:6px;width:28px;height:28px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.15);font-size:13px;">♡</div>
-              </div>
-              <div class="p-body">
-                <div class="p-title">KitchenAid - Value Bundle Artisan® Series 5 Quart Tilt-Head Stan...</div>
-                <div class="p-stars">★★★★★ <span style="color:#030303;font-size:11px;">4.5 (3)</span></div>
-                <div style="font-size:14px;font-weight:700;color:#030303;margin-bottom:2px;">$279.99 <span style="font-size:12px;color:#6C6F75;text-decoration:line-through;font-weight:400;">$299.99</span></div>
-                <button class="add-to-cart" style="margin-top:4px;">Add to cart</button>
-              </div>
-            </div>
-            <div class="product-card">
-              <div class="p-img" style="position:relative;">
-                <div style="font-size:36px;">🔪</div>
-                <div style="position:absolute;top:6px;left:6px;"><span class="badge blue" style="font-size:9px;">Best Selling</span></div>
-                <div style="position:absolute;top:6px;right:6px;width:28px;height:28px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.15);font-size:13px;">♡</div>
-              </div>
-              <div class="p-body">
-                <div class="p-title">Ninja - Detect Kitchen System Power Blender + Food Processor Pro wit...</div>
-                <div class="p-stars">★★★★★ <span style="color:#030303;font-size:11px;">4.9 (252)</span></div>
-                <div class="p-price">$249.98</div>
-                <button class="add-to-cart">Add to cart</button>
-              </div>
-            </div>
-          </div>
-
-          <div style="font-size:14px;font-weight:700;margin-bottom:10px;">A question to help narrow it down:</div>
-          <div class="chip">Does she bake often?</div>
-          <div class="chip">Is she a coffee lover?</div>
-          <div class="chip">Does she cook for a crowd?</div>
-        </div>
-      </div>
-      <div style="padding:8px 16px 12px;background:white;border-top:1px solid #E5E5E5;display:flex;align-items:center;gap:10px;flex-shrink:0;">
-        <div style="display:flex;gap:16px;"><span style="font-size:20px;cursor:pointer;">👍</span><span style="font-size:20px;cursor:pointer;">👎</span></div>
-        <div style="border:1.5px solid #E5E5E5;border-radius:24px;height:44px;flex:1;display:flex;align-items:center;padding:0 14px;gap:8px;">
-          <input placeholder="Ask a question" style="flex:1;border:none;outline:none;font-size:14px;background:transparent;">
-          <div style="width:28px;height:28px;background:#E5E5E5;border-radius:50%;display:flex;align-items:center;justify-content:center;">↑</div>
-        </div>
-      </div>
-      <div class="bb-bottom-nav">
-        <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="#6C6F75" stroke-width="2"><path d="M3 12L12 3l9 9"/><path d="M9 21V12h6v9"/></svg><span class="nav-label">Home</span></div>
-        <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="#6C6F75" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg><span class="nav-label">Shop</span></div>
-        <div class="nav-item active"><div style="width:32px;height:32px;background:linear-gradient(135deg,#0046BE,#7B2FBE);border-radius:50%;display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="10"/></svg></div><span class="nav-label" style="color:#0046BE;">Ask Blue</span></div>
-        <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="#6C6F75" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/></svg><span class="nav-label">Wallet</span></div>
-        <div class="nav-item"><div style="width:28px;height:28px;background:#E8F0FE;border-radius:50%;font-size:14px;color:#0046BE;font-weight:700;display:flex;align-items:center;justify-content:center;">S</div><span class="nav-label">Sarah</span></div>
-      </div>
-    </div>
-
-    <!-- ===== SCREEN 14: SMS – PRICE DROP & AUTO BUY ===== -->
-    <div class="screen" id="s14" style="background:#000;flex-direction:column;">
-      <div style="background:#1C1C1E;padding:14px 16px;display:flex;align-items:center;gap:12px;flex-shrink:0;">
-        <div style="width:36px;height:36px;background:#3D3E40;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:16px;cursor:pointer;">‹</div>
-        <div style="flex:1;text-align:center;">
-          <div style="width:44px;height:44px;background:#FFE200;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;margin:0 auto 4px;">🏷️</div>
-          <div style="color:white;font-size:16px;font-weight:600;">332211</div>
-        </div>
-        <div style="width:36px;"></div>
-      </div>
-      <div class="scroll-content" style="padding:16px;background:#000;">
-        <div style="text-align:center;color:#8E8E93;font-size:12px;margin-bottom:16px;">Fri, Nov 25 at 8:43 AM</div>
-        <!-- Message 1 -->
-        <div style="display:flex;justify-content:flex-start;margin-bottom:12px;">
-          <div style="background:#1C1C1E;border-radius:18px 18px 18px 4px;padding:14px 16px;max-width:85%;color:white;font-size:14px;line-height:1.5;">
-            BestBuy: Price drop alert 🎯 Your Greenworks electric mower is now <strong>$100 off</strong> for Black Friday — ends today at 6:43PM CT. Go to your <span style="color:#5AB4FA;text-decoration:underline;">Christmas list to manage.</span><br>Reply STOP to opt out
-          </div>
-        </div>
-        <!-- Message 2 -->
-        <div style="display:flex;justify-content:flex-start;margin-bottom:16px;">
-          <div style="background:#1C1C1E;border-radius:18px 18px 18px 4px;padding:14px 16px;max-width:85%;color:white;font-size:14px;line-height:1.5;">
-            BestBuy: Would you like us to <strong>AUTO BUY</strong> the Greenworks electric mower for Black Friday. Reply <strong>BUY NOW</strong> and we will buy and ship to your 55117 address on file. Go to <span style="color:#5AB4FA;text-decoration:underline;">Christmas list to manage.</span><br>Reply STOP to opt out
-          </div>
-        </div>
-        <!-- Product card in SMS -->
-        <div style="background:#1C1C1E;border-radius:12px;padding:12px;display:flex;gap:12px;margin-bottom:20px;">
-          <div style="width:60px;height:60px;background:#2C2C2E;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;">🌿</div>
-          <div>
-            <div style="color:white;font-size:13px;font-weight:600;margin-bottom:4px;">Greenworks - 48V (24V x 2) 17" Brushless Push...</div>
-            <div style="color:#C37600;font-size:12px;margin-bottom:4px;">★★★★★ <span style="color:#8E8E93;">5.0 (918)</span></div>
-            <div style="color:white;font-size:15px;font-weight:700;">$439.99</div>
-          </div>
-        </div>
-      </div>
-      <!-- SMS input bar -->
-      <div style="background:#1C1C1E;padding:10px 12px 24px;display:flex;align-items:center;gap:10px;flex-shrink:0;">
-        <div style="width:32px;height:32px;background:#3D3E40;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:18px;">+</div>
-        <div style="flex:1;background:#2C2C2E;border-radius:20px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;">
-          <span style="color:#8E8E93;font-size:14px;">Text Message · SMS</span>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8E8E93" stroke-width="2"><path d="M12 1a4 4 0 014 4v5a4 4 0 01-8 0V5a4 4 0 014-4z"/><path d="M19 10a7 7 0 01-14 0"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
-        </div>
-      </div>
-    </div>
-
-    <!-- ===== SCREEN 15: BB SAVED ITEMS – ALL TAGGED ===== -->
-    <div class="screen" id="s15" style="background:#F7F7FF;flex-direction:column;">
-      <div style="background:#0046BE;padding:10px 16px 12px;flex-shrink:0;">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="background:white;border-radius:6px;height:40px;flex:1;display:flex;align-items:center;padding:0 10px;gap:8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#6C6F75" stroke-width="2"/></svg><span style="font-size:14px;color:#6C6F75;">Search Best Buy</span></div>
-          <div style="position:relative;"><svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/></svg><div style="position:absolute;top:-4px;right:-4px;background:#FFE200;color:#030303;border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;">5</div></div>
-        </div>
-      </div>
-      <div style="background:white;padding:10px 16px 8px;display:flex;align-items:center;gap:8px;flex-shrink:0;">
-        <svg width="22" height="20" viewBox="0 0 22 20" fill="#0046BE"><path d="M11 19l-1.5-1.35C4.4 12.8 1 10.1 1 6.5 1 3.4 3.4 1 6.5 1c1.74 0 3.41.81 4.5 2.09C12.09 1.81 13.76 1 15.5 1 18.6 1 21 3.4 21 6.5c0 3.6-3.4 6.3-8.5 11.15L11 19z"/></svg>
-        <h1 style="font-size:20px;font-weight:700;color:#030303;">Saved items</h1>
-      </div>
-      <div style="padding:0 16px 10px;display:flex;gap:8px;overflow-x:auto;background:white;flex-shrink:0;border-bottom:1px solid #E5E5E5;">
-        <div style="border:1.5px solid #0046BE;border-radius:20px;padding:6px 12px;font-size:13px;color:#0046BE;white-space:nowrap;display:flex;align-items:center;gap:6px;">✓ Christmas gifts ×</div>
-        <div style="border:1.5px solid #E5E5E5;border-radius:20px;padding:6px 12px;font-size:13px;color:#030303;white-space:nowrap;">Trip to Thailand</div>
-        <div style="border:1.5px solid #E5E5E5;border-radius:20px;padding:6px 12px;font-size:13px;color:#030303;white-space:nowrap;">All saved items</div>
-        <div style="border:1.5px solid #E5E5E5;border-radius:20px;padding:6px 12px;font-size:13px;color:#030303;white-space:nowrap;">+ Create new list</div>
-      </div>
-      <div class="scroll-content">
-        <!-- Items grid - 2 per row -->
-        <div style="padding:12px 16px;display:grid;grid-template-columns:1fr 1fr;gap:10px;background:white;">
-          <div class="product-card">
-            <div class="p-img" style="position:relative;">
-              <div style="font-size:32px;">🚲</div>
-              <div style="position:absolute;top:6px;left:6px;"><span class="badge blue" style="font-size:9px;">Top Rated</span></div>
-            </div>
-            <div class="p-body">
-              <div class="p-title">Hey Bike Ranger S 2.0 - Foldable Step-Thru Fat...</div>
-              <div class="p-stars">★★★★★ <span style="font-size:11px;color:#030303;">5.0 (919)</span></div>
-              <div class="p-price">$799.99</div>
-              <div style="font-size:11px;color:#BB0628;font-weight:600;margin-bottom:4px;">Price drop!</div>
-              <button class="add-to-cart">Add to cart</button>
-            </div>
-          </div>
-          <div class="product-card">
-            <div class="p-img" style="position:relative;">
-              <div style="font-size:32px;">🌿</div>
-              <div style="position:absolute;top:6px;left:6px;"><span class="badge blue" style="font-size:9px;">Top Rated</span></div>
-            </div>
-            <div class="p-body">
-              <div class="p-title">Greenworks - 48V + 24V Brushless Push Lawn Mower</div>
-              <div class="p-stars">★★★★★ <span style="font-size:11px;color:#030303;">4.8 (784)</span></div>
-              <div style="font-size:14px;font-weight:700;color:#030303;margin-bottom:2px;">$439.99 <span style="font-size:12px;color:#BB0628;font-weight:400;">$100 off today!</span></div>
-              <button class="add-to-cart">Add to cart</button>
-            </div>
-          </div>
-          <div class="product-card">
-            <div class="p-img"><div style="font-size:32px;">🧺</div></div>
-            <div class="p-body">
-              <div class="p-title">VEVOR - Rear Bike Basket, Medium Bicycle...</div>
-              <div class="p-stars">★★★★★ <span style="font-size:11px;color:#030303;">4.9 (918)</span></div>
-              <div class="p-price">$43.99</div>
-              <button class="add-to-cart">Add to cart</button>
-            </div>
-          </div>
-          <div class="product-card">
-            <div class="p-img"><div style="font-size:32px;">🍳</div></div>
-            <div class="p-body">
-              <div class="p-title">Ninja - Foodi Smart XL Countertop Indoor Grill</div>
-              <div class="p-stars">★★★★★ <span style="font-size:11px;color:#030303;">4.9 (3,854)</span></div>
-              <div class="p-price">$299.99</div>
-              <button class="add-to-cart">Add to cart</button>
-            </div>
-          </div>
-        </div>
-        <!-- Bundles section -->
-        <div style="background:white;margin-top:8px;padding:14px 16px;border-top:1px solid #E5E5E5;">
-          <div style="font-size:15px;font-weight:700;margin-bottom:10px;">Bundles &amp; save for mom</div>
-          <div style="display:flex;gap:10px;overflow-x:auto;">
-            <div class="product-card" style="width:140px;flex-shrink:0;">
-              <div class="p-img"><div style="font-size:28px;">🚲</div></div>
-              <div class="p-body"><div class="p-title">Lectric eBikes - Xpress Rear Rack</div><div class="p-price">$89.99</div></div>
-            </div>
-            <div class="product-card" style="width:140px;flex-shrink:0;">
-              <div class="p-img"><div style="font-size:28px;">⛑️</div></div>
-              <div class="p-body"><div class="p-title">Giro - Adult Bike Helmet</div><div class="p-price">$62.99</div></div>
-            </div>
-          </div>
-        </div>
-        <!-- Top deals for sister -->
-        <div style="background:white;margin-top:8px;padding:14px 16px;margin-bottom:8px;">
-          <div style="font-size:15px;font-weight:700;margin-bottom:10px;">Top deals for your sister</div>
-          <div style="display:flex;gap:10px;overflow-x:auto;">
-            <div class="product-card" style="width:140px;flex-shrink:0;">
-              <div class="p-img"><div style="font-size:28px;">☕</div></div>
-              <div class="p-body"><div class="p-title">Breville - Barista Express</div><div class="p-price">$229.99</div></div>
-            </div>
-            <div class="product-card" style="width:140px;flex-shrink:0;">
-              <div class="p-img"><div style="font-size:28px;">🥣</div></div>
-              <div class="p-body"><div class="p-title">KitchenAid - Artisan Series</div><div class="p-price">$279.99</div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="bb-bottom-nav">
-        <div class="nav-item active"><svg viewBox="0 0 24 24" fill="#0046BE"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span class="nav-label" style="color:#0046BE;">Home</span></div>
-        <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="#6C6F75" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg><span class="nav-label">Shop</span></div>
-        <div class="nav-item"><div style="width:32px;height:32px;background:linear-gradient(135deg,#0046BE,#7B2FBE);border-radius:50%;display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="10"/></svg></div><span class="nav-label">Ask Blue</span></div>
-        <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="#6C6F75" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/></svg><span class="nav-label">Wallet</span></div>
-        <div class="nav-item"><div style="width:28px;height:28px;background:#E8F0FE;border-radius:50%;font-size:14px;color:#0046BE;font-weight:700;display:flex;align-items:center;justify-content:center;">S</div><span class="nav-label">Sarah</span></div>
-      </div>
-    </div>
-
-    <!-- ===== SCREEN 16: CART / CHECKOUT ===== -->
-    <div class="screen" id="s16" style="background:#F7F7FF;flex-direction:column;">
-      <div style="background:#0046BE;padding:10px 16px 12px;flex-shrink:0;">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="background:white;border-radius:6px;height:40px;flex:1;display:flex;align-items:center;padding:0 10px;gap:8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#6C6F75" stroke-width="2"/></svg><span style="font-size:14px;color:#6C6F75;">Search Best Buy</span></div>
-        </div>
-      </div>
-      <div style="background:white;padding:12px 16px;display:flex;align-items:center;border-bottom:1px solid #E5E5E5;flex-shrink:0;">
-        <h1 style="font-size:18px;font-weight:700;color:#030303;">Cart (5): $1,025.97</h1>
-      </div>
-      <div class="scroll-content">
-        <!-- Cart items -->
-        <div style="background:white;padding:16px;border-bottom:1px solid #F5F5F5;">
-          <!-- Item 1 -->
-          <div style="display:flex;gap:12px;padding-bottom:14px;border-bottom:1px solid #F5F5F5;margin-bottom:14px;">
-            <div style="width:72px;height:72px;background:#F5F5F5;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;">🚲</div>
-            <div style="flex:1;">
-              <div style="font-size:13px;font-weight:600;line-height:1.3;margin-bottom:4px;color:#030303;">Hey Bike - Ranger S 2.0 - Foldable Step-Thru Fat-Tire Electric Bike</div>
-              <div style="font-size:12px;color:#030303;margin-bottom:2px;">Qty: 1 &nbsp; <span style="color:#0046BE;text-decoration:underline;">Remove</span></div>
-              <div style="font-size:15px;font-weight:700;color:#030303;">$799.99</div>
-              <div style="font-size:11px;color:#030303;margin-top:4px;">🚚 <strong>Free</strong> 2-day shipping</div>
-            </div>
-          </div>
-          <!-- Item 2 -->
-          <div style="display:flex;gap:12px;padding-bottom:14px;border-bottom:1px solid #F5F5F5;margin-bottom:14px;">
-            <div style="width:72px;height:72px;background:#F5F5F5;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;">🍳</div>
-            <div style="flex:1;">
-              <div style="font-size:13px;font-weight:600;line-height:1.3;margin-bottom:4px;color:#030303;">Ninja - Foodi Smart XL 6-in-1 Countertop Indoor Grill with Smart Cook System</div>
-              <div style="font-size:12px;color:#030303;margin-bottom:2px;">Qty: 1 &nbsp; <span style="color:#0046BE;text-decoration:underline;">Remove</span></div>
-              <div style="font-size:15px;font-weight:700;color:#030303;">$299.99</div>
-              <div style="font-size:11px;color:#030303;margin-top:4px;">🏪 Pick up today</div>
-            </div>
-          </div>
-          <!-- Item 3 -->
-          <div style="display:flex;gap:12px;padding-bottom:14px;border-bottom:1px solid #F5F5F5;margin-bottom:14px;">
-            <div style="width:72px;height:72px;background:#F5F5F5;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;">🧘</div>
-            <div style="flex:1;">
-              <div style="font-size:13px;font-weight:600;line-height:1.3;margin-bottom:4px;color:#030303;">BalonFresh Fitness - 7-Piece Yoga Set</div>
-              <div style="font-size:12px;color:#030303;margin-bottom:2px;">Qty: 1 &nbsp; <span style="color:#0046BE;text-decoration:underline;">Remove</span></div>
-              <div style="font-size:15px;font-weight:700;color:#030303;">$46.99</div>
-              <div style="font-size:11px;color:#030303;margin-top:4px;">🚚 Free shipping</div>
-            </div>
-          </div>
-          <!-- Item 4 -->
-          <div style="display:flex;gap:12px;padding-bottom:14px;border-bottom:1px solid #F5F5F5;margin-bottom:14px;">
-            <div style="width:72px;height:72px;background:#F5F5F5;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;">🌿</div>
-            <div style="flex:1;">
-              <div style="font-size:13px;font-weight:600;line-height:1.3;margin-bottom:4px;color:#030303;">Greenworks - 48V (24V x 2) 17" Brushless Push Lawn Mower +Blower +String Trimmer</div>
-              <div style="font-size:12px;color:#030303;margin-bottom:2px;">Qty: 1 &nbsp; <span style="color:#0046BE;text-decoration:underline;">Remove</span></div>
-              <div style="font-size:15px;font-weight:700;color:#030303;">$439.99</div>
-              <div style="font-size:11px;color:#030303;margin-top:4px;">🏪 <strong>Free</strong> delivery</div>
-            </div>
-          </div>
-          <!-- Item 5 -->
-          <div style="display:flex;gap:12px;">
-            <div style="width:72px;height:72px;background:#F5F5F5;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;">🧺</div>
-            <div style="flex:1;">
-              <div style="font-size:13px;font-weight:600;line-height:1.3;margin-bottom:4px;color:#030303;">VEVOR - Rear Bike Basket, Medium Bicycle Basket</div>
-              <div style="font-size:12px;color:#030303;margin-bottom:2px;">Qty: 1 &nbsp; <span style="color:#0046BE;text-decoration:underline;">Remove</span></div>
-              <div style="font-size:15px;font-weight:700;color:#030303;">$43.99</div>
-              <div style="font-size:11px;color:#030303;margin-top:4px;">🚚 Free delivery tomorrow</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Order Summary -->
-        <div style="background:white;margin-top:8px;padding:16px;border-top:1px solid #E5E5E5;border-bottom:1px solid #E5E5E5;">
-          <div style="font-size:16px;font-weight:700;margin-bottom:12px;">Order Summary</div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:14px;"><span>Subtotal</span><span>$1,630.95</span></div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:14px;"><span>Estimated Delivery</span><span style="color:#007600;font-weight:600;">FREE</span></div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:14px;color:#BB0628;"><span>Black Friday Savings</span><span>–$605.00</span></div>
-          <div style="border-top:1px solid #E5E5E5;padding-top:12px;display:flex;justify-content:space-between;font-size:17px;font-weight:700;"><span>Total</span><span>$1,025.97</span></div>
-        </div>
-
-        <!-- 10% back badge -->
-        <div style="background:#E8F0FE;margin-top:8px;padding:14px 16px;display:flex;align-items:center;gap:10px;">
-          <div style="font-size:24px;">💙</div>
-          <div style="font-size:13px;color:#030303;line-height:1.4;"><strong>10% back in rewards</strong><br>As a My Best Buy Total™ member</div>
-        </div>
-
-        <!-- Protection plan -->
-        <div style="background:white;margin-top:8px;padding:16px;border-bottom:1px solid #E5E5E5;">
-          <div style="font-size:14px;font-weight:700;margin-bottom:4px;">🛡️ Geek Squad Protection</div>
-          <div style="font-size:12px;color:#6C6F75;">Add protection to your items for extra peace of mind.</div>
-        </div>
-
-        <!-- Checkout button -->
-        <div style="padding:16px;background:white;margin-bottom:8px;">
-          <button style="width:100%;background:#FFE200;border:none;border-radius:4px;height:50px;font-size:17px;font-weight:700;cursor:pointer;margin-bottom:12px;">Checkout</button>
-          <div style="text-align:center;font-size:12px;color:#6C6F75;">Estimated taxes calculated at checkout</div>
-        </div>
-
-        <!-- Saved items section -->
-        <div style="background:white;padding:16px;margin-bottom:84px;">
-          <div style="font-size:15px;font-weight:700;margin-bottom:10px;">Saved Items</div>
-          <div style="display:flex;gap:10px;overflow-x:auto;">
-            <div class="product-card" style="width:130px;flex-shrink:0;">
-              <div class="p-img" style="height:90px;"><div style="font-size:28px;">🥣</div></div>
-              <div class="p-body" style="padding:8px;"><div style="font-size:11px;font-weight:600;">KitchenAid - Artisan Series</div><div style="font-size:13px;font-weight:700;margin-top:4px;">$279.99</div></div>
-            </div>
-            <div class="product-card" style="width:130px;flex-shrink:0;">
-              <div class="p-img" style="height:90px;"><div style="font-size:28px;">☕</div></div>
-              <div class="p-body" style="padding:8px;"><div style="font-size:11px;font-weight:600;">Breville - Barista Express</div><div style="font-size:13px;font-weight:700;margin-top:4px;">$229.99</div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Sticky checkout bar -->
-      <div style="background:white;border-top:2px solid #E5E5E5;padding:10px 16px 24px;flex-shrink:0;">
-        <button onclick="goToScreen(1)" style="width:100%;background:#FFE200;border:none;border-radius:4px;height:48px;font-size:16px;font-weight:700;cursor:pointer;">Checkout</button>
-      </div>
-    </div>
-
-  </div><!-- /screens -->
 </div><!-- /phone -->
 
-<div class="nav-bar" id="navDots"></div>
+<div class="dots" id="dots"></div>
 
 <script>
   const TOTAL = 16;
-  let current = 1;
+  const SECTIONS = {
+    1: 'Intro',
+    2: 'Mom · ChatGPT',
+    3: 'Mom · ChatGPT',
+    4: 'Mom · ChatGPT',
+    5: 'Mom · Saved Items',
+    6: 'Dad · Ask Blue',
+    7: 'Dad · Ask Blue',
+    8: 'Dad · Ask Blue',
+    9: 'Dad · Ask Blue',
+    10: 'Best Buy Home',
+    11: 'Sister · Ask Blue',
+    12: 'Sister · Ask Blue',
+    13: 'Sister · Ask Blue',
+    14: 'Checkout · SMS',
+    15: 'Checkout · Saved',
+    16: 'Checkout · Cart',
+  };
+
+  let cur = 1;
 
   function buildDots() {
-    const bar = document.getElementById('navDots');
+    const bar = document.getElementById('dots');
     bar.innerHTML = '';
     for (let i = 1; i <= TOTAL; i++) {
       const d = document.createElement('div');
-      d.className = 'nav-dot' + (i === current ? ' active' : '');
-      d.onclick = () => goToScreen(i);
+      d.className = 'dot' + (i === cur ? ' active' : '');
+      d.onclick = () => go(i);
       bar.appendChild(d);
     }
   }
 
-  function goToScreen(n) {
+  function go(n) {
     if (n < 1 || n > TOTAL) return;
-    const prev = document.getElementById('s' + current);
-    if (prev) prev.classList.remove('active');
-    current = n;
-    const next = document.getElementById('s' + current);
-    if (next) next.classList.add('active');
-    document.getElementById('screenLabel').textContent = current + ' / ' + TOTAL;
+    document.getElementById('s' + cur).classList.remove('active');
+    cur = n;
+    const el = document.getElementById('s' + cur);
+    el.classList.add('active');
+    el.scrollTop = 0;
+    document.getElementById('lbl').textContent = cur + ' / ' + TOTAL;
+    document.getElementById('badge').textContent = SECTIONS[cur];
     buildDots();
-    // scroll top on scroll-content elements
-    const sc = next && next.querySelector('.scroll-content');
-    if (sc) sc.scrollTop = 0;
   }
 
-  function nextScreen() { goToScreen(current + 1); }
-  function prevScreen() { goToScreen(current - 1); }
+  function next() { go(cur + 1); }
+  function prev() { go(cur - 1); }
 
   document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight') nextScreen();
-    if (e.key === 'ArrowLeft') prevScreen();
+    if (e.key === 'ArrowRight') next();
+    if (e.key === 'ArrowLeft')  prev();
+  });
+
+  // Swipe support
+  let startX = 0;
+  const phone = document.getElementById('phone');
+  phone.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+  phone.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 40) dx < 0 ? next() : prev();
   });
 
   buildDots();
