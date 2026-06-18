@@ -413,38 +413,37 @@
   .page.active { display: flex; }
 
   /* ═══════════════════════════════════════
-     iPHONE 14 FRAME  (490 × 844)
+     iPHONE 14 FRAME  (390 × 844)
   ═══════════════════════════════════════ */
   .phone-wrap {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 24px;
     height: 100%;
-    justify-content: center;
-    padding: 24px 0;
+    width: 100%;
   }
 
   .iphone {
-    width: 490px;
+    width: 390px;
     height: 844px;
     position: relative;
     flex-shrink: 0;
+    margin: 0 auto;
   }
 
   /* Outer shell / anodised aluminium */
   .iphone-shell {
     position: absolute;
     inset: 0;
-    border-radius: 54px;
+    border-radius: 47px;
     background: linear-gradient(160deg, #2a2b2f 0%, #1a1b1e 40%, #252629 70%, #1c1d20 100%);
     box-shadow:
-      /* edge highlight */
       inset 0 1px 0 rgba(255,255,255,0.18),
       inset 0 -1px 0 rgba(0,0,0,0.5),
       inset 1px 0 0 rgba(255,255,255,0.09),
       inset -1px 0 0 rgba(0,0,0,0.35),
-      /* outer glow / drop shadow */
       0 0 0 1px rgba(0,0,0,0.6),
       0 32px 80px rgba(0,0,0,0.7),
       0 8px 24px rgba(0,0,0,0.4);
@@ -452,36 +451,26 @@
     pointer-events: none;
   }
 
-  /* Inner bezel / glass inset */
-  .iphone-bezel {
-    position: absolute;
-    top: 8px; left: 8px; right: 8px; bottom: 8px;
-    border-radius: 48px;
-    background: #0a0a0a;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
-    z-index: 2;
-    overflow: hidden;
-  }
-
-  /* Screen area */
+  /* Screen area — sits flush inside the shell */
   .iphone-screen {
     position: absolute;
-    top: 8px; left: 8px; right: 8px; bottom: 8px;
-    border-radius: 48px;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: 47px;
     overflow: hidden;
     z-index: 1;
+    background: #000;
   }
 
   /* Dynamic Island */
   .dynamic-island {
     position: absolute;
-    top: 14px;
+    top: 12px;
     left: 50%;
     transform: translateX(-50%);
-    width: 126px;
-    height: 37px;
+    width: 120px;
+    height: 34px;
     background: #000;
-    border-radius: 20px;
+    border-radius: 18px;
     z-index: 10;
     box-shadow: 0 0 0 1px rgba(255,255,255,0.06);
   }
@@ -489,10 +478,10 @@
   /* Side buttons */
   .btn-power {
     position: absolute;
-    right: -4px;
-    top: 184px;
-    width: 4px;
-    height: 80px;
+    right: -3px;
+    top: 180px;
+    width: 3px;
+    height: 72px;
     background: linear-gradient(to right, #1a1a1c, #2c2c2e);
     border-radius: 0 3px 3px 0;
     z-index: 4;
@@ -500,10 +489,10 @@
   }
   .btn-vol-up {
     position: absolute;
-    left: -4px;
-    top: 170px;
-    width: 4px;
-    height: 54px;
+    left: -3px;
+    top: 164px;
+    width: 3px;
+    height: 50px;
     background: linear-gradient(to left, #1a1a1c, #2c2c2e);
     border-radius: 3px 0 0 3px;
     z-index: 4;
@@ -511,10 +500,10 @@
   }
   .btn-vol-dn {
     position: absolute;
-    left: -4px;
-    top: 236px;
-    width: 4px;
-    height: 54px;
+    left: -3px;
+    top: 226px;
+    width: 3px;
+    height: 50px;
     background: linear-gradient(to left, #1a1a1c, #2c2c2e);
     border-radius: 3px 0 0 3px;
     z-index: 4;
@@ -522,23 +511,23 @@
   }
   .btn-action {
     position: absolute;
-    left: -4px;
-    top: 116px;
-    width: 4px;
-    height: 38px;
+    left: -3px;
+    top: 112px;
+    width: 3px;
+    height: 34px;
     background: linear-gradient(to left, #1a1a1c, #2c2c2e);
     border-radius: 3px 0 0 3px;
     z-index: 4;
     box-shadow: -1px 0 2px rgba(0,0,0,0.5);
   }
 
-  /* Bottom bar (home indicator area) */
+  /* Home indicator */
   .iphone-home {
     position: absolute;
-    bottom: 8px;
+    bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
-    width: 140px;
+    width: 130px;
     height: 5px;
     background: rgba(255,255,255,0.22);
     border-radius: 3px;
@@ -553,12 +542,11 @@
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
-    border-radius: 48px;
   }
   .phone-screen::-webkit-scrollbar { display: none; }
   .phone-screen.active { display: block; }
   .phone-screen img {
-    width: 490px;
+    width: 390px;
     display: block;
   }
 
@@ -859,7 +847,7 @@
     <!-- ── Mobile 2 placeholder ── -->
     <div class="page" id="page-mobile2">
       <div style="display:flex;flex-direction:column;align-items:center;gap:28px;">
-        <div class="iphone" style="display:flex;align-items:center;justify-content:center;">
+        <div class="iphone" style="display:flex;align-items:center;justify-content:center;margin:0 auto;">
           <div class="btn-action"></div>
           <div class="btn-vol-up"></div>
           <div class="btn-vol-dn"></div>
