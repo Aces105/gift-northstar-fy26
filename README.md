@@ -7,9 +7,6 @@ Overview
 This prototype demonstrates key flows in the gifting ecosystem:
 
 
-Ask Blue — agentic AI shopping assistant flow
-Gift Hub — centralized gifting destination and discovery experience
-Madlibs Gift Quiz — lightweight gift-finder quiz for personalized recommendations
 
 
 Live Demo
