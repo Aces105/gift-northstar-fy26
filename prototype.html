@@ -3,269 +3,733 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Best Buy Gifting North Star FY27 – Sarah's Journey</title>
+<title>Gifting North Star FY27 – Prototypes</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --sidebar-w: 220px;
+    --bb-blue: #0046BE;
+    --bb-yellow: #FFE200;
+    --sidebar-bg: #0f1117;
+    --sidebar-border: rgba(255,255,255,0.07);
+    --text-muted: rgba(255,255,255,0.4);
+    --text-dim: rgba(255,255,255,0.65);
+    --text-bright: #fff;
+    --hover-bg: rgba(255,255,255,0.06);
+    --active-bg: rgba(0,70,190,0.25);
+    --active-border: #0046BE;
+  }
+
   body {
-    background: #0f0f1a;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
+    background: #13151f;
+    color: var(--text-bright);
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ═══════════════════════════════════════
+     SIDEBAR
+  ═══════════════════════════════════════ */
+  .sidebar {
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--sidebar-border);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+  .sidebar-logo {
+    padding: 20px 16px 16px;
+    border-bottom: 1px solid var(--sidebar-border);
+    flex-shrink: 0;
+  }
+  .sidebar-logo .bb-mark {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 10px;
+  }
+  .sidebar-logo .bb-mark span {
+    background: var(--bb-yellow);
+    color: #000;
+    font-size: 10px;
+    font-weight: 900;
+    padding: 1px 5px;
+    line-height: 1.3;
+    letter-spacing: 0.5px;
+  }
+  .sidebar-logo .project-name {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    line-height: 1.4;
+  }
+  .sidebar-logo .fy-tag {
+    display: inline-block;
+    margin-top: 6px;
+    background: rgba(0,70,190,0.3);
+    border: 1px solid rgba(0,70,190,0.5);
+    color: #6fa3f7;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+  }
+
+  /* Scenarios section */
+  .nav-section {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--sidebar-border);
+  }
+
+  .dropdown-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+  .dropdown-toggle:hover { color: var(--text-dim); }
+  .dropdown-toggle .chevron {
+    font-size: 10px;
+    transition: transform 0.2s;
+  }
+  .dropdown-toggle.open .chevron { transform: rotate(180deg); }
+
+  .scenario-list {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.25s ease;
+  }
+  .scenario-list.open { max-height: 600px; }
+
+  .scenario-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 16px 9px 20px;
+    cursor: pointer;
+    color: var(--text-dim);
+    font-size: 13px;
+    border-left: 2px solid transparent;
+    transition: background 0.12s, color 0.12s, border-color 0.12s;
+    text-decoration: none;
+  }
+  .scenario-item:hover { background: var(--hover-bg); color: var(--text-bright); }
+  .scenario-item.active {
+    background: var(--active-bg);
+    border-left-color: var(--active-border);
+    color: var(--text-bright);
+  }
+  .scenario-item .num {
+    font-size: 11px;
+    color: var(--text-muted);
+    width: 16px;
+    flex-shrink: 0;
+  }
+  .scenario-item.active .num { color: #6fa3f7; }
+  .scenario-item .name { flex: 1; font-weight: 500; }
+  .scenario-item .device-tag {
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.08);
+    color: var(--text-muted);
+    letter-spacing: 0.3px;
+    flex-shrink: 0;
+  }
+  .scenario-item.active .device-tag { background: rgba(0,70,190,0.3); color: #6fa3f7; }
+
+  /* Screen list (sub-nav inside a scenario) */
+  .screen-list {
+    padding: 4px 0 8px;
+    display: none;
+  }
+  .screen-list.visible { display: block; }
+
+  .screen-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px 6px 36px;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 12px;
+    border-left: 2px solid transparent;
+    transition: background 0.1s, color 0.1s;
+  }
+  .screen-item:hover { background: var(--hover-bg); color: var(--text-dim); }
+  .screen-item.active { color: #6fa3f7; border-left-color: rgba(0,70,190,0.4); }
+  .screen-item .screen-num {
+    font-size: 10px;
+    color: rgba(255,255,255,0.2);
+    width: 14px;
+    flex-shrink: 0;
+    text-align: right;
+  }
+
+  /* Other nav sections */
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 16px;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 12px;
+    transition: background 0.12s, color 0.12s;
+    border-left: 2px solid transparent;
+  }
+  .nav-link:hover { background: var(--hover-bg); color: var(--text-dim); }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 16px;
+    border-top: 1px solid var(--sidebar-border);
+    font-size: 10px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* ═══════════════════════════════════════
+     MAIN CONTENT
+  ═══════════════════════════════════════ */
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Top bar */
+  .topbar {
+    height: 48px;
+    background: #0f1117;
+    border-bottom: 1px solid var(--sidebar-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    flex-shrink: 0;
+  }
+  .topbar .scenario-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-bright);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .topbar .scenario-title .sep { color: var(--text-muted); font-weight: 300; }
+  .topbar .screen-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: monospace;
+  }
+  .topbar .nav-btns {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .topbar .nav-btn {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text-dim);
+    width: 30px; height: 30px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s;
+  }
+  .topbar .nav-btn:hover { background: rgba(255,255,255,0.12); }
+  .topbar .nav-btn:disabled { opacity: 0.25; cursor: default; }
+
+  /* Canvas area */
+  .canvas {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ── PAGE PANELS ── */
+  .page { display: none; width: 100%; height: 100%; }
+  .page.active { display: flex; align-items: center; justify-content: center; }
+
+  /* ═══════════════════════════════════════
+     PHONE PROTOTYPE (Sarah – Mobile)
+  ═══════════════════════════════════════ */
+  .phone-wrap {
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 20px;
+    height: 100%;
     justify-content: center;
-    min-height: 100vh;
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
-    user-select: none;
   }
 
-  /* ── Phone shell ── */
   .phone {
     width: 390px;
-    height: 844px;
-    border-radius: 50px;
+    height: 780px;
+    border-radius: 48px;
     overflow: hidden;
     position: relative;
     box-shadow:
-      0 0 0 1px rgba(255,255,255,0.08),
-      0 0 0 10px #1c1c1e,
-      0 0 0 11px rgba(255,255,255,0.06),
-      0 40px 80px rgba(0,0,0,0.7);
+      0 0 0 1px rgba(255,255,255,0.07),
+      0 0 0 9px #1c1c1e,
+      0 0 0 10px rgba(255,255,255,0.05),
+      0 32px 64px rgba(0,0,0,0.6);
     background: #000;
+    flex-shrink: 0;
   }
 
-  /* ── Screens ── */
-  .screen {
+  .phone-screen {
     position: absolute; inset: 0;
     display: none;
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
   }
-  .screen::-webkit-scrollbar { display: none; }
-  .screen.active { display: block; }
+  .phone-screen::-webkit-scrollbar { display: none; }
+  .phone-screen.active { display: block; }
+  .phone-screen img { width: 390px; display: block; }
 
-  .screen img.frame-img {
-    width: 390px;
-    display: block;
-  }
-
-  /* ── Tap zones (invisible, on top of image) ── */
-  .tap-zone {
-    position: absolute;
-    cursor: pointer;
-  }
-
-  /* ── Navigation arrows ── */
-  .arrow {
-    position: fixed;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.12);
-    color: white;
-    width: 44px; height: 44px;
-    border-radius: 50%;
-    font-size: 20px;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    backdrop-filter: blur(8px);
-    transition: background 0.15s;
-    z-index: 200;
-  }
-  .arrow:hover { background: rgba(255,255,255,0.18); }
-  .arrow.left  { left:  calc(50% - 242px); }
-  .arrow.right { right: calc(50% - 242px); }
-
-  /* ── Dot indicator ── */
-  .dots {
-    position: fixed;
-    bottom: 28px;
+  /* Dot indicator below phone */
+  .phone-dots {
     display: flex;
-    gap: 6px;
+    gap: 5px;
     align-items: center;
-    z-index: 200;
   }
-  .dot {
-    width: 6px; height: 6px;
+  .pdot {
+    width: 5px; height: 5px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.2);
     cursor: pointer;
     transition: all 0.2s;
   }
-  .dot.active { background: #FFE200; width: 20px; border-radius: 3px; }
+  .pdot.active { background: var(--bb-yellow); width: 16px; border-radius: 2.5px; }
 
-  /* ── Screen label ── */
-  .label {
-    position: fixed;
-    top: 18px;
-    color: rgba(255,255,255,0.35);
+  /* ═══════════════════════════════════════
+     PLACEHOLDER PAGES (Desktop & Mobile 2)
+  ═══════════════════════════════════════ */
+  .placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 40px;
+    text-align: center;
+    max-width: 480px;
+  }
+  .placeholder .icon {
+    width: 72px; height: 72px;
+    border-radius: 16px;
+    background: rgba(0,70,190,0.15);
+    border: 1px solid rgba(0,70,190,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+    margin-bottom: 8px;
+  }
+  .placeholder h2 { font-size: 22px; font-weight: 700; color: var(--text-bright); }
+  .placeholder p { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+  .placeholder .coming-soon {
+    background: rgba(255,226,0,0.1);
+    border: 1px solid rgba(255,226,0,0.25);
+    color: var(--bb-yellow);
     font-size: 11px;
+    font-weight: 700;
     letter-spacing: 1px;
-    font-family: monospace;
-    z-index: 200;
+    padding: 6px 16px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    margin-top: 8px;
   }
 
-  /* ── Section badge (shown between screens) ── */
-  .section-badge {
-    position: fixed;
-    top: 18px;
-    right: calc(50% - 195px - 8px);
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.1);
-    color: rgba(255,255,255,0.5);
-    font-size: 10px;
-    letter-spacing: 0.5px;
-    padding: 4px 10px;
-    border-radius: 20px;
-    z-index: 200;
-    font-family: -apple-system, sans-serif;
+  /* Desktop mockup frame */
+  .desktop-frame {
+    width: 900px;
+    height: 560px;
+    background: #1a1b24;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .desktop-chrome {
+    height: 36px;
+    background: #0f1117;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 14px;
+    flex-shrink: 0;
+  }
+  .desktop-chrome .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .desktop-chrome .dot.r { background: #FF5F57; }
+  .desktop-chrome .dot.y { background: #FEBC2E; }
+  .desktop-chrome .dot.g { background: #28C840; }
+  .desktop-chrome .url-bar {
+    flex: 1; margin: 0 40px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 6px;
+    height: 20px;
+    display: flex; align-items: center;
+    padding: 0 10px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+  }
+  .desktop-body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--text-muted);
+    font-size: 14px;
   }
 </style>
 </head>
 <body>
 
-<span class="label" id="lbl">1 / 16</span>
-<span class="section-badge" id="badge">Intro</span>
+<!-- ═══════════════════════════════════════
+     SIDEBAR
+═══════════════════════════════════════ -->
+<aside class="sidebar">
 
-<button class="arrow left"  onclick="prev()">‹</button>
-<button class="arrow right" onclick="next()">›</button>
-
-<div class="phone" id="phone">
-
-  <!-- Each screen: scrollable container with the exact Figma frame image -->
-
-  <div class="screen active" id="s1">
-    <img class="frame-img" src="images/s1_intro.png" alt="Intro Card">
+  <div class="sidebar-logo">
+    <div class="bb-mark">
+      <span>BEST</span>
+      <span>BUY</span>
+    </div>
+    <div class="project-name">Gifting North Star</div>
+    <span class="fy-tag">FY27</span>
   </div>
 
-  <div class="screen" id="s2">
-    <img class="frame-img" src="images/s2_chatgpt_default.png" alt="ChatGPT Default">
+  <!-- Scenarios dropdown -->
+  <div class="nav-section">
+    <button class="dropdown-toggle open" id="scenarioToggle" onclick="toggleScenarios()">
+      Scenarios <span class="chevron">▾</span>
+    </button>
+
+    <div class="scenario-list open" id="scenarioList">
+
+      <!-- 1. Sarah -->
+      <div class="scenario-item active" id="nav-sarah" onclick="selectScenario('sarah')">
+        <span class="num">1</span>
+        <span class="name">Sarah</span>
+        <span class="device-tag">Mobile</span>
+      </div>
+
+      <!-- Sub-screens for Sarah -->
+      <div class="screen-list visible" id="screenList-sarah">
+        <!-- populated by JS -->
+      </div>
+
+      <!-- 2. Desktop scenario -->
+      <div class="scenario-item" id="nav-desktop" onclick="selectScenario('desktop')">
+        <span class="num">2</span>
+        <span class="name">New Scenario</span>
+        <span class="device-tag">Desktop</span>
+      </div>
+
+      <!-- 3. Mobile scenario -->
+      <div class="scenario-item" id="nav-mobile2" onclick="selectScenario('mobile2')">
+        <span class="num">3</span>
+        <span class="name">New Scenario</span>
+        <span class="device-tag">Mobile</span>
+      </div>
+
+    </div>
   </div>
 
-  <div class="screen" id="s3">
-    <img class="frame-img" src="images/s3_chatgpt_mom.png" alt="ChatGPT Mom Typing">
+  <!-- Other links -->
+  <div class="nav-section">
+    <div class="nav-link">
+      <span style="font-size:14px;">🗺️</span> Journey Map
+    </div>
+    <div class="nav-link">
+      <span style="font-size:14px;">🧩</span> Components
+    </div>
+    <div class="nav-link">
+      <span style="font-size:14px;">📐</span> Design Tokens
+    </div>
   </div>
 
-  <div class="screen" id="s4">
-    <img class="frame-img" src="images/s4_chatgpt_ebike.png" alt="ChatGPT E-bike Results">
+  <div class="sidebar-footer">
+    Gifting North Star · FY27<br>
+    Pre-season scenario prototype
+  </div>
+</aside>
+
+<!-- ═══════════════════════════════════════
+     MAIN
+═══════════════════════════════════════ -->
+<div class="main">
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="scenario-title" id="topTitle">
+      Scenarios <span class="sep">/</span> 1. Sarah
+      <span style="font-size:11px;background:rgba(0,70,190,0.2);border:1px solid rgba(0,70,190,0.4);color:#6fa3f7;padding:2px 8px;border-radius:10px;margin-left:4px;">Mobile</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <span class="screen-label" id="screenLabel">Screen 1 / 16</span>
+      <div class="nav-btns">
+        <button class="nav-btn" id="btnPrev" onclick="prevScreen()">‹</button>
+        <button class="nav-btn" id="btnNext" onclick="nextScreen()">›</button>
+      </div>
+    </div>
   </div>
 
-  <div class="screen" id="s5">
-    <img class="frame-img" src="images/s5_saved_mom.png" alt="BB Saved Items Mom">
-  </div>
+  <!-- Canvas -->
+  <div class="canvas">
 
-  <div class="screen" id="s6">
-    <img class="frame-img" src="images/s6_askblue_mom.png" alt="Ask Blue Still Shopping Mom">
-  </div>
+    <!-- ── PAGE: Sarah (mobile) ── -->
+    <div class="page active" id="page-sarah">
+      <div class="phone-wrap">
+        <div class="phone" id="phone">
 
-  <div class="screen" id="s7">
-    <img class="frame-img" src="images/s7_askblue_dad_typing.png" alt="Ask Blue Dad Typing">
-  </div>
+          <div class="phone-screen active" id="ps1"><img src="images/s1_intro.png" alt="Intro Card"></div>
+          <div class="phone-screen" id="ps2"><img src="images/s2_chatgpt_default.png" alt="ChatGPT Default"></div>
+          <div class="phone-screen" id="ps3"><img src="images/s3_chatgpt_mom.png" alt="ChatGPT Mom Typing"></div>
+          <div class="phone-screen" id="ps4"><img src="images/s4_chatgpt_ebike.png" alt="ChatGPT E-bike Results"></div>
+          <div class="phone-screen" id="ps5"><img src="images/s5_saved_mom.png" alt="BB Saved Items – Mom"></div>
+          <div class="phone-screen" id="ps6"><img src="images/s6_askblue_mom.png" alt="Ask Blue – Still Shopping Mom"></div>
+          <div class="phone-screen" id="ps7"><img src="images/s7_askblue_dad_typing.png" alt="Ask Blue – Dad Typing"></div>
+          <div class="phone-screen" id="ps8"><img src="images/s8_askblue_dad_results.png" alt="Ask Blue – Dad Results"></div>
+          <div class="phone-screen" id="ps9"><img src="images/s9_askblue_dad_toast.png" alt="Ask Blue – Dad Item Saved"></div>
+          <div class="phone-screen" id="ps10"><img src="images/s10_bb_home.png" alt="Best Buy Home"></div>
+          <div class="phone-screen" id="ps11"><img src="images/s11_askblue_hi.png" alt="Ask Blue – Hi Sarah"></div>
+          <div class="phone-screen" id="ps12"><img src="images/s12_askblue_sister_typing.png" alt="Ask Blue – Sister Typing"></div>
+          <div class="phone-screen" id="ps13"><img src="images/s13_askblue_sister_results.png" alt="Ask Blue – Sister Results"></div>
+          <div class="phone-screen" id="ps14"><img src="images/s14_sms.png" alt="SMS Price Drop Alert"></div>
+          <div class="phone-screen" id="ps15"><img src="images/s15_saved_all.png" alt="BB Saved Items – All Tagged"></div>
+          <div class="phone-screen" id="ps16"><img src="images/s16_cart.png" alt="BB Cart Checkout"></div>
 
-  <div class="screen" id="s8">
-    <img class="frame-img" src="images/s8_askblue_dad_results.png" alt="Ask Blue Dad Results">
-  </div>
+        </div>
+        <div class="phone-dots" id="phoneDots"></div>
+      </div>
+    </div>
 
-  <div class="screen" id="s9">
-    <img class="frame-img" src="images/s9_askblue_dad_toast.png" alt="Ask Blue Dad Item Saved">
-  </div>
+    <!-- ── PAGE: Desktop scenario (placeholder) ── -->
+    <div class="page" id="page-desktop">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:24px;">
+        <div class="desktop-frame">
+          <div class="desktop-chrome">
+            <div class="dot r"></div>
+            <div class="dot y"></div>
+            <div class="dot g"></div>
+            <div class="url-bar">bestbuy.com · Gifting Experience</div>
+          </div>
+          <div class="desktop-body">
+            <div style="font-size:48px;opacity:0.3;">🖥️</div>
+            <div style="font-size:16px;font-weight:600;color:rgba(255,255,255,0.5);">Desktop Scenario</div>
+            <div style="font-size:13px;color:rgba(255,255,255,0.25);max-width:300px;text-align:center;line-height:1.6;">
+              Add Figma desktop frames to populate this scenario
+            </div>
+          </div>
+        </div>
+        <div class="placeholder" style="padding:0;">
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+      </div>
+    </div>
 
-  <div class="screen" id="s10">
-    <img class="frame-img" src="images/s10_bb_home.png" alt="Best Buy Home">
-  </div>
+    <!-- ── PAGE: Mobile scenario 2 (placeholder) ── -->
+    <div class="page" id="page-mobile2">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:20px;">
+        <div class="phone" style="display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;">
+          <div style="font-size:48px;opacity:0.2;">📱</div>
+          <div style="font-size:14px;font-weight:600;color:rgba(255,255,255,0.3);">Mobile Scenario</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.15);text-align:center;padding:0 32px;line-height:1.6;">
+            Add Figma mobile frames to populate this scenario
+          </div>
+        </div>
+        <span class="coming-soon">Coming Soon</span>
+      </div>
+    </div>
 
-  <div class="screen" id="s11">
-    <img class="frame-img" src="images/s11_askblue_hi.png" alt="Ask Blue Hi Sarah">
-  </div>
-
-  <div class="screen" id="s12">
-    <img class="frame-img" src="images/s12_askblue_sister_typing.png" alt="Ask Blue Sister Typing">
-  </div>
-
-  <div class="screen" id="s13">
-    <img class="frame-img" src="images/s13_askblue_sister_results.png" alt="Ask Blue Sister Results">
-  </div>
-
-  <div class="screen" id="s14">
-    <img class="frame-img" src="images/s14_sms.png" alt="SMS Price Drop Alert">
-  </div>
-
-  <div class="screen" id="s15">
-    <img class="frame-img" src="images/s15_saved_all.png" alt="BB Saved Items All Tagged">
-  </div>
-
-  <div class="screen" id="s16">
-    <img class="frame-img" src="images/s16_cart.png" alt="BB Cart Checkout">
-  </div>
-
-</div><!-- /phone -->
-
-<div class="dots" id="dots"></div>
+  </div><!-- /canvas -->
+</div><!-- /main -->
 
 <script>
-  const TOTAL = 16;
-  const SECTIONS = {
-    1: 'Intro',
-    2: 'Mom · ChatGPT',
-    3: 'Mom · ChatGPT',
-    4: 'Mom · ChatGPT',
-    5: 'Mom · Saved Items',
-    6: 'Dad · Ask Blue',
-    7: 'Dad · Ask Blue',
-    8: 'Dad · Ask Blue',
-    9: 'Dad · Ask Blue',
-    10: 'Best Buy Home',
-    11: 'Sister · Ask Blue',
-    12: 'Sister · Ask Blue',
-    13: 'Sister · Ask Blue',
-    14: 'Checkout · SMS',
-    15: 'Checkout · Saved',
-    16: 'Checkout · Cart',
-  };
+  // ═══════════════════════════════════════
+  //  SARAH SCREENS DATA
+  // ═══════════════════════════════════════
+  const SARAH_SCREENS = [
+    { id: 1,  label: 'Intro Card',               section: 'Intro' },
+    { id: 2,  label: 'ChatGPT – Default',         section: 'Mom' },
+    { id: 3,  label: 'ChatGPT – Mom Typing',      section: 'Mom' },
+    { id: 4,  label: 'ChatGPT – E-bike Results',  section: 'Mom' },
+    { id: 5,  label: 'Saved Items – Mom',         section: 'Mom' },
+    { id: 6,  label: 'Ask Blue – Still Shopping', section: 'Dad' },
+    { id: 7,  label: 'Ask Blue – Dad Typing',     section: 'Dad' },
+    { id: 8,  label: 'Ask Blue – Dad Results',    section: 'Dad' },
+    { id: 9,  label: 'Ask Blue – Item Saved',     section: 'Dad' },
+    { id: 10, label: 'Best Buy Home',             section: 'Home' },
+    { id: 11, label: 'Ask Blue – Hi Sarah',       section: 'Sister' },
+    { id: 12, label: 'Ask Blue – Sister Typing',  section: 'Sister' },
+    { id: 13, label: 'Ask Blue – Sister Results', section: 'Sister' },
+    { id: 14, label: 'SMS – Price Drop Alert',    section: 'Checkout' },
+    { id: 15, label: 'Saved Items – All Tagged',  section: 'Checkout' },
+    { id: 16, label: 'Cart & Checkout',           section: 'Checkout' },
+  ];
 
-  let cur = 1;
+  // ── State ──
+  let activeScenario = 'sarah';
+  let sarahScreen = 1;
+  const SARAH_TOTAL = 16;
 
+  // ── Build sidebar screen list ──
+  function buildScreenList() {
+    const container = document.getElementById('screenList-sarah');
+    container.innerHTML = '';
+    let lastSection = '';
+    SARAH_SCREENS.forEach(s => {
+      if (s.section !== lastSection) {
+        const sep = document.createElement('div');
+        sep.style.cssText = 'padding:6px 16px 2px 36px;font-size:10px;color:rgba(255,255,255,0.2);letter-spacing:0.5px;text-transform:uppercase;';
+        sep.textContent = s.section;
+        container.appendChild(sep);
+        lastSection = s.section;
+      }
+      const el = document.createElement('div');
+      el.className = 'screen-item' + (s.id === sarahScreen ? ' active' : '');
+      el.id = 'si-' + s.id;
+      el.innerHTML = `<span class="screen-num">${s.id}</span>${s.label}`;
+      el.onclick = () => goToSarahScreen(s.id);
+      container.appendChild(el);
+    });
+  }
+
+  // ── Build phone dots ──
   function buildDots() {
-    const bar = document.getElementById('dots');
+    const bar = document.getElementById('phoneDots');
     bar.innerHTML = '';
-    for (let i = 1; i <= TOTAL; i++) {
+    for (let i = 1; i <= SARAH_TOTAL; i++) {
       const d = document.createElement('div');
-      d.className = 'dot' + (i === cur ? ' active' : '');
-      d.onclick = () => go(i);
+      d.className = 'pdot' + (i === sarahScreen ? ' active' : '');
+      d.onclick = () => goToSarahScreen(i);
       bar.appendChild(d);
     }
   }
 
-  function go(n) {
-    if (n < 1 || n > TOTAL) return;
-    document.getElementById('s' + cur).classList.remove('active');
-    cur = n;
-    const el = document.getElementById('s' + cur);
+  // ── Navigate Sarah screens ──
+  function goToSarahScreen(n) {
+    if (n < 1 || n > SARAH_TOTAL) return;
+    document.getElementById('ps' + sarahScreen).classList.remove('active');
+    document.getElementById('si-' + sarahScreen)?.classList.remove('active');
+    sarahScreen = n;
+    const el = document.getElementById('ps' + sarahScreen);
     el.classList.add('active');
     el.scrollTop = 0;
-    document.getElementById('lbl').textContent = cur + ' / ' + TOTAL;
-    document.getElementById('badge').textContent = SECTIONS[cur];
+    document.getElementById('si-' + sarahScreen)?.classList.add('active');
+    document.getElementById('si-' + sarahScreen)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    // Update topbar
+    const s = SARAH_SCREENS[sarahScreen - 1];
+    document.getElementById('screenLabel').textContent = `${s.section} · ${s.label}  ${sarahScreen}/${SARAH_TOTAL}`;
+    document.getElementById('btnPrev').disabled = sarahScreen === 1;
+    document.getElementById('btnNext').disabled = sarahScreen === SARAH_TOTAL;
     buildDots();
   }
 
-  function next() { go(cur + 1); }
-  function prev() { go(cur - 1); }
+  function nextScreen() { goToSarahScreen(sarahScreen + 1); }
+  function prevScreen() { goToSarahScreen(sarahScreen - 1); }
 
+  // ── Select scenario ──
+  function selectScenario(id) {
+    // Hide all pages
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.scenario-item').forEach(i => i.classList.remove('active'));
+    document.querySelectorAll('.screen-list').forEach(l => l.classList.remove('visible'));
+
+    activeScenario = id;
+    document.getElementById('page-' + id).classList.add('active');
+    document.getElementById('nav-' + id).classList.add('active');
+
+    // Update topbar
+    const labels = {
+      sarah:   'Scenarios / 1. Sarah',
+      desktop: 'Scenarios / 2. New Scenario',
+      mobile2: 'Scenarios / 3. New Scenario',
+    };
+    const tags = {
+      sarah:   '<span style="font-size:11px;background:rgba(0,70,190,0.2);border:1px solid rgba(0,70,190,0.4);color:#6fa3f7;padding:2px 8px;border-radius:10px;margin-left:4px;">Mobile</span>',
+      desktop: '<span style="font-size:11px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.4);padding:2px 8px;border-radius:10px;margin-left:4px;">Desktop</span>',
+      mobile2: '<span style="font-size:11px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.4);padding:2px 8px;border-radius:10px;margin-left:4px;">Mobile</span>',
+    };
+    document.getElementById('topTitle').innerHTML = labels[id].replace('/', '<span class="sep">/</span>') + tags[id];
+
+    // Show/hide nav elements depending on scenario
+    const isPhoneScenario = id === 'sarah';
+    document.getElementById('screenLabel').style.display = isPhoneScenario ? '' : 'none';
+    document.querySelector('.nav-btns').style.display   = isPhoneScenario ? '' : 'none';
+
+    if (id === 'sarah') {
+      document.getElementById('screenList-sarah').classList.add('visible');
+      goToSarahScreen(sarahScreen);
+    }
+  }
+
+  // ── Scenarios dropdown toggle ──
+  function toggleScenarios() {
+    const btn  = document.getElementById('scenarioToggle');
+    const list = document.getElementById('scenarioList');
+    btn.classList.toggle('open');
+    list.classList.toggle('open');
+  }
+
+  // ── Keyboard nav ──
   document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight') next();
-    if (e.key === 'ArrowLeft')  prev();
+    if (activeScenario === 'sarah') {
+      if (e.key === 'ArrowRight') nextScreen();
+      if (e.key === 'ArrowLeft')  prevScreen();
+    }
   });
 
-  // Swipe support
-  let startX = 0;
+  // ── Swipe on phone ──
+  let touchStartX = 0;
   const phone = document.getElementById('phone');
-  phone.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+  phone.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
   phone.addEventListener('touchend', e => {
-    const dx = e.changedTouches[0].clientX - startX;
-    if (Math.abs(dx) > 40) dx < 0 ? next() : prev();
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 40) dx < 0 ? nextScreen() : prevScreen();
   });
 
+  // ── Init ──
+  buildScreenList();
   buildDots();
+  goToSarahScreen(1);
 </script>
 </body>
 </html>
