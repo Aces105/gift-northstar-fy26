@@ -318,8 +318,8 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
     min-width: 0;
+    min-height: 0;
   }
 
   /* ── Top bar ── */
@@ -400,68 +400,74 @@
   ═══════════════════════════════════════ */
   .canvas {
     flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+    min-height: 0;
+    overflow: auto;
     position: relative;
     background: var(--bg-canvas);
     background-image: radial-gradient(circle at 60% 40%, rgba(0,70,190,0.08) 0%, transparent 60%);
+    display: flex;
+    flex-direction: column;
   }
 
-  .page { display: none; width: 100%; height: 100%; align-items: center; justify-content: center; }
-  .page.active { display: flex; }
+  .page { display: none; }
+  .page.active {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    /* Shift center-point left by half the sidebar to center in full viewport */
+    padding-right: calc(var(--sidebar-w) + 40px);
+    box-sizing: border-box;
+  }
 
   /* ═══════════════════════════════════════
-     iPHONE 14 FRAME  (390 × 844)
+     iPHONE 14 FRAME  (390 × 844 screen)
+     Shell = padding on .iphone so gradient
+     shows as bezels — no overlay covering
+     the screen content.
   ═══════════════════════════════════════ */
   .phone-wrap {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     gap: 24px;
-    height: 100%;
-    width: 100%;
   }
 
+  /* The gradient background IS the physical shell.
+     Padding creates the bezel around the screen. */
   .iphone {
-    width: 390px;
-    height: 844px;
+    width: 418px;   /* 390 screen + 14 bezel each side */
+    height: 872px;  /* 844 screen + 14 bezel each side */
+    border-radius: 52px;
+    background: linear-gradient(145deg, #3c3d41 0%, #1e1f22 30%, #2b2c2f 60%, #1a1b1e 100%);
+    padding: 14px;
     position: relative;
     flex-shrink: 0;
-    margin: 0 auto;
-  }
-
-  /* Outer shell / anodised aluminium */
-  .iphone-shell {
-    position: absolute;
-    inset: 0;
-    border-radius: 47px;
-    background: linear-gradient(160deg, #2a2b2f 0%, #1a1b1e 40%, #252629 70%, #1c1d20 100%);
+    box-sizing: border-box;
     box-shadow:
-      inset 0 1px 0 rgba(255,255,255,0.18),
-      inset 0 -1px 0 rgba(0,0,0,0.5),
-      inset 1px 0 0 rgba(255,255,255,0.09),
-      inset -1px 0 0 rgba(0,0,0,0.35),
-      0 0 0 1px rgba(0,0,0,0.6),
-      0 32px 80px rgba(0,0,0,0.7),
-      0 8px 24px rgba(0,0,0,0.4);
-    z-index: 3;
-    pointer-events: none;
+      inset 0 1.5px 0 rgba(255,255,255,0.18),
+      inset 0 -1.5px 0 rgba(0,0,0,0.45),
+      inset 1px 0 0 rgba(255,255,255,0.08),
+      inset -1px 0 0 rgba(0,0,0,0.3),
+      0 0 0 1px rgba(0,0,0,0.75),
+      0 40px 100px rgba(0,0,0,0.7),
+      0 10px 32px rgba(0,0,0,0.45);
   }
 
-  /* Screen area — sits flush inside the shell */
+  /* Glass screen inside the bezel */
   .iphone-screen {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    border-radius: 47px;
+    width: 390px;
+    height: 844px;
+    border-radius: 40px;
     overflow: hidden;
-    z-index: 1;
+    position: relative;
     background: #000;
+    display: block;
   }
 
-  /* Dynamic Island */
+  /* Dynamic Island — inside the screen */
   .dynamic-island {
     position: absolute;
     top: 12px;
@@ -469,82 +475,116 @@
     transform: translateX(-50%);
     width: 120px;
     height: 34px;
-    background: #000;
+    background: #080808;
     border-radius: 18px;
-    z-index: 10;
-    box-shadow: 0 0 0 1px rgba(255,255,255,0.06);
+    z-index: 20;
+    pointer-events: none;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.05);
   }
 
-  /* Side buttons */
-  .btn-power {
-    position: absolute;
-    right: -3px;
-    top: 180px;
-    width: 3px;
-    height: 72px;
-    background: linear-gradient(to right, #1a1a1c, #2c2c2e);
-    border-radius: 0 3px 3px 0;
-    z-index: 4;
-    box-shadow: 1px 0 2px rgba(0,0,0,0.5);
-  }
-  .btn-vol-up {
-    position: absolute;
-    left: -3px;
-    top: 164px;
-    width: 3px;
-    height: 50px;
-    background: linear-gradient(to left, #1a1a1c, #2c2c2e);
-    border-radius: 3px 0 0 3px;
-    z-index: 4;
-    box-shadow: -1px 0 2px rgba(0,0,0,0.5);
-  }
-  .btn-vol-dn {
-    position: absolute;
-    left: -3px;
-    top: 226px;
-    width: 3px;
-    height: 50px;
-    background: linear-gradient(to left, #1a1a1c, #2c2c2e);
-    border-radius: 3px 0 0 3px;
-    z-index: 4;
-    box-shadow: -1px 0 2px rgba(0,0,0,0.5);
-  }
-  .btn-action {
-    position: absolute;
-    left: -3px;
-    top: 112px;
-    width: 3px;
-    height: 34px;
-    background: linear-gradient(to left, #1a1a1c, #2c2c2e);
-    border-radius: 3px 0 0 3px;
-    z-index: 4;
-    box-shadow: -1px 0 2px rgba(0,0,0,0.5);
-  }
-
-  /* Home indicator */
+  /* Home indicator — inside the screen */
   .iphone-home {
     position: absolute;
-    bottom: 10px;
+    bottom: 8px;
     left: 50%;
     transform: translateX(-50%);
     width: 130px;
     height: 5px;
-    background: rgba(255,255,255,0.22);
+    background: rgba(255,255,255,0.25);
     border-radius: 3px;
-    z-index: 10;
+    z-index: 20;
+    pointer-events: none;
   }
 
-  /* Screen slides */
+  /* Side buttons — outside .iphone via negative offset */
+  .btn-power {
+    position: absolute;
+    right: -3px;
+    top: 194px;  /* 14px padding + 180 from screen top */
+    width: 3px;
+    height: 72px;
+    background: linear-gradient(to right, #1a1a1c, #2e2e30);
+    border-radius: 0 3px 3px 0;
+    z-index: 10;
+    box-shadow: 1px 0 2px rgba(0,0,0,0.55);
+  }
+  .btn-vol-up {
+    position: absolute;
+    left: -3px;
+    top: 178px;  /* 14px padding + 164 from screen top */
+    width: 3px;
+    height: 50px;
+    background: linear-gradient(to left, #1a1a1c, #2e2e30);
+    border-radius: 3px 0 0 3px;
+    z-index: 10;
+    box-shadow: -1px 0 2px rgba(0,0,0,0.55);
+  }
+  .btn-vol-dn {
+    position: absolute;
+    left: -3px;
+    top: 240px;  /* 14px padding + 226 from screen top */
+    width: 3px;
+    height: 50px;
+    background: linear-gradient(to left, #1a1a1c, #2e2e30);
+    border-radius: 3px 0 0 3px;
+    z-index: 10;
+    box-shadow: -1px 0 2px rgba(0,0,0,0.55);
+  }
+  .btn-action {
+    position: absolute;
+    left: -3px;
+    top: 126px;  /* 14px padding + 112 from screen top */
+    width: 3px;
+    height: 34px;
+    background: linear-gradient(to left, #1a1a1c, #2e2e30);
+    border-radius: 3px 0 0 3px;
+    z-index: 10;
+    box-shadow: -1px 0 2px rgba(0,0,0,0.55);
+  }
+
+  /* Screen slides — fill the screen area */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes fadeOut {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+  }
+  @keyframes slideUpIn {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+  }
+  @keyframes slideDownOut {
+    from { transform: translateY(0); }
+    to   { transform: translateY(100%); }
+  }
+
   .phone-screen {
     position: absolute;
     inset: 0;
-    display: none;
+    display: block;
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1;
+    will-change: transform, opacity;
   }
   .phone-screen::-webkit-scrollbar { display: none; }
-  .phone-screen.active { display: block; }
+  .phone-screen.active {
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 2;
+  }
+  /* Fade — used for all non-drawer transitions */
+  .phone-screen.anim-fade-enter  { animation: fadeIn       0.3s ease forwards; z-index: 3; opacity: 1; }
+  .phone-screen.anim-fade-exit   { animation: fadeOut      0.3s ease forwards; z-index: 2; }
+  /* Drawer — slides up from bottom on enter, drops down on exit */
+  .phone-screen.anim-drawer-enter { animation: slideUpIn   0.38s cubic-bezier(0.22,1,0.36,1) forwards; z-index: 3; opacity: 1; }
+  .phone-screen.anim-drawer-exit  { animation: slideDownOut 0.38s cubic-bezier(0.22,1,0.36,1) forwards; z-index: 3; }
+
   .phone-screen img {
     width: 390px;
     display: block;
@@ -564,6 +604,25 @@
     transition: all 0.2s;
   }
   .pdot.active { background: var(--bb-yellow); width: 20px; border-radius: 3px; }
+
+  /* ═══════════════════════════════════════
+     APP FOOTER NAVIGATION
+     1:1 Figma SVG — fixed over scroll content.
+     z-index 15: above phone-screen (2/3),
+     below dynamic-island / iphone-home (20).
+  ═══════════════════════════════════════ */
+  .app-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 79px;
+    z-index: 15;
+    pointer-events: none;
+    transition: opacity 0.18s;
+  }
+  .app-footer.hidden { opacity: 0; }
+  .app-footer svg { display: block; }
 
   /* ═══════════════════════════════════════
      PLACEHOLDER PAGES
@@ -712,7 +771,7 @@
 
       <div class="scenario-item active" id="nav-sarah" onclick="selectScenario('sarah')">
         <span class="num">1</span>
-        <span class="name">Sarah</span>
+        <span class="name">Pre-season: Sept-Oct - Sarah</span>
         <span class="device-tag">Mobile</span>
       </div>
 
@@ -720,13 +779,13 @@
 
       <div class="scenario-item" id="nav-desktop" onclick="selectScenario('desktop')">
         <span class="num">2</span>
-        <span class="name">New Scenario</span>
+        <span class="name">Pre-Powerweek: Late Nov - Marcus</span>
         <span class="device-tag">Desktop</span>
       </div>
 
       <div class="scenario-item" id="nav-mobile2" onclick="selectScenario('mobile2')">
         <span class="num">3</span>
-        <span class="name">New Scenario</span>
+        <span class="name">Last Minute: Late Dec - /span>
         <span class="device-tag">Mobile</span>
       </div>
 
@@ -783,40 +842,198 @@
       <div class="phone-wrap">
 
         <div class="iphone">
-          <!-- Physical buttons -->
+          <!-- Physical side buttons -->
           <div class="btn-action"></div>
           <div class="btn-vol-up"></div>
           <div class="btn-vol-dn"></div>
           <div class="btn-power"></div>
 
-          <!-- Screen content -->
+          <!-- Glass screen (clips content, rounds corners) -->
           <div class="iphone-screen">
-            <div class="phone-screen active" id="ps1"><img src="images/s1_intro.png" alt="Intro Card"></div>
-            <div class="phone-screen" id="ps2"><img src="images/s2_chatgpt_default.png" alt="ChatGPT Default"></div>
-            <div class="phone-screen" id="ps3"><img src="images/s3_chatgpt_mom.png" alt="ChatGPT Mom Typing"></div>
-            <div class="phone-screen" id="ps4"><img src="images/s4_chatgpt_ebike.png" alt="ChatGPT E-bike Results"></div>
-            <div class="phone-screen" id="ps5"><img src="images/s5_saved_mom.png" alt="BB Saved Items – Mom"></div>
-            <div class="phone-screen" id="ps6"><img src="images/s6_askblue_mom.png" alt="Ask Blue – Still Shopping Mom"></div>
-            <div class="phone-screen" id="ps7"><img src="images/s7_askblue_dad_typing.png" alt="Ask Blue – Dad Typing"></div>
-            <div class="phone-screen" id="ps8"><img src="images/s8_askblue_dad_results.png" alt="Ask Blue – Dad Results"></div>
-            <div class="phone-screen" id="ps9"><img src="images/s9_askblue_dad_toast.png" alt="Ask Blue – Dad Item Saved"></div>
-            <div class="phone-screen" id="ps10"><img src="images/s10_bb_home.png" alt="Best Buy Home"></div>
-            <div class="phone-screen" id="ps11"><img src="images/s11_askblue_hi.png" alt="Ask Blue – Hi Sarah"></div>
-            <div class="phone-screen" id="ps12"><img src="images/s12_askblue_sister_typing.png" alt="Ask Blue – Sister Typing"></div>
-            <div class="phone-screen" id="ps13"><img src="images/s13_askblue_sister_results.png" alt="Ask Blue – Sister Results"></div>
-            <div class="phone-screen" id="ps14"><img src="images/s14_sms.png" alt="SMS Price Drop Alert"></div>
-            <div class="phone-screen" id="ps15"><img src="images/s15_saved_all.png" alt="BB Saved Items – All Tagged"></div>
-            <div class="phone-screen" id="ps16"><img src="images/s16_cart.png" alt="BB Cart Checkout"></div>
+
+            <!-- Dynamic Island overlays screen top -->
+            <div class="dynamic-island"></div>
+
+            <!-- Figma frames — one per screen -->
+            <!-- Hotspot positions derived from Figma prototype API (FKuMC1M0Aa8adHrs9FcPeH) -->
+
+            <!-- S1: Intro Card → tap anywhere to start -->
+            <div class="phone-screen active" id="ps1">
+              <img src="images/s1_intro.png" alt="Intro Card">
+              <div onclick="goToSarahScreen(2)" style="position:absolute;inset:0;cursor:pointer;"></div>
+            </div>
+
+            <!-- S2: ChatGPT Default → tap anywhere (Figma: full-frame navigate) -->
+            <div class="phone-screen" id="ps2">
+              <img src="images/s2_chatgpt_default.png" alt="ChatGPT Default">
+              <div onclick="goToSarahScreen(3)" style="position:absolute;inset:0;cursor:pointer;"></div>
+            </div>
+
+            <!-- S3: ChatGPT – Mom Typing → tap anywhere (Figma: full-frame navigate) -->
+            <div class="phone-screen" id="ps3">
+              <img src="images/s3_chatgpt_mom.png" alt="ChatGPT Mom Typing">
+              <div onclick="goToSarahScreen(4)" style="position:absolute;inset:0;cursor:pointer;"></div>
+            </div>
+
+            <!-- S4: ChatGPT – E-bike Results → tap anywhere / Best Buy link (Figma: full-frame navigate) -->
+            <div class="phone-screen" id="ps4">
+              <img src="images/s4_chatgpt_ebike.png" alt="ChatGPT E-bike Results">
+              <div onclick="goToSarahScreen(5)" style="position:absolute;inset:0;cursor:pointer;"></div>
+            </div>
+
+            <!-- S5: BB Saved Items – Mom → tap Ask Blue in bottom nav -->
+            <div class="phone-screen" id="ps5">
+              <img src="images/s5_saved_mom.png" alt="BB Saved Items – Mom">
+              <div onclick="goToSarahScreen(6)" style="position:absolute;left:130px;top:760px;width:130px;height:80px;cursor:pointer;"></div>
+            </div>
+
+            <!-- S6: Ask Blue – Still Shopping → tap input field (Figma: x=16 y=695 358×64) -->
+            <div class="phone-screen" id="ps6" data-type="drawer">
+              <img src="images/s6_askblue_mom.png" alt="Ask Blue – Still Shopping Mom">
+              <div onclick="goToSarahScreen(7)" style="position:absolute;left:16px;top:695px;width:358px;height:64px;cursor:pointer;"></div>
+            </div>
+
+            <!-- S7: Ask Blue – Dad Typing → tap send button (Figma: x=330 y=442 32×32) -->
+            <div class="phone-screen" id="ps7" data-type="drawer">
+              <img src="images/s7_askblue_dad_typing.png" alt="Ask Blue – Dad Typing">
+              <div onclick="goToSarahScreen(8)" style="position:absolute;left:314px;top:426px;width:60px;height:60px;cursor:pointer;"></div>
+            </div>
+
+            <!-- S8: Ask Blue – Dad Results → tap Save action (Figma: x=256 y=784 87×20) -->
+            <div class="phone-screen" id="ps8" data-type="drawer">
+              <img src="images/s8_askblue_dad_results.png" alt="Ask Blue – Dad Results">
+              <div onclick="goToSarahScreen(9)" style="position:absolute;left:240px;top:768px;width:135px;height:48px;cursor:pointer;"></div>
+            </div>
+
+            <!-- S9: Ask Blue – Dad Item Saved → tap anywhere to dismiss toast -->
+            <div class="phone-screen" id="ps9">
+              <img src="images/s9_askblue_dad_toast.png" alt="Ask Blue – Dad Item Saved">
+              <div onclick="goToSarahScreen(10)" style="position:absolute;inset:0;cursor:pointer;"></div>
+            </div>
+
+            <!-- S10: Best Buy Home → tap Ask Blue in bottom nav -->
+            <div class="phone-screen" id="ps10">
+              <img src="images/s10_bb_home.png" alt="Best Buy Home">
+              <div onclick="goToSarahScreen(11)" style="position:absolute;left:130px;top:765px;width:130px;height:75px;cursor:pointer;"></div>
+            </div>
+
+            <!-- S11: Ask Blue – Hi Sarah → tap input field (Figma: x=16 y=686 358×64) -->
+            <div class="phone-screen" id="ps11" data-type="drawer">
+              <img src="images/s11_askblue_hi.png" alt="Ask Blue – Hi Sarah">
+              <div onclick="goToSarahScreen(12)" style="position:absolute;left:16px;top:686px;width:358px;height:64px;cursor:pointer;"></div>
+            </div>
+
+            <!-- S12: Ask Blue – Sister Typing → tap send button (Figma: x=330 y=442 area) -->
+            <div class="phone-screen" id="ps12">
+              <img src="images/s12_askblue_sister_typing.png" alt="Ask Blue – Sister Typing">
+              <div onclick="goToSarahScreen(13)" style="position:absolute;left:314px;top:418px;width:60px;height:60px;cursor:pointer;"></div>
+            </div>
+
+            <!-- S13: Ask Blue – Sister Results → tap Save action (Figma: x=256 y=784 87×20) -->
+            <div class="phone-screen" id="ps13">
+              <img src="images/s13_askblue_sister_results.png" alt="Ask Blue – Sister Results">
+              <div onclick="goToSarahScreen(14)" style="position:absolute;left:240px;top:768px;width:135px;height:48px;cursor:pointer;"></div>
+            </div>
+
+            <!-- S14: SMS – Price Drop Alert → tap the message bubble (Figma: x=42 y=194 234×192) -->
+            <div class="phone-screen" id="ps14">
+              <img src="images/s14_sms.png" alt="SMS Price Drop Alert">
+              <div onclick="goToSarahScreen(15)" style="position:absolute;left:42px;top:194px;width:234px;height:192px;cursor:pointer;"></div>
+            </div>
+
+            <!-- S15: BB Saved Items – All Tagged → tap checkout bar (Figma: x=15 y=782 360×32) -->
+            <div class="phone-screen" id="ps15">
+              <img src="images/s15_saved_all.png" alt="BB Saved Items – All Tagged">
+              <div onclick="goToSarahScreen(16)" style="position:absolute;left:15px;top:775px;width:360px;height:60px;cursor:pointer;"></div>
+            </div>
+
+            <!-- S16: Cart & Checkout → end of flow -->
+            <div class="phone-screen" id="ps16">
+              <img src="images/s16_cart.png" alt="BB Cart Checkout">
+            </div>
+
+            <!-- App Footer Navigation — 1:1 Figma SVG export -->
+            <div class="app-footer hidden" id="appFooter"><svg width="390" height="79" viewBox="0 0 391 79" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="App Footer Navigation">
+<mask id="path-1-inside-1_4148_86210" fill="white">
+<path d="M0 0H391V55C391 68.2548 380.255 79 367 79H24C10.7452 79 0 68.2548 0 55V0Z"/>
+</mask>
+<path d="M0 0H391V55C391 68.2548 380.255 79 367 79H24C10.7452 79 0 68.2548 0 55V0Z" fill="white"/>
+<path d="M0 -1H391V1H0V-1ZM0 1M391 79H0H391M391 79M0 79V0V79M0 79M391 0V79V0" fill="#E4E5E8" mask="url(#path-1-inside-1_4148_86210)"/>
+<g id="Footer Nav">
+<g id="Home">
+<g id="Icon+Text"><g id="Icon"><g id="Path">
+<path d="M47.7497 27.5001H43.2497C42.8397 27.5001 42.4997 27.1601 42.4997 26.7501V20.2501C42.4997 19.5601 43.0597 19.0001 43.7497 19.0001H47.2497C47.9397 19.0001 48.4997 19.5601 48.4997 20.2501V26.7501C48.4997 27.1601 48.1597 27.5001 47.7497 27.5001ZM43.9997 26.0001H46.9997V20.5001H43.9997V26.0001Z" fill="#0046BE"/>
+<path d="M51.7497 27.5001H39.2497C37.7297 27.5001 36.4997 26.2701 36.4997 24.7501V14.7501C36.4997 14.3401 36.8397 14.0001 37.2497 14.0001C37.6597 14.0001 37.9997 14.3401 37.9997 14.7501V24.7501C37.9997 25.4401 38.5597 26.0001 39.2497 26.0001H51.7497C52.4397 26.0001 52.9997 25.4401 52.9997 24.7501V14.7501C52.9997 14.3401 53.3397 14.0001 53.7497 14.0001C54.1597 14.0001 54.4997 14.3401 54.4997 14.7501V24.7501C54.4997 26.2701 53.2697 27.5001 51.7497 27.5001Z" fill="#0046BE"/>
+<path d="M55.7497 17.0001C55.5897 17.0001 55.4297 16.9501 55.2897 16.8401L45.6697 9.36009C45.5597 9.27009 45.4297 9.27009 45.3397 9.35009L35.7097 16.8401C35.3797 17.0901 34.9097 17.0301 34.6597 16.7101C34.4097 16.3801 34.4597 15.9101 34.7897 15.6601L44.4097 8.18009C45.0397 7.67009 45.9697 7.67009 46.6097 8.19009L56.2097 15.6601C56.5397 15.9101 56.5997 16.3901 56.3397 16.7101C56.1897 16.9001 55.9697 17.0001 55.7497 17.0001Z" fill="#0046BE"/>
+</g></g>
+<g id="Text"><path id="Label" d="M31.8901 34.85H33.4001V37.82H36.4101V34.85H37.9001V42H36.4101V39.01H33.4001V42H31.8901V34.85ZM41.7199 42.11C41.3265 42.11 40.9632 42.0467 40.6299 41.92C40.3032 41.7933 40.0165 41.6133 39.7699 41.38C39.5299 41.1467 39.3399 40.8667 39.1999 40.54C39.0665 40.2133 38.9999 39.8467 38.9999 39.44V39.36C38.9999 38.9533 39.0665 38.5833 39.1999 38.25C39.3399 37.9167 39.5332 37.6333 39.7799 37.4C40.0265 37.16 40.3132 36.9767 40.6399 36.85C40.9732 36.7167 41.3365 36.65 41.7299 36.65C42.1165 36.65 42.4732 36.7133 42.7999 36.84C43.1332 36.9667 43.4199 37.1467 43.6599 37.38C43.9065 37.6133 44.0965 37.8967 44.2299 38.23C44.3699 38.5567 44.4399 38.9233 44.4399 39.33V39.41C44.4399 39.8233 44.3699 40.1967 44.2299 40.53C44.0965 40.8567 43.9065 41.14 43.6599 41.38C43.4199 41.6133 43.1332 41.7933 42.7999 41.92C42.4665 42.0467 42.1065 42.11 41.7199 42.11ZM41.7299 41.08C42.1499 41.08 42.4765 40.9333 42.7099 40.64C42.9499 40.34 43.0699 39.9333 43.0699 39.42V39.35C43.0699 38.83 42.9499 38.4233 42.7099 38.13C42.4765 37.8367 42.1499 37.69 41.7299 37.69C41.3032 37.69 40.9699 37.8333 40.7299 38.12C40.4899 38.4067 40.3699 38.81 40.3699 39.33V39.41C40.3699 39.93 40.4865 40.34 40.7199 40.64C40.9532 40.9333 41.2899 41.08 41.7299 41.08ZM45.4715 36.77H46.8115V37.57C46.9449 37.3167 47.1449 37.1 47.4115 36.92C47.6849 36.74 48.0182 36.65 48.4115 36.65C48.7515 36.65 49.0482 36.7267 49.3015 36.88C49.5549 37.0267 49.7482 37.26 49.8815 37.58C50.0882 37.2533 50.3515 37.0167 50.6715 36.87C50.9915 36.7233 51.3149 36.65 51.6415 36.65C51.8815 36.65 52.1082 36.69 52.3215 36.77C52.5349 36.8433 52.7182 36.9633 52.8715 37.13C53.0315 37.2967 53.1549 37.5067 53.2415 37.76C53.3349 38.0133 53.3815 38.3133 53.3815 38.66V42H52.0415V38.8C52.0415 38.44 51.9649 38.18 51.8115 38.02C51.6582 37.8533 51.4415 37.77 51.1615 37.77C51.0215 37.77 50.8849 37.7933 50.7515 37.84C50.6249 37.8867 50.5115 37.9567 50.4115 38.05C50.3115 38.1433 50.2315 38.26 50.1715 38.4C50.1182 38.54 50.0915 38.7033 50.0915 38.89V42H48.7615V38.8C48.7615 38.44 48.6849 38.18 48.5315 38.02C48.3782 37.8533 48.1615 37.77 47.8815 37.77C47.7415 37.77 47.6049 37.7933 47.4715 37.84C47.3449 37.8867 47.2315 37.9567 47.1315 38.05C47.0315 38.1433 46.9515 38.26 46.8915 38.4C46.8382 38.54 46.8115 38.7033 46.8115 38.89V42H45.4715V36.77ZM57.0512 42.11C56.6579 42.11 56.2979 42.05 55.9712 41.93C55.6445 41.81 55.3612 41.6367 55.1212 41.41C54.8812 41.1767 54.6945 40.8967 54.5612 40.57C54.4279 40.2367 54.3612 39.8633 54.3612 39.45V39.37C54.3612 38.9633 54.4279 38.5933 54.5612 38.26C54.6945 37.92 54.8779 37.6333 55.1112 37.4C55.3512 37.16 55.6312 36.9767 55.9512 36.85C56.2779 36.7167 56.6312 36.65 57.0112 36.65C57.3379 36.65 57.6512 36.7 57.9512 36.8C58.2579 36.9 58.5279 37.06 58.7612 37.28C58.9945 37.4933 59.1779 37.77 59.3112 38.11C59.4512 38.4433 59.5212 38.8433 59.5212 39.31V39.68H55.7212C55.7479 40.1467 55.8779 40.5067 56.1112 40.76C56.3445 41.0067 56.6712 41.13 57.0912 41.13C57.4379 41.13 57.7012 41.0633 57.8812 40.93C58.0612 40.7967 58.1745 40.61 58.2212 40.37H59.5012C59.4145 40.9367 59.1579 41.37 58.7312 41.67C58.3112 41.9633 57.7512 42.11 57.0512 42.11ZM58.2012 38.83C58.1745 38.41 58.0579 38.1 57.8512 37.9C57.6512 37.7 57.3712 37.6 57.0112 37.6C56.6645 37.6 56.3812 37.71 56.1612 37.93C55.9412 38.1433 55.8012 38.4433 55.7412 38.83H58.2012Z" fill="#0046BE"/></g>
+</g>
+<path id="Active" d="M17.5 1H73.5C73.5 2.10457 72.6046 3 71.5 3H19.5C18.3954 3 17.5 2.10457 17.5 1Z" fill="#0046BE"/>
+</g>
+<g id="Shop">
+<g id="Icon+Text_2"><g id="Icon_2"><g id="Path_2">
+<path d="M128.27 25.5H115.63C115.2 25.5 114.79 25.34 114.47 25.06L110.59 21.61C110.404 21.4467 110.254 21.2452 110.153 21.0191C110.051 20.7931 109.999 20.5479 110 20.3V15.7C110 15.2 110.21 14.72 110.59 14.39L114.47 10.94C114.79 10.66 115.2 10.5 115.63 10.5H128.25C129.76 10.5 131 11.73 131 13.25L131.01 22.75C131.01 23.49 130.73 24.18 130.21 24.7C129.69 25.21 129 25.5 128.27 25.5ZM115.63 12C115.57 12 115.51 12.02 115.46 12.06L111.58 15.51C111.53 15.56 111.5 15.63 111.5 15.7V20.3C111.5 20.37 111.53 20.44 111.58 20.49L115.46 23.94C115.51 23.98 115.57 24 115.63 24H128.27C128.6 24 128.92 23.87 129.15 23.63C129.39 23.39 129.52 23.08 129.52 22.75L129.5 13.25C129.5 12.56 128.94 12 128.25 12H115.63Z" fill="#6C6F75"/>
+<path d="M112.97 18.77C113.4 18.77 113.74 18.43 113.74 18C113.74 17.58 113.39 17.23 112.97 17.23C112.54 17.23 112.2 17.57 112.2 18C112.2 18.42 112.55 18.77 112.97 18.77Z" fill="#6C6F75"/>
+</g></g>
+<g id="Text_2"><path id="Label_2" d="M111.271 42.11C110.778 42.11 110.355 42.0533 110.001 41.94C109.648 41.8267 109.351 41.67 109.111 41.47C108.878 41.2633 108.698 41.0167 108.571 40.73C108.451 40.4433 108.378 40.1233 108.351 39.77H109.781C109.801 39.9367 109.838 40.0967 109.891 40.25C109.945 40.3967 110.025 40.5267 110.131 40.64C110.245 40.7467 110.391 40.8333 110.571 40.9C110.758 40.9667 110.991 41 111.271 41C111.645 41 111.945 40.91 112.171 40.73C112.405 40.5433 112.521 40.2967 112.521 39.99C112.521 39.8367 112.498 39.7067 112.451 39.6C112.411 39.4933 112.338 39.4033 112.231 39.33C112.125 39.25 111.978 39.1833 111.791 39.13C111.611 39.0767 111.385 39.0267 111.111 38.98C110.671 38.92 110.288 38.84 109.961 38.74C109.641 38.64 109.378 38.5067 109.171 38.34C108.965 38.1733 108.811 37.97 108.711 37.73C108.611 37.4833 108.561 37.19 108.561 36.85C108.561 36.55 108.621 36.2733 108.741 36.02C108.861 35.76 109.031 35.5367 109.251 35.35C109.478 35.1633 109.748 35.0167 110.061 34.91C110.375 34.8033 110.725 34.75 111.111 34.75C111.905 34.75 112.525 34.9267 112.971 35.28C113.425 35.6333 113.688 36.16 113.761 36.86H112.381C112.328 36.5133 112.198 36.26 111.991 36.1C111.785 35.94 111.491 35.86 111.111 35.86C110.731 35.86 110.445 35.9433 110.251 36.11C110.065 36.27 109.971 36.4767 109.971 36.73C109.971 36.8633 109.988 36.9833 110.021 37.09C110.061 37.19 110.131 37.28 110.231 37.36C110.331 37.4333 110.471 37.5 110.651 37.56C110.831 37.6133 111.068 37.66 111.361 37.7C111.788 37.7533 112.161 37.83 112.481 37.93C112.808 38.0233 113.081 38.1533 113.301 38.32C113.521 38.48 113.685 38.6867 113.791 38.94C113.905 39.1867 113.961 39.49 113.961 39.85C113.961 40.1633 113.898 40.46 113.771 40.74C113.645 41.0133 113.465 41.2533 113.231 41.46C112.998 41.66 112.715 41.82 112.381 41.94C112.048 42.0533 111.678 42.11 111.271 42.11ZM115.076 34.65H116.416V37.61C116.549 37.35 116.756 37.1267 117.036 36.94C117.323 36.7467 117.683 36.65 118.116 36.65C118.376 36.65 118.613 36.69 118.826 36.77C119.046 36.85 119.233 36.9733 119.386 37.14C119.546 37.3 119.669 37.51 119.756 37.77C119.843 38.0233 119.886 38.33 119.886 38.69V42H118.546V38.85C118.546 38.4767 118.469 38.2033 118.316 38.03C118.163 37.85 117.916 37.76 117.576 37.76C117.256 37.76 116.983 37.86 116.756 38.06C116.529 38.26 116.416 38.56 116.416 38.96V42H115.076V34.65ZM123.6 42.11C123.206 42.11 122.843 42.0467 122.51 41.92C122.183 41.7933 121.896 41.6133 121.65 41.38C121.41 41.1467 121.22 40.8667 121.08 40.54C120.946 40.2133 120.88 39.8467 120.88 39.44V39.36C120.88 38.9533 120.946 38.5833 121.08 38.25C121.22 37.9167 121.413 37.6333 121.66 37.4C121.906 37.16 122.193 36.9767 122.52 36.85C122.853 36.7167 123.216 36.65 123.61 36.65C123.996 36.65 124.353 36.7133 124.68 36.84C125.013 36.9667 125.3 37.1467 125.54 37.38C125.786 37.6133 125.976 37.8967 126.11 38.23C126.25 38.5567 126.32 38.9233 126.32 39.33V39.41C126.32 39.8233 126.25 40.1967 126.11 40.53C125.976 40.8567 125.786 41.14 125.54 41.38C125.3 41.6133 125.013 41.7933 124.68 41.92C124.346 42.0467 123.986 42.11 123.6 42.11ZM123.61 41.08C124.03 41.08 124.356 40.9333 124.59 40.64C124.83 40.34 124.95 39.9333 124.95 39.42V39.35C124.95 38.83 124.83 38.4233 124.59 38.13C124.356 37.8367 124.03 37.69 123.61 37.69C123.183 37.69 122.85 37.8333 122.61 38.12C122.37 38.4067 122.25 38.81 122.25 39.33V39.41C122.25 39.93 122.366 40.34 122.6 40.64C122.833 40.9333 123.17 41.08 123.61 41.08ZM127.351 36.77H128.691V37.6C128.845 37.3467 129.068 37.1267 129.361 36.94C129.655 36.7467 129.998 36.65 130.391 36.65C130.711 36.65 131.011 36.71 131.291 36.83C131.571 36.9433 131.815 37.1167 132.021 37.35C132.228 37.5767 132.388 37.8567 132.501 38.19C132.621 38.5233 132.681 38.9033 132.681 39.33V39.41C132.681 39.8367 132.625 40.2167 132.511 40.55C132.398 40.8833 132.238 41.1667 132.031 41.4C131.825 41.6267 131.581 41.8033 131.301 41.93C131.021 42.05 130.715 42.11 130.381 42.11C129.968 42.11 129.618 42.0233 129.331 41.85C129.045 41.67 128.831 41.45 128.691 41.19V43.78H127.351V36.77ZM130.011 41.06C130.431 41.06 130.751 40.92 130.971 40.64C131.198 40.36 131.311 39.9533 131.311 39.42V39.34C131.311 38.7867 131.188 38.3733 130.941 38.1C130.695 37.8267 130.381 37.69 130.001 37.69C129.601 37.69 129.275 37.8267 129.021 38.1C128.775 38.3733 128.651 38.7867 128.651 39.34V39.42C128.651 39.9733 128.775 40.3867 129.021 40.66C129.268 40.9267 129.598 41.06 130.011 41.06Z" fill="#6C6F75"/></g>
+</g>
+</g>
+<g id="Discover">
+<g id="Icon+Text_3"><g id="Icon_3">
+<path id="Vector" d="M195.5 8.5C200.84 8.5 205.25 12.6 205.25 17.75C205.243 19.3123 204.829 20.846 204.05 22.2C204.068 23.3882 204.125 24.5755 204.22 25.76L204.24 26.08V26.19C204.249 26.3026 204.232 26.4157 204.191 26.5209C204.15 26.6261 204.086 26.7207 204.003 26.7976C203.92 26.8745 203.821 26.9317 203.714 26.9651C203.606 26.9984 203.492 27.0069 203.38 26.99H203.36L203.3 26.98L202.29 26.78C201.623 26.6467 200.717 26.44 199.57 26.16C198.317 26.7067 196.96 26.9867 195.5 27C190.16 27 185.75 22.9 185.75 17.75C185.75 16.6233 185.95 15.5567 186.35 14.55C186.43 14.59 186.513 14.6233 186.6 14.65C187.57 14.95 187.86 15.19 188 15.35C188.23 15.59 188.45 15.99 188.93 17.12C189.101 17.5289 189.39 17.878 189.759 18.1235C190.128 18.369 190.562 18.5 191.005 18.5C191.448 18.5 191.882 18.369 192.251 18.1235C192.62 17.878 192.909 17.5289 193.08 17.12C193.291 16.478 193.609 15.8762 194.02 15.34C194.18 15.16 194.47 14.94 195.4 14.65C195.86 14.5082 196.262 14.223 196.547 13.836C196.833 13.4491 196.987 12.9809 196.987 12.5C196.987 12.0191 196.833 11.5509 196.547 11.164C196.262 10.777 195.86 10.4918 195.4 10.35C194.43 10.05 194.14 9.81 194 9.65C193.771 9.3638 193.583 9.04751 193.44 8.71C194.107 8.57 194.793 8.5 195.5 8.5Z" fill="url(#paint0_linear_4148_86210)"/>
+<path id="Vector_2" d="M191 8C191.3 8 191.57 8.18 191.7 8.46C192.15 9.56 192.46 10.2 192.88 10.66C193.28 11.1 193.86 11.45 194.97 11.78C195.126 11.8254 195.263 11.9202 195.36 12.05C195.458 12.1798 195.51 12.3377 195.51 12.5C195.51 12.6623 195.458 12.8202 195.36 12.95C195.263 13.0798 195.126 13.1746 194.97 13.22C194.199 13.3913 193.49 13.7719 192.92 14.32C192.378 14.9789 191.962 15.7312 191.69 16.54C191.633 16.6753 191.536 16.7907 191.414 16.8717C191.291 16.9528 191.147 16.9961 191 16.9961C190.853 16.9961 190.709 16.9528 190.587 16.8717C190.464 16.7907 190.368 16.6753 190.31 16.54C190.028 15.7482 189.623 15.0057 189.11 14.34C188.71 13.9 188.14 13.55 187.03 13.22C186.874 13.1746 186.738 13.0798 186.64 12.95C186.543 12.8202 186.49 12.6623 186.49 12.5C186.49 12.3377 186.543 12.1798 186.64 12.05C186.738 11.9202 186.874 11.8254 187.03 11.78C187.802 11.6087 188.511 11.2281 189.08 10.68C189.51 10.22 189.84 9.58 190.31 8.46L190.36 8.36C190.43 8.25325 190.525 8.16487 190.636 8.10223C190.748 8.0396 190.873 8.00455 191 8Z" fill="url(#paint1_linear_4148_86210)"/>
+<path id="Vector_3" opacity="0.2" d="M190.93 8.75986C191.06 8.71986 191.2 8.79986 191.24 8.92986C191.4 9.50986 191.64 10.2199 192.14 10.8499C192.747 11.5883 193.598 12.085 194.54 12.2499C194.606 12.2618 194.665 12.2996 194.704 12.3549C194.742 12.4102 194.757 12.4786 194.745 12.5449C194.733 12.6112 194.695 12.67 194.64 12.7085C194.585 12.7469 194.516 12.7618 194.45 12.7499C193.38 12.5689 192.415 11.9991 191.74 11.1499C191.19 10.4499 190.93 9.64986 190.76 9.06986C190.741 9.00621 190.749 8.93779 190.781 8.87965C190.813 8.82152 190.866 8.77843 190.93 8.75986Z" fill="white"/>
+</g>
+<g id="Text_3"><path id="Label_3" d="M177.592 34.85H179.532L181.872 42H180.322L179.792 40.33H177.152L176.622 42H175.222L177.592 34.85ZM177.472 39.26H179.472L178.472 36.07L177.472 39.26ZM184.603 42.11C183.909 42.11 183.369 41.96 182.983 41.66C182.596 41.36 182.389 40.9267 182.363 40.36H183.623C183.656 40.6133 183.743 40.81 183.883 40.95C184.023 41.0833 184.259 41.15 184.593 41.15C185.179 41.15 185.473 40.9433 185.473 40.53C185.473 40.3367 185.386 40.1933 185.213 40.1C185.039 40.0067 184.763 39.93 184.383 39.87C184.036 39.8167 183.743 39.75 183.503 39.67C183.263 39.59 183.066 39.4867 182.913 39.36C182.759 39.2333 182.646 39.0833 182.573 38.91C182.506 38.73 182.473 38.5133 182.473 38.26C182.473 37.9933 182.529 37.76 182.643 37.56C182.756 37.36 182.906 37.1933 183.093 37.06C183.286 36.92 183.503 36.8167 183.743 36.75C183.983 36.6833 184.233 36.65 184.493 36.65C184.773 36.65 185.033 36.68 185.273 36.74C185.519 36.7933 185.733 36.8833 185.913 37.01C186.099 37.1367 186.253 37.3033 186.373 37.51C186.493 37.71 186.569 37.96 186.603 38.26H185.363C185.316 38.0333 185.226 37.8667 185.093 37.76C184.959 37.6533 184.759 37.6 184.493 37.6C184.246 37.6 184.053 37.6533 183.913 37.76C183.779 37.86 183.713 37.9967 183.713 38.17C183.713 38.3433 183.786 38.4733 183.933 38.56C184.086 38.6467 184.359 38.7233 184.753 38.79C185.073 38.8367 185.356 38.8967 185.603 38.97C185.856 39.0367 186.066 39.13 186.233 39.25C186.406 39.37 186.536 39.5233 186.623 39.71C186.716 39.89 186.763 40.12 186.763 40.4C186.763 40.96 186.573 41.3867 186.193 41.68C185.819 41.9667 185.289 42.11 184.603 42.11ZM187.752 34.65H189.092V38.97L190.862 36.77H192.302L190.292 39.16L192.462 42H190.932L189.092 39.53V42H187.752V34.65ZM195.567 34.85H198.277C199.044 34.85 199.627 35.0033 200.027 35.31C200.427 35.6167 200.627 36.0833 200.627 36.71V36.75C200.627 37.1167 200.537 37.4333 200.357 37.7C200.177 37.96 199.884 38.1533 199.477 38.28C199.957 38.3733 200.314 38.5567 200.547 38.83C200.787 39.1033 200.907 39.4833 200.907 39.97V40.01C200.907 40.67 200.694 41.1667 200.267 41.5C199.847 41.8333 199.234 42 198.427 42H195.567V34.85ZM198.057 37.82C198.477 37.82 198.774 37.7433 198.947 37.59C199.12 37.4367 199.207 37.1867 199.207 36.84V36.8C199.207 36.48 199.114 36.25 198.927 36.11C198.74 35.9633 198.447 35.89 198.047 35.89H197.027V37.82H198.057ZM198.227 40.95C198.647 40.95 198.954 40.86 199.147 40.68C199.34 40.5 199.437 40.2367 199.437 39.89V39.85C199.437 39.4967 199.334 39.2333 199.127 39.06C198.927 38.8867 198.597 38.8 198.137 38.8H197.027V40.95H198.227ZM202.011 34.65H203.351V42H202.011V34.65ZM206.445 42.11C206.192 42.11 205.955 42.0733 205.735 42C205.522 41.92 205.335 41.8 205.175 41.64C205.015 41.48 204.888 41.2767 204.795 41.03C204.708 40.7767 204.665 40.4767 204.665 40.13V36.77H206.005V39.96C206.005 40.34 206.082 40.6167 206.235 40.79C206.388 40.9633 206.632 41.05 206.965 41.05C207.278 41.05 207.545 40.95 207.765 40.75C207.992 40.55 208.105 40.2533 208.105 39.86V36.77H209.445V42H208.105V41.18C207.972 41.44 207.768 41.66 207.495 41.84C207.228 42.02 206.878 42.11 206.445 42.11ZM213.169 42.11C212.776 42.11 212.416 42.05 212.089 41.93C211.763 41.81 211.479 41.6367 211.239 41.41C210.999 41.1767 210.813 40.8967 210.679 40.57C210.546 40.2367 210.479 39.8633 210.479 39.45V39.37C210.479 38.9633 210.546 38.5933 210.679 38.26C210.813 37.92 210.996 37.6333 211.229 37.4C211.469 37.16 211.749 36.9767 212.069 36.85C212.396 36.7167 212.749 36.65 213.129 36.65C213.456 36.65 213.769 36.7 214.069 36.8C214.376 36.9 214.646 37.06 214.879 37.28C215.113 37.4933 215.296 37.77 215.429 38.11C215.569 38.4433 215.639 38.8433 215.639 39.31V39.68H211.839C211.866 40.1467 211.996 40.5067 212.229 40.76C212.463 41.0067 212.789 41.13 213.209 41.13C213.556 41.13 213.819 41.0633 213.999 40.93C214.179 40.7967 214.293 40.61 214.339 40.37H215.619C215.533 40.9367 215.276 41.37 214.849 41.67C214.429 41.9633 213.869 42.11 213.169 42.11ZM214.319 38.83C214.293 38.41 214.176 38.1 213.969 37.9C213.769 37.7 213.489 37.6 213.129 37.6C212.783 37.6 212.499 37.71 212.279 37.93C212.059 38.1433 211.919 38.4433 211.859 38.83H214.319Z" fill="url(#paint2_linear_4148_86210)"/></g>
+</g>
+</g>
+<g id="Wallet">
+<g id="Icon+Text_4"><g id="Icon_4"><g id="Path_3">
+<path d="M277.75 26H263.25C261.73 26 260.5 24.77 260.5 23.25V12.75C260.5 11.23 261.73 10 263.25 10H277.75C279.27 10 280.5 11.23 280.5 12.75V14.75C280.5 15.16 280.16 15.5 279.75 15.5C279.34 15.5 279 15.16 279 14.75V12.75C279 12.06 278.44 11.5 277.75 11.5H263.25C262.56 11.5 262 12.06 262 12.75V23.25C262 23.94 262.56 24.5 263.25 24.5H277.75C278.44 24.5 279 23.94 279 23.25V21.25C279 20.84 279.34 20.5 279.75 20.5C280.16 20.5 280.5 20.84 280.5 21.25V23.25C280.5 24.77 279.27 26 277.75 26Z" fill="#6C6F75"/>
+<path d="M280.75 22H274.5C272.29 22 270.5 20.21 270.5 18C270.5 15.79 272.29 14 274.5 14H280.75C281.16 14 281.5 14.34 281.5 14.75V21.25C281.5 21.66 281.16 22 280.75 22ZM274.5 15.5C273.12 15.5 272 16.62 272 18C272 19.38 273.12 20.5 274.5 20.5H280V15.5H274.5Z" fill="#6C6F75"/>
+<path d="M264.25 26C263.84 26 263.5 25.66 263.5 25.25V10.75C263.5 10.34 263.84 10 264.25 10C264.66 10 265 10.34 265 10.75V25.25C265 25.66 264.66 26 264.25 26Z" fill="#6C6F75"/>
+<path d="M275.5 17C274.95 17 274.5 17.45 274.5 18C274.5 18.55 274.95 19 275.5 19C276.05 19 276.5 18.55 276.5 18C276.5 17.45 276.05 17 275.5 17Z" fill="#6C6F75"/>
+</g></g>
+<g id="Text_4"><path id="Label_4" d="M255.769 34.85H257.289L258.449 39.93L259.749 34.85H261.009L262.349 39.96L263.549 34.85H264.939L263.179 42H261.669L260.329 36.94L258.949 42H257.519L255.769 34.85ZM266.838 42.11C266.598 42.11 266.371 42.08 266.158 42.02C265.951 41.96 265.768 41.87 265.608 41.75C265.448 41.6233 265.321 41.4667 265.228 41.28C265.134 41.0867 265.088 40.86 265.088 40.6C265.088 40.3 265.151 40.0533 265.278 39.86C265.411 39.66 265.588 39.4967 265.808 39.37C266.028 39.2433 266.278 39.1467 266.558 39.08C266.844 39.0067 267.141 38.9433 267.448 38.89C267.774 38.8367 268.014 38.7633 268.168 38.67C268.321 38.57 268.398 38.4267 268.398 38.24C268.398 38.0467 268.331 37.8967 268.198 37.79C268.071 37.6833 267.848 37.63 267.528 37.63C267.228 37.63 267.001 37.6967 266.848 37.83C266.694 37.9633 266.604 38.15 266.578 38.39H265.288C265.314 38.09 265.391 37.83 265.518 37.61C265.644 37.39 265.811 37.21 266.018 37.07C266.224 36.9233 266.461 36.8167 266.728 36.75C266.994 36.6833 267.281 36.65 267.588 36.65C267.894 36.65 268.178 36.6833 268.438 36.75C268.704 36.8167 268.934 36.9233 269.128 37.07C269.321 37.2167 269.471 37.4067 269.578 37.64C269.684 37.8667 269.738 38.1433 269.738 38.47V42H268.428V41.35C268.268 41.5633 268.064 41.7433 267.818 41.89C267.571 42.0367 267.244 42.11 266.838 42.11ZM267.198 41.16C267.544 41.16 267.831 41.0733 268.058 40.9C268.291 40.72 268.408 40.4733 268.408 40.16V39.34C268.268 39.48 267.954 39.6033 267.468 39.71C267.334 39.7367 267.204 39.77 267.078 39.81C266.951 39.85 266.838 39.9033 266.738 39.97C266.644 40.03 266.568 40.1067 266.508 40.2C266.448 40.2867 266.418 40.3933 266.418 40.52C266.418 40.7133 266.478 40.87 266.598 40.99C266.718 41.1033 266.918 41.16 267.198 41.16ZM271.054 34.65H272.394V42H271.054V34.65ZM273.788 34.65H275.128V42H273.788V34.65ZM278.882 42.11C278.489 42.11 278.129 42.05 277.802 41.93C277.476 41.81 277.192 41.6367 276.952 41.41C276.712 41.1767 276.526 40.8967 276.392 40.57C276.259 40.2367 276.192 39.8633 276.192 39.45V39.37C276.192 38.9633 276.259 38.5933 276.392 38.26C276.526 37.92 276.709 37.6333 276.942 37.4C277.182 37.16 277.462 36.9767 277.782 36.85C278.109 36.7167 278.462 36.65 278.842 36.65C279.169 36.65 279.482 36.7 279.782 36.8C280.089 36.9 280.359 37.06 280.592 37.28C280.826 37.4933 281.009 37.77 281.142 38.11C281.282 38.4433 281.352 38.8433 281.352 39.31V39.68H277.552C277.579 40.1467 277.709 40.5067 277.942 40.76C278.176 41.0067 278.502 41.13 278.922 41.13C279.269 41.13 279.532 41.0633 279.712 40.93C279.892 40.7967 280.006 40.61 280.052 40.37H281.332C281.246 40.9367 280.989 41.37 280.562 41.67C280.142 41.9633 279.582 42.11 278.882 42.11ZM280.032 38.83C280.006 38.41 279.889 38.1 279.682 37.9C279.482 37.7 279.202 37.6 278.842 37.6C278.496 37.6 278.212 37.71 277.992 37.93C277.772 38.1433 277.632 38.4433 277.572 38.83H280.032ZM284.261 42.1C283.721 42.1 283.311 41.9633 283.031 41.69C282.758 41.41 282.621 41.01 282.621 40.49V37.75H281.931V36.77H282.621V35.63H283.961V36.77H285.081V37.75H283.961V40.37C283.961 40.7967 284.158 41.01 284.551 41.01C284.758 41.01 284.948 40.98 285.121 40.92V41.97C285.014 42.0033 284.891 42.0333 284.751 42.06C284.618 42.0867 284.454 42.1 284.261 42.1Z" fill="#6C6F75"/></g>
+</g>
+</g>
+<g id="Account">
+<g id="_Tab Bar Label"><g id="Icon+Text_5"><g id="Icon_5"><g id="Path_4">
+<path d="M345.5 29C339.43 29 334.5 24.07 334.5 18C334.5 11.93 339.43 7 345.5 7C351.57 7 356.5 11.93 356.5 18C356.5 24.07 351.57 29 345.5 29ZM345.5 8.5C340.26 8.5 336 12.76 336 18C336 23.24 340.26 27.5 345.5 27.5C350.74 27.5 355 23.24 355 18C355 12.76 350.74 8.5 345.5 8.5Z" fill="#6C6F75"/>
+<path d="M349.43 17.64C349.78 17 350 16.27 350 15.49C350 13.01 347.98 10.99 345.5 10.99C343.02 10.99 341 13.01 341 15.49C341 16.27 341.22 17 341.57 17.64C339.37 18.67 338 20.78 338 23.25V25.69C338 25.89 338.08 26.07 338.21 26.22C338.33 26.33 340.99 29 345.5 29C350 29 352.67 26.33 352.79 26.22C352.93 26.08 353 25.89 353 25.69V23.25C353 20.78 351.63 18.67 349.43 17.64ZM345.5 12.49C347.15 12.49 348.5 13.84 348.5 15.49C348.5 17.14 347.15 18.49 345.5 18.49C343.85 18.49 342.5 17.14 342.5 15.49C342.5 13.84 343.85 12.49 345.5 12.49ZM351.5 25.36C350.84 25.92 348.69 27.5 345.5 27.5C342.31 27.5 340.16 25.92 339.5 25.36V23.25C339.5 21.28 340.66 19.6 342.48 18.87C342.98 19.35 343.94 20 345.5 20C347.06 20 348.02 19.35 348.51 18.87C350.34 19.6 351.5 21.27 351.5 23.25V25.36Z" fill="#6C6F75"/>
+</g></g>
+<g id="Text_5"><path id="Label_5" d="M334.987 42.11C334.494 42.11 334.07 42.0533 333.717 41.94C333.364 41.8267 333.067 41.67 332.827 41.47C332.594 41.2633 332.414 41.0167 332.287 40.73C332.167 40.4433 332.094 40.1233 332.067 39.77H333.497C333.517 39.9367 333.554 40.0967 333.607 40.25C333.66 40.3967 333.74 40.5267 333.847 40.64C333.96 40.7467 334.107 40.8333 334.287 40.9C334.474 40.9667 334.707 41 334.987 41C335.36 41 335.66 40.91 335.887 40.73C336.12 40.5433 336.237 40.2967 336.237 39.99C336.237 39.8367 336.214 39.7067 336.167 39.6C336.127 39.4933 336.054 39.4033 335.947 39.33C335.84 39.25 335.694 39.1833 335.507 39.13C335.327 39.0767 335.1 39.0267 334.827 38.98C334.387 38.92 334.004 38.84 333.677 38.74C333.357 38.64 333.094 38.5067 332.887 38.34C332.68 38.1733 332.527 37.97 332.427 37.73C332.327 37.4833 332.277 37.19 332.277 36.85C332.277 36.55 332.337 36.2733 332.457 36.02C332.577 35.76 332.747 35.5367 332.967 35.35C333.194 35.1633 333.464 35.0167 333.777 34.91C334.09 34.8033 334.44 34.75 334.827 34.75C335.62 34.75 336.24 34.9267 336.687 35.28C337.14 35.6333 337.404 36.16 337.477 36.86H336.097C336.044 36.5133 335.914 36.26 335.707 36.1C335.5 35.94 335.207 35.86 334.827 35.86C334.447 35.86 334.16 35.9433 333.967 36.11C333.78 36.27 333.687 36.4767 333.687 36.73C333.687 36.8633 333.704 36.9833 333.737 37.09C333.777 37.19 333.847 37.28 333.947 37.36C334.047 37.4333 334.187 37.5 334.367 37.56C334.547 37.6133 334.784 37.66 335.077 37.7C335.504 37.7533 335.877 37.83 336.197 37.93C336.524 38.0233 336.797 38.1533 337.017 38.32C337.237 38.48 337.4 38.6867 337.507 38.94C337.62 39.1867 337.677 39.49 337.677 39.85C337.677 40.1633 337.614 40.46 337.487 40.74C337.36 41.0133 337.18 41.2533 336.947 41.46C336.714 41.66 336.43 41.82 336.097 41.94C335.764 42.0533 335.394 42.11 334.987 42.11ZM340.212 42.11C339.972 42.11 339.745 42.08 339.532 42.02C339.325 41.96 339.142 41.87 338.982 41.75C338.822 41.6233 338.695 41.4667 338.602 41.28C338.509 41.0867 338.462 40.86 338.462 40.6C338.462 40.3 338.525 40.0533 338.652 39.86C338.785 39.66 338.962 39.4967 339.182 39.37C339.402 39.2433 339.652 39.1467 339.932 39.08C340.219 39.0067 340.515 38.9433 340.822 38.89C341.149 38.8367 341.389 38.7633 341.542 38.67C341.695 38.57 341.772 38.4267 341.772 38.24C341.772 38.0467 341.705 37.8967 341.572 37.79C341.445 37.6833 341.222 37.63 340.902 37.63C340.602 37.63 340.375 37.6967 340.222 37.83C340.069 37.9633 339.979 38.15 339.952 38.39H338.662C338.689 38.09 338.765 37.83 338.892 37.61C339.019 37.39 339.185 37.21 339.392 37.07C339.599 36.9233 339.835 36.8167 340.102 36.75C340.369 36.6833 340.655 36.65 340.962 36.65C341.269 36.65 341.552 36.6833 341.812 36.75C342.079 36.8167 342.309 36.9233 342.502 37.07C342.695 37.2167 342.845 37.4067 342.952 37.64C343.059 37.8667 343.112 38.1433 343.112 38.47V42H341.802V41.35C341.642 41.5633 341.439 41.7433 341.192 41.89C340.945 42.0367 340.619 42.11 340.212 42.11ZM340.572 41.16C340.919 41.16 341.205 41.0733 341.432 40.9C341.665 40.72 341.782 40.4733 341.782 40.16V39.34C341.642 39.48 341.329 39.6033 340.842 39.71C340.709 39.7367 340.579 39.77 340.452 39.81C340.325 39.85 340.212 39.9033 340.112 39.97C340.019 40.03 339.942 40.1067 339.882 40.2C339.822 40.2867 339.792 40.3933 339.792 40.52C339.792 40.7133 339.852 40.87 339.972 40.99C340.092 41.1033 340.292 41.16 340.572 41.16ZM344.388 36.77H345.728V37.76C345.894 37.4133 346.108 37.15 346.368 36.97C346.634 36.79 346.988 36.6967 347.428 36.69V37.94C347.161 37.94 346.921 37.9667 346.708 38.02C346.501 38.0667 346.324 38.1433 346.178 38.25C346.031 38.3567 345.918 38.5 345.838 38.68C345.764 38.86 345.728 39.08 345.728 39.34V42H344.388V36.77ZM349.724 42.11C349.484 42.11 349.257 42.08 349.044 42.02C348.837 41.96 348.654 41.87 348.494 41.75C348.334 41.6233 348.207 41.4667 348.114 41.28C348.02 41.0867 347.974 40.86 347.974 40.6C347.974 40.3 348.037 40.0533 348.164 39.86C348.297 39.66 348.474 39.4967 348.694 39.37C348.914 39.2433 349.164 39.1467 349.444 39.08C349.73 39.0067 350.027 38.9433 350.334 38.89C350.66 38.8367 350.9 38.7633 351.054 38.67C351.207 38.57 351.284 38.4267 351.284 38.24C351.284 38.0467 351.217 37.8967 351.084 37.79C350.957 37.6833 350.734 37.63 350.414 37.63C350.114 37.63 349.887 37.6967 349.734 37.83C349.58 37.9633 349.49 38.15 349.464 38.39H348.174C348.2 38.09 348.277 37.83 348.404 37.61C348.53 37.39 348.697 37.21 348.904 37.07C349.11 36.9233 349.347 36.8167 349.614 36.75C349.88 36.6833 350.167 36.65 350.474 36.65C350.78 36.65 351.064 36.6833 351.324 36.75C351.59 36.8167 351.82 36.9233 352.014 37.07C352.207 37.2167 352.357 37.4067 352.464 37.64C352.57 37.8667 352.624 38.1433 352.624 38.47V42H351.314V41.35C351.154 41.5633 350.95 41.7433 350.704 41.89C350.457 42.0367 350.13 42.11 349.724 42.11ZM350.084 41.16C350.43 41.16 350.717 41.0733 350.944 40.9C351.177 40.72 351.294 40.4733 351.294 40.16V39.34C351.154 39.48 350.84 39.6033 350.354 39.71C350.22 39.7367 350.09 39.77 349.964 39.81C349.837 39.85 349.724 39.9033 349.624 39.97C349.53 40.03 349.454 40.1067 349.394 40.2C349.334 40.2867 349.304 40.3933 349.304 40.52C349.304 40.7133 349.364 40.87 349.484 40.99C349.604 41.1033 349.804 41.16 350.084 41.16ZM353.899 34.65H355.239V37.61C355.373 37.35 355.579 37.1267 355.859 36.94C356.146 36.7467 356.506 36.65 356.939 36.65C357.199 36.65 357.436 36.69 357.649 36.77C357.869 36.85 358.056 36.9733 358.209 37.14C358.369 37.3 358.493 37.51 358.579 37.77C358.666 38.0233 358.709 38.33 358.709 38.69V42H357.369V38.85C357.369 38.4767 357.293 38.2033 357.139 38.03C356.986 37.85 356.739 37.76 356.399 37.76C356.079 37.76 355.806 37.86 355.579 38.06C355.353 38.26 355.239 38.56 355.239 38.96V42H353.899V34.65Z" fill="#6C6F75"/></g>
+</g></g>
+<g id="Dot"><circle id="Ellipse 39" cx="353" cy="11" r="4" fill="#E81E25" stroke="white" stroke-width="2"/></g>
+</g>
+</g>
+<g id="Mobile OS Gesture Bar" clip-path="url(#clip0_4148_86210)">
+<g id="fixed height"><g id="spacer">
+<rect id="bar" x="133" y="66" width="125" height="5" rx="2.5" fill="black" fill-opacity="0.8"/>
+</g></g>
+</g>
+</g>
+<defs>
+<linearGradient id="paint0_linear_4148_86210" x1="205.5" y1="8.5" x2="184.58" y2="25.9" gradientUnits="userSpaceOnUse">
+<stop stop-color="#2B5DF5"/><stop offset="1" stop-color="#003CAF"/>
+</linearGradient>
+<linearGradient id="paint1_linear_4148_86210" x1="195.5" y1="8" x2="186.5" y2="17" gradientUnits="userSpaceOnUse">
+<stop stop-color="#AA64FF"/><stop offset="1" stop-color="#7B3EFF"/>
+</linearGradient>
+<linearGradient id="paint2_linear_4148_86210" x1="175" y1="44" x2="181.47" y2="21.8937" gradientUnits="userSpaceOnUse">
+<stop stop-color="#7026BF"/><stop offset="1" stop-color="#003CAF"/>
+</linearGradient>
+<clipPath id="clip0_4148_86210">
+<rect width="391" height="34" fill="white" transform="translate(0 45)"/>
+</clipPath>
+</defs>
+</svg></div>
+
+            <!-- Home indicator bar -->
+            <div class="iphone-home"></div>
+
           </div>
-
-          <!-- Dynamic Island -->
-          <div class="dynamic-island"></div>
-
-          <!-- Home indicator -->
-          <div class="iphone-home"></div>
-
-          <!-- Outer shell overlay (for depth) -->
-          <div class="iphone-shell"></div>
         </div>
 
         <div class="phone-dots" id="phoneDots"></div>
@@ -846,20 +1063,19 @@
 
     <!-- ── Mobile 2 placeholder ── -->
     <div class="page" id="page-mobile2">
-      <div style="display:flex;flex-direction:column;align-items:center;gap:28px;">
-        <div class="iphone" style="display:flex;align-items:center;justify-content:center;margin:0 auto;">
+      <div class="phone-wrap">
+        <div class="iphone">
           <div class="btn-action"></div>
           <div class="btn-vol-up"></div>
           <div class="btn-vol-dn"></div>
           <div class="btn-power"></div>
           <div class="iphone-screen" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#0f1015;">
+            <div class="dynamic-island"></div>
             <div style="font-size:44px;opacity:0.15;">📱</div>
             <div style="font-size:16px;font-weight:700;color:rgba(255,255,255,0.2);letter-spacing:-0.2px;">Mobile Scenario</div>
             <div style="font-size:13px;font-weight:400;color:rgba(255,255,255,0.12);text-align:center;padding:0 40px;line-height:1.7;letter-spacing:0.1px;">Add Figma mobile frames to populate this scenario</div>
+            <div class="iphone-home"></div>
           </div>
-          <div class="dynamic-island"></div>
-          <div class="iphone-home"></div>
-          <div class="iphone-shell"></div>
         </div>
         <span class="coming-soon">Coming Soon</span>
       </div>
@@ -926,21 +1142,33 @@
 
   function goToSarahScreen(n) {
     if (n < 1 || n > SARAH_TOTAL) return;
-    document.getElementById('ps' + sarahScreen)?.classList.remove('active');
-    document.getElementById('si-' + sarahScreen)?.classList.remove('active');
+    const prev = sarahScreen;
+    const isForward = n > prev;
     sarahScreen = n;
-    const el = document.getElementById('ps' + sarahScreen);
-    el.classList.add('active');
-    el.scrollTop = 0;
+
+    const prevEl = document.getElementById('ps' + prev);
+    const nextEl = document.getElementById('ps' + sarahScreen);
+
+    if (prevEl && nextEl && prev !== sarahScreen) {
+      prevEl.classList.add(isForward ? 'anim-exit' : 'anim-exit-bk');
+      nextEl.classList.add(isForward ? 'anim-enter' : 'anim-enter-bk');
+      nextEl.classList.add('active');
+      nextEl.scrollTop = 0;
+      setTimeout(() => {
+        prevEl.classList.remove('active', 'anim-exit', 'anim-exit-bk');
+        nextEl.classList.remove('anim-enter', 'anim-enter-bk');
+      }, 400);
+    }
+
+    document.getElementById('si-' + prev)?.classList.remove('active');
     const siEl = document.getElementById('si-' + sarahScreen);
     siEl?.classList.add('active');
     siEl?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
-    const s = SARAH_SCREENS[sarahScreen - 1];
     document.getElementById('screenLabel').textContent = `${sarahScreen} / ${SARAH_TOTAL}`;
     document.getElementById('btnPrev').disabled = sarahScreen === 1;
     document.getElementById('btnNext').disabled = sarahScreen === SARAH_TOTAL;
     buildDots();
+    updateFooter(sarahScreen);
   }
 
   function nextScreen() { goToSarahScreen(sarahScreen + 1); }
@@ -974,6 +1202,21 @@
     if (id === 'sarah') {
       document.getElementById('screenList-sarah').classList.add('visible');
     }
+  }
+
+  /* Screens that show the BB App Footer Navigation */
+  const FOOTER_SCREENS = new Set([5,6,7,8,9,10,11,12,13,15,16]);
+
+  function updateFooter(n) {
+    const footer = document.getElementById('appFooter');
+    if (!footer) return;
+    const show = FOOTER_SCREENS.has(n);
+    footer.classList.toggle('hidden', !show);
+    /* Hide the white home indicator when the Figma SVG footer is visible
+       (the SVG has its own black gesture bar baked in). */
+    document.querySelectorAll('.iphone-home').forEach(el => {
+      el.style.opacity = show ? '0' : '';
+    });
   }
 
   function toggleScenarios() {
