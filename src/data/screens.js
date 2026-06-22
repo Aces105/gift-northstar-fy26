@@ -31,6 +31,13 @@ export const DRAWER_BASE = {
   112: 106, // drawer-side-auto-buy-brother over brother screen 7
   // Pre-Power Week Friend (desktop side drawers)
   120: 132, // drawer-side-pack-friend over friend screen 2
+
+  // Last Minute Brother-in-Law (mobile bottom drawer)
+  170: 162, // lm-drawer over Screen 2
+
+  // Last Minute Birthday Present (mobile bottom drawer)
+  190: 182, // bp-drawer over Screen 2
+  183: 182, // Screen 3 shares same sheet as drawer — content crossfade, no slide
 }
 
 // ─── Scenarios ────────────────────────────────────────────────────────────────
@@ -42,6 +49,7 @@ export const SCENARIOS = [
   { id: 'powerweek',    label: 'Power Week - Sarah',       subtitle: 'BF – CM',  color: '#D4C49A' },
   { id: 'prepowerweek',  label: 'Pre-Power Week: Late Nov', subtitle: 'Late Nov', color: '#DC8667' },
   { id: 'powerweekbf',   label: 'Power Week',               subtitle: 'BF – CM',  color: '#DC8667' },
+  { id: 'lastminute',    label: 'Last Minute: Late Dec',    subtitle: 'Late Dec', color: '#E35454' },
 ]
 
 // ─── Sections ─────────────────────────────────────────────────────────────────
@@ -148,6 +156,30 @@ export const SECTIONS = [
     color:    '#DC8667',
     scenario: 'powerweekbf',
     screens:  [150, 151, 152, 153],
+  },
+
+  // ── Last Minute: Late Dec ─────────────────────────────────────────────────────
+  {
+    id:       'lm-brother',
+    label:    'Brother-in-Law',
+    color:    '#E35454',
+    scenario: 'lastminute',
+    screens:  [160, 161, 162, 163, 164, 165, 166, 167, 168],
+  },
+  {
+    id:       'lm-components',
+    label:    'Components',
+    color:    '#E35454',
+    scenario: 'lastminute',
+    screens:  [170],
+    group:    'lm-brother',
+  },
+  {
+    id:       'lm-birthday',
+    label:    'Birthday Present',
+    color:    '#E35454',
+    scenario: 'lastminute',
+    screens:  [180, 181, 182, 190, 183, 184, 185, 186],
   },
 ]
 
@@ -622,4 +654,32 @@ export const SCREENS = [
   { id: 131, desktop: true, src: '/images/friend_01_body.png', headerSrc: '/images/friend_01.png', alt: 'Friend — Screen 1', type: 'regular', hotspots: [{ id: 'tap', inset: true, to: 132 }, { id: 'hint', type: 'hint', x: 469, y: 469, to: 133 }] },
   { id: 132, desktop: true, src: '/images/friend_02_body.png', headerSrc: '/images/friend_02.png', alt: 'Friend — Screen 2', type: 'regular', hotspots: [{ id: 'tap', inset: true, to: 133 }] },
   { id: 133, desktop: true, src: '/images/friend_03_body.png', headerSrc: '/images/friend_03.png', alt: 'Friend — Screen 3', type: 'regular', hotspots: [{ id: 'hint-vaude', type: 'hint', x: 1619, y: 1208, to: 120 }] },
+
+  // ── Last Minute: Late Dec — Brother-in-Law (mobile 390×varied) ──────────────
+  // Figma section: Last Minute Brother in Law (4232:77784)
+  { id: 160, src: '/images/lm_title.png',   alt: 'Brother-in-Law — Title card',  type: 'regular', hotspots: [{ id: 'tap', inset: true, to: 161 }] },
+  { id: 161, src: '/images/lm_screen1.png', alt: 'Brother-in-Law — Screen 1',    type: 'regular', hotspots: [{ id: 'hint-bb-app', type: 'hint', x: 215, y: 582, w: 70, h: 70, to: 162 }] },
+  { id: 162, src: '/images/lm_screen2.png', alt: 'Brother-in-Law — Screen 2',    type: 'regular', hotspots: [{ id: 'tap', inset: true, to: 163 }] },
+  { id: 163, src: '/images/lm_screen3.png', alt: 'Brother-in-Law — Screen 3',    type: 'regular', hotspots: [{ id: 'tap', inset: true, to: 164 }] },
+  { id: 164, src: '/images/lm_screen4.png', alt: 'Brother-in-Law — Screen 4',    type: 'regular', hotspots: [{ id: 'hint', type: 'hint', x: 343, y: 459, to: 166 }] },
+  { id: 165, src: '/images/lm_screen5.png', alt: 'Brother-in-Law — Screen 5',    type: 'regular', hotspots: [{ id: 'tap', inset: true, to: 166 }] },
+  { id: 166, src: '/images/lm_screen6.png', alt: 'Brother-in-Law — Screen 6',    type: 'regular', hotspots: [{ id: 'tap', inset: true, to: 167 }] },
+  { id: 167, src: '/images/lm_cart.png',    alt: 'Brother-in-Law — Cart',         type: 'regular', hotspots: [{ id: 'tap', inset: true, to: 168 }] },
+  { id: 168, src: '/images/lm_outro.png',   alt: 'Brother-in-Law — End card',     type: 'regular', hotspots: [] },
+
+  // ── Last Minute Components ──────────────────────────────────────────────────
+  { id: 170, src: '/images/lm_drawer.png',  alt: 'Brother-in-Law — Drawer',       type: 'drawer',  drawerFull: true, hotspots: [] },
+
+  // ── Last Minute: Birthday Present Nephew (mobile 390×varied) ────────────────
+  // Figma section: Birthday Present Nephew (4235:114310)
+  { id: 180, src: '/images/bp_title.png',   alt: 'Birthday Present — Title card', type: 'regular', hotspots: [{ id: 'tap', inset: true, to: 181 }] },
+  { id: 181, src: '/images/bp_screen1.png', alt: 'Birthday Present — Screen 1',   type: 'regular', hotspots: [{ id: 'hint-bb-app', type: 'hint', x: 208, y: 582, w: 72, h: 72, to: 182 }] },
+  { id: 182, src: '/images/bp_screen2.png', alt: 'Birthday Present — Screen 2',   type: 'regular', hotspots: [{ id: 'hint-ask-blue', type: 'hint', x: 100, y: 565, w: 190, h: 48, to: 190 }] },
+  { id: 183, src: '/images/bp_screen3.png', alt: 'Birthday Present — Screen 3',   type: 'drawer',  drawerFull: true, hotspots: [{ id: 'tap', inset: true, to: 184 }] },
+  { id: 184, src: '/images/bp_screen4.png', alt: 'Birthday Present — Screen 4',   type: 'regular', hotspots: [{ id: 'tap', inset: true, to: 185 }] },
+  { id: 185, src: '/images/bp_screen5.png', alt: 'Birthday Present — Screen 5',   type: 'regular', hotspots: [{ id: 'tap', inset: true, to: 186 }] },
+  { id: 186, src: '/images/bp_outro.png',   alt: 'Birthday Present — End card',   type: 'regular', hotspots: [] },
+
+  // ── Birthday Present Components ─────────────────────────────────────────────
+  { id: 190, src: '/images/bp_drawer.png',  alt: 'Birthday Present — Drawer',     type: 'drawer',  drawerFull: true, hotspots: [{ id: 'hint-bottom', type: 'hint', x: 295, y: 775, w: 80, h: 55, to: 183 }] },
 ]
