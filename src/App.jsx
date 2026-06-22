@@ -1,29 +1,46 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import Sidebar from './components/Sidebar'
 import TopBar from './components/TopBar'
 import PhoneShell from './components/PhoneShell'
 import ScreenStack from './components/ScreenStack'
-import { SCREENS } from './data/screens'
-
-const TOTAL = SCREENS.length
+import DesktopStack from './components/DesktopStack'
+import MacFrame from './components/MacFrame'
+import ResponsiveDesktop from './components/ResponsiveDesktop'
+import { SCREENS, SECTIONS } from './data/screens'
 
 export default function App() {
   const [current, setCurrent] = useState(1)
 
-  const navigate = useCallback((n) => {
-    if (n >= 1 && n <= TOTAL) setCurrent(n)
+  // Flat ordered list of screen IDs across all sections (story order)
+  const orderedIds = useMemo(
+    () => SECTIONS.flatMap(sec => sec.screens),
+    []
+  )
+
+  const navigate = useCallback((id) => {
+    if (SCREENS.find(s => s.id === id)) setCurrent(id)
   }, [])
 
-  // Keyboard nav
+  // Arrow-key navigation follows story order
   useEffect(() => {
     const handler = (e) => {
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') navigate(current + 1)
-      if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   navigate(current - 1)
+      const idx = orderedIds.indexOf(current)
+      if ((e.key === 'ArrowRight' || e.key === 'ArrowDown') && idx < orderedIds.length - 1) {
+        navigate(orderedIds[idx + 1])
+      }
+      if ((e.key === 'ArrowLeft' || e.key === 'ArrowUp') && idx > 0) {
+        navigate(orderedIds[idx - 1])
+      }
     }
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
-  }, [current, navigate])
+  }, [current, navigate, orderedIds])
+
+  // Dot indicators — only show screens in story order
+  const dotIds = orderedIds
+
+  const isDesktop = !!(SCREENS.find(s => s.id === current)?.desktop)
 
   return (
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
@@ -36,53 +53,65 @@ export default function App() {
         <div style={{
           flex: 1,
           minHeight: 0,
-          overflow: 'auto',
+          overflow: isDesktop ? 'auto' : 'auto',
           background: 'var(--bg-canvas)',
-          backgroundImage: 'radial-gradient(ellipse at 65% 40%, rgba(0,70,190,0.1) 0%, transparent 55%)',
+          backgroundImage: 'radial-gradient(ellipse at 65% 40%, rgba(0,70,190,0.08) 0%, transparent 55%)',
           display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          // Shift center-point left by half the sidebar so the phone sits at true viewport center
-          paddingRight: 'var(--sidebar-w)',
+          flexDirection: isDesktop ? 'column' : 'row',
+          alignItems: isDesktop ? 'stretch' : 'center',
+          justifyContent: isDesktop ? 'flex-start' : 'center',
+          ...(isDesktop ? {} : { paddingRight: 'var(--sidebar-w)' }),
         }}>
           <motion.div
-            initial={{ opacity: 0, scale: 0.96, y: 12 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            key={isDesktop ? 'desktop' : 'mobile'}
+            style={isDesktop ? { width: '100%' } : {}}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
           >
-            <PhoneShell>
-              <ScreenStack current={current} onNavigate={navigate} />
-            </PhoneShell>
+            {isDesktop ? (
+              <ResponsiveDesktop>
+                <MacFrame>
+                  <DesktopStack current={current} onNavigate={navigate} />
+                </MacFrame>
+              </ResponsiveDesktop>
+            ) : (
+              <PhoneShell>
+                <ScreenStack current={current} onNavigate={navigate} />
+              </PhoneShell>
+            )}
           </motion.div>
 
-          {/* Dot indicators */}
-          <div style={{
-            position: 'absolute',
-            bottom: 24,
-            left: '50%',
-            transform: 'translateX(calc(-50% + var(--sidebar-w) / 2))',
-            display: 'flex',
-            gap: 5,
-            alignItems: 'center',
-          }}>
-            {SCREENS.map(s => (
-              <motion.button
-                key={s.id}
-                onClick={() => navigate(s.id)}
-                whileHover={{ scale: 1.3 }}
-                whileTap={{ scale: 0.9 }}
-                animate={{
-                  width: s.id === current ? 18 : 6,
-                  background: s.id === current ? '#0046BE' : 'rgba(255,255,255,0.2)',
-                }}
-                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                style={{
-                  height: 6, borderRadius: 3,
-                  border: 'none', cursor: 'pointer', padding: 0,
-                }}
-              />
-            ))}
-          </div>
+          {/* Dot indicators — mobile only */}
+          {!isDesktop && (
+            <div style={{
+              position: 'absolute',
+              bottom: 24,
+              left: '50%',
+              transform: 'translateX(calc(-50% + var(--sidebar-w) / 2))',
+              display: 'flex',
+              gap: 4,
+              alignItems: 'center',
+            }}>
+              {dotIds.map(id => (
+                <motion.button
+                  key={id}
+                  onClick={() => navigate(id)}
+                  whileHover={{ scale: 1.4 }}
+                  whileTap={{ scale: 0.85 }}
+                  animate={{
+                    width:      id === current ? 18 : 5,
+                    background: id === current ? '#0046BE' : 'rgba(255,255,255,0.18)',
+                  }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                  style={{
+                    height: 5, borderRadius: 3,
+                    border: 'none', cursor: 'pointer', padding: 0,
+                  }}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

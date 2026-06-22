@@ -1,10 +1,22 @@
+import { useMemo } from 'react'
 import { motion } from 'framer-motion'
-import { SCREENS } from '../data/screens'
+import { SCREENS, SECTIONS } from '../data/screens'
 
 export default function TopBar({ current, onNavigate }) {
-  const total = SCREENS.length
-  const screen = SCREENS[current - 1]
-  const progress = (current / total) * 100
+  const screen = SCREENS.find(s => s.id === current)
+
+  // Build ordered ID list + find position for progress & prev/next
+  const orderedIds = useMemo(() => SECTIONS.flatMap(sec => sec.screens), [])
+  const idx        = orderedIds.indexOf(current)
+  const progress   = ((idx + 1) / orderedIds.length) * 100
+
+  // Active section label
+  const section = SECTIONS.find(sec => sec.screens.includes(current))
+
+  const prevId = idx > 0 ? orderedIds[idx - 1] : null
+  const nextId = idx < orderedIds.length - 1 ? orderedIds[idx + 1] : null
+
+  if (!screen) return null
 
   return (
     <div style={{
@@ -24,16 +36,22 @@ export default function TopBar({ current, onNavigate }) {
         height: 2, background: 'rgba(255,255,255,0.06)',
       }}>
         <motion.div
-          style={{ height: '100%', background: '#0046BE', originX: 0 }}
+          style={{
+            height: '100%',
+            background: section?.color ?? '#0046BE',
+            originX: 0,
+          }}
           animate={{ width: `${progress}%` }}
           transition={{ type: 'spring', stiffness: 200, damping: 30 }}
         />
       </div>
 
-      {/* Breadcrumb */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
-        <span style={{ fontSize: 12, color: 'var(--text-3)', fontWeight: 400 }}>Sarah</span>
-        <span style={{ color: 'var(--text-4)', fontSize: 14 }}>/</span>
+      {/* Breadcrumb: Section › Frame */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0, overflow: 'hidden' }}>
+        <span style={{ fontSize: 12, color: 'var(--text-3)', fontWeight: 500, flexShrink: 0 }}>
+          {section?.label ?? 'Sarah'}
+        </span>
+        <span style={{ color: 'var(--text-4)', fontSize: 14, flexShrink: 0 }}>/</span>
         <motion.span
           key={current}
           initial={{ opacity: 0, y: 4 }}
@@ -51,7 +69,7 @@ export default function TopBar({ current, onNavigate }) {
             fontSize: 10, fontWeight: 600, padding: '2px 7px', borderRadius: 10,
             background: 'rgba(170,100,255,0.15)', color: '#b580ff',
             border: '1px solid rgba(170,100,255,0.25)',
-            flexShrink: 0,
+            flexShrink: 0, marginLeft: 2,
           }}>
             Drawer
           </span>
@@ -65,22 +83,13 @@ export default function TopBar({ current, onNavigate }) {
           color: 'var(--text-3)',
           fontVariantNumeric: 'tabular-nums',
           fontFamily: 'monospace',
+          flexShrink: 0,
         }}>
-          {current} / {total}
+          {idx + 1} / {orderedIds.length}
         </span>
         <div style={{ display: 'flex', gap: 4 }}>
-          {[
-            { label: '‹', delta: -1, disabled: current === 1 },
-            { label: '›', delta: 1, disabled: current === total },
-          ].map(({ label, delta, disabled }) => (
-            <NavBtn
-              key={label}
-              onClick={() => onNavigate(current + delta)}
-              disabled={disabled}
-            >
-              {label}
-            </NavBtn>
-          ))}
+          <NavBtn onClick={() => prevId && onNavigate(prevId)} disabled={!prevId}>‹</NavBtn>
+          <NavBtn onClick={() => nextId && onNavigate(nextId)} disabled={!nextId}>›</NavBtn>
         </div>
       </div>
     </div>
@@ -104,7 +113,6 @@ function NavBtn({ onClick, disabled, children }) {
         fontSize: 18, lineHeight: 1,
         cursor: disabled ? 'default' : 'pointer',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        transition: 'background 0.12s, color 0.12s',
       }}
     >
       {children}

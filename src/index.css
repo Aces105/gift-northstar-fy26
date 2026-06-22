@@ -27,6 +27,17 @@ html, body, #root {
 
 button { font-family: var(--font); }
 
+/* Allow text selection in the sidebar so labels can be copied */
+aside { user-select: text; -webkit-user-select: text; }
+
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 2px; }
+
+/* Hide scrollbars inside the phone frame — native mobile feel */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+
+/* Bottom sheet drag handle — cursor affordance on desktop */
+[data-sheet-handle] { cursor: grab; }
+[data-sheet-handle]:active { cursor: grabbing; }
