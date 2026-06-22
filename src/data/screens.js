@@ -37,7 +37,8 @@ export const DRAWER_BASE = {
 
   // Last Minute Birthday Present (mobile bottom drawer)
   190: 182, // bp-drawer over Screen 2
-  183: 182, // Screen 3 shares same sheet as drawer — content crossfade, no slide
+  183: 182, // Screen 3 shares same sheet — content crossfade, no slide
+  184: 182, // Screen 4 shares same sheet — content crossfade, no slide
 }
 
 // ─── Scenarios ────────────────────────────────────────────────────────────────
@@ -200,7 +201,7 @@ export const SCREENS = [
   {
     id: 1,
     src: '/images/s1_intro.png',
-    alt: 'Sarah Mom — Gifting North Star intro',
+    alt: 'Sarah Mom — Title card: Pre-season',
     type: 'regular',
     hotspots: [{ id: 'tap', inset: true, to: 2 }],
   },
@@ -383,7 +384,7 @@ export const SCREENS = [
     // Figma: Template Section (4175:62596, 390×844) — section intro
     id: 70,
     src: '/images/sister_intro.png',
-    alt: 'Sarah Sister — Section intro',
+    alt: 'Sarah Sister — Title card: Re-engagement',
     type: 'regular',
     hotspots: [{ id: 'tap', inset: true, to: 71 }],
   },
@@ -631,7 +632,7 @@ export const SCREENS = [
   { id: 104, desktop: true, src: '/images/brother_05_body.png', headerSrc: '/images/brother_05.png', alt: 'Brother — Screen 5', type: 'regular', hotspots: [{ id: 'tap', inset: true, to: 105 }] },
   { id: 105, desktop: true, src: '/images/brother_06_body.png', headerSrc: '/images/brother_06.png', alt: 'Brother — Screen 6', type: 'regular', hotspots: [{ id: 'tap', inset: true, to: 106 }, { id: 'hint', type: 'hint', x: 647, y: 1118, w: 440, h: 75, to: 103 }] },
   { id: 106, desktop: true, src: '/images/brother_07_body.png', headerSrc: '/images/brother_07.png', alt: 'Brother — Screen 7', type: 'regular', hotspots: [{ id: 'tap', inset: true, to: 107 }, { id: 'hint-heart', type: 'hint', x: 1594, y: 813, to: 112 }] },
-  { id: 107, desktop: true, src: '/images/brother_08_body.png', headerSrc: '/images/brother_08.png', alt: 'Brother — Screen 8', type: 'regular', hotspots: [] },
+  { id: 107, desktop: true, src: '/images/brother_08_body.png', headerSrc: '/images/brother_08.png', alt: 'Brother — Screen 8', type: 'regular', hotspots: [{ id: 'hint-gift-ideas', type: 'hint', x: 878, y: 118, w: 110, h: 62, to: 131 }] },
 
   // ── Pre-Power Week Brother — Components (side drawers, 648×1165) ────────────
   { id: 110, desktop: true, src: '/images/brother_drawer_default.png', alt: 'Brother — drawer-side-auto-buy-default', type: 'drawer-side', hotspots: [{ id: 'hint-autobuy', type: 'hint', x: 81, y: 394, to: 111 }] },
@@ -639,7 +640,7 @@ export const SCREENS = [
   { id: 112, desktop: true, src: '/images/brother_drawer_brother.png', alt: 'Brother — drawer-side-auto-buy-brother', type: 'drawer-side', hotspots: [{ id: 'hint-autobuy', type: 'hint', x: 534, y: 295, to: 110 }] },
 
   // ── Pre-Power Week Friend — Desktop components ────────────────────────────────
-  { id: 120, desktop: true, src: '/images/friend_drawer_pack.png', alt: 'Friend — drawer-side-pack-friend', type: 'drawer-side', hotspots: [{ id: 'hint-save', type: 'hint', x: 70, y: 1043, w: 460, h: 50, to: 132 }] },
+  { id: 120, desktop: true, src: '/images/friend_drawer_pack.png', alt: 'Friend — drawer-side-pack-friend', type: 'drawer-side', hotspots: [{ id: 'hint-save', type: 'hint', x: 70, y: 1043, w: 460, h: 50, to: 133 }] },
 
   // ── Power Week — Marcus Auto-Buy Notification (mobile, 390×varied) ───────────
   // Figma section: Power week Marcus Notification (4452:409169)
@@ -651,8 +652,8 @@ export const SCREENS = [
   // ── Pre-Power Week Friend — Desktop screens (1729×varied) ────────────────────
   // Figma section: Pre-Power Week Friend (4204:103478)
   { id: 130, desktop: true, src: '/images/friend_title.png',     alt: 'Friend — Title card', type: 'regular', hotspots: [{ id: 'tap', inset: true, to: 131 }] },
-  { id: 131, desktop: true, src: '/images/friend_01_body.png', headerSrc: '/images/friend_01.png', alt: 'Friend — Screen 1', type: 'regular', hotspots: [{ id: 'tap', inset: true, to: 132 }, { id: 'hint', type: 'hint', x: 469, y: 469, to: 133 }] },
-  { id: 132, desktop: true, src: '/images/friend_02_body.png', headerSrc: '/images/friend_02.png', alt: 'Friend — Screen 2', type: 'regular', hotspots: [{ id: 'tap', inset: true, to: 133 }] },
+  { id: 131, desktop: true, src: '/images/friend_01_body.png', headerSrc: '/images/friend_01.png', alt: 'Friend — Screen 1', type: 'regular', hotspots: [{ id: 'hint', type: 'hint', x: 452, y: 458, w: 52, h: 52, to: 132 }] },
+  { id: 132, desktop: true, src: '/images/friend_02_body.png', headerSrc: '/images/friend_02.png', alt: 'Friend — Screen 2', type: 'regular', hotspots: [{ id: 'hint-vaude', type: 'hint', x: 1600, y: 1200, w: 52, h: 52, to: 120 }] },
   { id: 133, desktop: true, src: '/images/friend_03_body.png', headerSrc: '/images/friend_03.png', alt: 'Friend — Screen 3', type: 'regular', hotspots: [{ id: 'hint-vaude', type: 'hint', x: 1619, y: 1208, to: 120 }] },
 
   // ── Last Minute: Late Dec — Brother-in-Law (mobile 390×varied) ──────────────
@@ -674,9 +675,9 @@ export const SCREENS = [
   // Figma section: Birthday Present Nephew (4235:114310)
   { id: 180, src: '/images/bp_title.png',   alt: 'Birthday Present — Title card', type: 'regular', hotspots: [{ id: 'tap', inset: true, to: 181 }] },
   { id: 181, src: '/images/bp_screen1.png', alt: 'Birthday Present — Screen 1',   type: 'regular', hotspots: [{ id: 'hint-bb-app', type: 'hint', x: 208, y: 582, w: 72, h: 72, to: 182 }] },
-  { id: 182, src: '/images/bp_screen2.png', alt: 'Birthday Present — Screen 2',   type: 'regular', hotspots: [{ id: 'hint-ask-blue', type: 'hint', x: 100, y: 565, w: 190, h: 48, to: 190 }] },
+  { id: 182, src: '/images/bp_screen2.png', alt: 'Birthday Present — Screen 2',   type: 'regular', hotspots: [{ id: 'tap', inset: true, to: 190 }] },
   { id: 183, src: '/images/bp_screen3.png', alt: 'Birthday Present — Screen 3',   type: 'drawer',  drawerFull: true, hotspots: [{ id: 'tap', inset: true, to: 184 }] },
-  { id: 184, src: '/images/bp_screen4.png', alt: 'Birthday Present — Screen 4',   type: 'regular', hotspots: [{ id: 'tap', inset: true, to: 185 }] },
+  { id: 184, src: '/images/bp_screen4.png', alt: 'Birthday Present — Screen 4',   type: 'drawer',  drawerFull: true, hotspots: [{ id: 'tap', inset: true, to: 185 }] },
   { id: 185, src: '/images/bp_screen5.png', alt: 'Birthday Present — Screen 5',   type: 'regular', hotspots: [{ id: 'tap', inset: true, to: 186 }] },
   { id: 186, src: '/images/bp_outro.png',   alt: 'Birthday Present — End card',   type: 'regular', hotspots: [] },
 
